@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import ReduxProvider from '../store/Provider';
 import { Toaster } from 'react-hot-toast';
 import AuthInitializer from '../components/auth/AuthInitializer';
+import ServiceWorkerCleanup from '../components/layout/ServiceWorkerCleanup';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body suppressHydrationWarning>
+        <ServiceWorkerCleanup />
         <ReduxProvider>
           <AuthInitializer />
           {children}

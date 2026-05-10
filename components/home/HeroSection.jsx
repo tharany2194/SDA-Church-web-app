@@ -1,75 +1,182 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSelector } from 'react-redux';
-import { ChevronRight, Play } from 'lucide-react';
+import { Play, MapPin, ChevronRight, Instagram, Facebook, Twitter, Linkedin } from 'lucide-react';
+
+const SOCIAL = [
+  { Icon: Instagram, label: 'ig' },
+  { Icon: Facebook, label: 'fb' },
+  { Icon: Twitter, label: 'tw' },
+  { Icon: Linkedin, label: 'in' },
+];
 
 export default function HeroSection() {
   const { language } = useSelector((s) => s.ui);
 
   const content = {
     en: {
-      tagline: 'Glorifying God. Serving People.',
-      title: 'Welcome to Grace Church',
-      subtitle: 'A community rooted in faith, united by love, and sent to serve. Join us every Sunday as we worship together.',
-      cta: 'Watch Live',
-      cta2: 'Learn More',
+      location: 'Varatharajapuram, TN',
+      title: 'Welcome to Varatharajapuram',
+      subtitle: 'Seventh Day Adventist Church',
+      desc: 'Discover a community rooted in faith, united by love, and sent to serve. Join us every Saturday as we worship together.',
+      cta: 'Join Us',
+      cta2: 'Watch Service',
+      card1: 'Saturday Worship',
+      card1sub: 'Weekly Service',
+      card2: 'Prayer Meeting',
+      card2sub: 'Wednesday Evening',
     },
     ta: {
-      tagline: 'தேவனை மகிமைப்படுத்துதல். மனிதர்களுக்கு சேவை செய்தல்.',
-      title: 'கிருபை திருச்சபைக்கு வரவேற்கிறோம்',
-      subtitle: 'விசுவாசத்தில் வேரூன்றிய, அன்பால் ஒன்றிணைந்த, சேவை செய்ய அனுப்பப்பட்ட சமூகம்.',
-      cta: 'நேரலை காண்க',
-      cta2: 'மேலும் அறிக',
+      location: 'வரதராஜபுரம், தமிழ்நாடு',
+      title: 'வரதராஜபுரம் திருச்சபைக்கு வரவேற்கிறோம்',
+      subtitle: 'செவ்வாய் நாள் அட்வென்டிஸ்ட் திருச்சபை',
+      desc: 'விசுவாசத்தில் வேரூன்றிய, அன்பால் ஒன்றிணைந்த, சேவை செய்ய அனுப்பப்பட்ட சமூகம்.',
+      cta: 'எங்களுடன் சேருங்கள்',
+      cta2: 'ஆராதனை காண்க',
+      card1: 'சனி ஆராதனை',
+      card1sub: 'வாராந்திர சேவை',
+      card2: 'ஜெப கூட்டம்',
+      card2sub: 'புதன் மாலை',
     },
   };
 
   const t = content[language];
 
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-primary-900 via-primary-800 to-church-dark">
-      {/* Background decorations */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-500/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gold/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary-700/10 rounded-full blur-3xl" />
-      </div>
+    <section
+      className="relative w-full -mt-20 overflow-hidden"
+      style={{
+        minHeight: 'calc(100vh + 5rem)',
+        backgroundImage: "url('/images/hero_img.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      {/* Outer vignette */}
+      <div className="absolute inset-0 bg-black/15" />
 
-      <div className="container-custom relative z-10 py-20">
-        <div className="max-w-3xl">
-          <span className="inline-block text-gold text-sm font-semibold tracking-widest uppercase mb-4 animate-fade-in">
-            {t.tagline}
-          </span>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-6 animate-slide-up">
-            {t.title}
-          </h1>
-          <p className="text-lg text-gray-300 mb-8 max-w-2xl leading-relaxed animate-slide-up">
-            {t.subtitle}
-          </p>
-          <div className="flex flex-wrap gap-4 animate-slide-up">
-            <Link href="/sermons" className="btn-primary text-base gap-2">
-              <Play size={18} />
-              {t.cta}
-            </Link>
-            <Link href="/about" className="btn-secondary border-white/30 text-white hover:bg-white/10 gap-2">
-              {t.cta2}
-              <ChevronRight size={18} />
-            </Link>
-          </div>
-        </div>
+      {/* Inner glass card — starts beneath navbar (top: 10rem = navbar bottom) */}
+      <div
+        className="absolute z-10 inset-x-3 sm:inset-x-4 md:inset-x-6 lg:inset-x-8 rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 shadow-2xl"
+        style={{ top: '10rem', bottom: '1.5rem' }}
+      >
+        {/* Card background image */}
+        <Image
+          src="/images/hero_img.png"
+          alt="bg"
+          fill
+          className="object-cover object-center scale-105"
+          priority
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
 
-        {/* Service times */}
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl">
-          {[
-            { day: 'Sunday Service', time: '10:00 AM', icon: '🙏' },
-            { day: 'Prayer Meeting', time: 'Wednesday 7 PM', icon: '✝️' },
-            { day: 'Youth Service', time: 'Friday 6 PM', icon: '⚡' },
-          ].map((item) => (
-            <div key={item.day} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-              <span className="text-2xl block mb-1">{item.icon}</span>
-              <p className="text-white font-semibold text-sm">{item.day}</p>
-              <p className="text-gray-300 text-xs mt-0.5">{item.time}</p>
+        {/* Content wrapper */}
+        <div className="relative z-10 h-full flex flex-col md:flex-row items-center md:items-end justify-between px-4 sm:px-6 md:px-10 lg:px-14 pb-4 sm:pb-5 md:pb-8 lg:pb-10 pt-4 sm:pt-6">
+
+          {/* ── LEFT: Text block ── */}
+          <div className="w-full md:w-3/5 lg:w-1/2 text-center md:text-left flex flex-col justify-center md:justify-end h-full md:h-auto mb-3 md:mb-0">
+
+            {/* Location badge */}
+            <div className="inline-flex items-center gap-1 mb-2 sm:mb-3 self-center md:self-start">
+              <MapPin size={11} className="text-white/70 flex-shrink-0" />
+              <span className="text-white/70 text-[9px] sm:text-[10px] font-bold tracking-widest uppercase truncate">
+                {t.location}
+              </span>
             </div>
-          ))}
+
+            {/* Title */}
+            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white leading-[1.1] tracking-tight mb-2 sm:mb-3 drop-shadow-lg">
+              {t.title}
+            </h1>
+
+            {/* Subtitle */}
+            <p className="text-xs sm:text-base md:text-lg lg:text-xl font-semibold text-white/80 mb-3 md:mb-5">
+              {t.subtitle}
+            </p>
+
+            {/* Description — hidden on mobile to keep layout tight */}
+            <p className="hidden md:block text-sm lg:text-base text-white/50 mb-6 lg:mb-8 max-w-md leading-relaxed">
+              {t.desc}
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-row items-center justify-center md:justify-start gap-3 mt-1 md:mt-0">
+              <Link
+                href="/about"
+                className="px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-full bg-white/95 text-gray-900 text-[10px] sm:text-xs md:text-sm font-bold hover:bg-white transition-all shadow-xl whitespace-nowrap"
+              >
+                {t.cta}
+              </Link>
+              <Link
+                href="/sermons"
+                className="flex items-center gap-2 text-white text-[10px] sm:text-xs md:text-sm font-semibold group px-3 sm:px-5 py-2.5 rounded-full hover:bg-white/10 transition-all"
+              >
+                <span className="w-7 h-7 sm:w-9 sm:h-10 rounded-full border border-white/30 bg-white/10 flex items-center justify-center group-hover:bg-white/30 transition-all flex-shrink-0">
+                  <Play size={10} fill="white" className="text-white ml-0.5" />
+                </span>
+                <span className="whitespace-nowrap">{t.cta2}</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* ── RIGHT: Cards + Social Icons ── */}
+          <div className="w-full md:w-auto flex flex-col items-center md:items-end gap-3 sm:gap-4 md:gap-6">
+
+            {/* Image Cards */}
+            <div className="flex flex-row items-end gap-2 sm:gap-4 justify-center md:justify-end w-full">
+
+              {/* Card 1 — Saturday Worship */}
+              <div className="relative w-[44%] xs:w-[110px] sm:w-[150px] md:w-48 lg:w-56 h-32 xs:h-36 sm:h-48 md:h-60 lg:h-72 rounded-xl sm:rounded-2xl overflow-hidden border border-white/30 shadow-2xl group cursor-pointer transition-transform hover:-translate-y-1">
+                <Image src="/images/img1.jpeg" alt={t.card1} fill className="object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/20 border border-white/30 flex items-center justify-center backdrop-blur-sm group-hover:bg-white/40 transition-all">
+                  <ChevronRight size={14} className="text-white" />
+                </div>
+                <div className="absolute bottom-0 left-0 p-2 sm:p-4">
+                  <div className="flex items-center gap-1 mb-0.5">
+                    <MapPin size={8} className="text-white/70" />
+                    <p className="text-white font-bold text-[9px] sm:text-xs leading-tight">{t.card1}</p>
+                  </div>
+                  <p className="text-white/60 text-[7px] sm:text-[9px]">{t.card1sub}</p>
+                </div>
+              </div>
+
+              {/* Card 2 — Prayer Meeting */}
+              <div className="relative w-[44%] xs:w-[110px] sm:w-[150px] md:w-48 lg:w-56 h-24 xs:h-28 sm:h-40 md:h-52 lg:h-64 rounded-xl sm:rounded-2xl overflow-hidden border border-white/30 shadow-2xl group cursor-pointer transition-transform hover:-translate-y-1">
+                <Image src="/images/img2.jpeg" alt={t.card2} fill className="object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/20 border border-white/30 flex items-center justify-center backdrop-blur-sm group-hover:bg-white/40 transition-all">
+                  <ChevronRight size={14} className="text-white" />
+                </div>
+                <div className="absolute bottom-0 left-0 p-2 sm:p-4">
+                  <div className="flex items-center gap-1 mb-0.5">
+                    <MapPin size={8} className="text-white/70" />
+                    <p className="text-white font-bold text-[9px] sm:text-xs leading-tight">{t.card2}</p>
+                  </div>
+                  <p className="text-white/60 text-[7px] sm:text-[9px]">{t.card2sub}</p>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex gap-2 sm:gap-3 items-center">
+              <span className="h-px w-6 bg-white/20 hidden md:block" />
+              {SOCIAL.map(({ Icon, label }) => (
+                <a
+                  key={label}
+                  href="#"
+                  className="w-7 h-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/25 transition-all"
+                >
+                  <Icon size={12} />
+                </a>
+              ))}
+            </div>
+
+          </div>
+
         </div>
       </div>
     </section>

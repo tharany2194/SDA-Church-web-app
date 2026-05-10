@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -41,21 +42,31 @@ export default function Navbar() {
     setUserMenuOpen(false);
   };
 
+  const isHome = pathname === '/';
+  const transparent = isHome && !scrolled;
+
   return (
     <header
       className={clsx(
         'sticky top-0 z-50 transition-all duration-300',
-        scrolled ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-white'
+        transparent
+          ? 'bg-transparent'
+          : 'bg-white/70 backdrop-blur-md shadow-md'
       )}
     >
-      <nav className="container-custom flex items-center justify-between h-16">
+      <nav className="container-custom flex items-center justify-between h-20">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-full bg-primary-600 flex items-center justify-center">
-            <span className="text-white font-bold text-lg">✝</span>
+          <div className="relative w-28 h-12 rounded-xl bg-white shadow-md overflow-hidden p-1">
+            <Image 
+              src="/images/logo.png" 
+              alt="Varatharajapuram SDA Church Logo" 
+              fill
+              className="object-contain"
+            />
           </div>
-          <span className="font-bold text-xl text-primary-700 hidden sm:block">
-            {language === 'ta' ? 'கிருபை திருச்சபை' : 'Grace Church'}
+          <span className={clsx('font-bold text-sm hidden sm:block leading-tight max-w-[140px]', transparent ? 'text-white' : 'text-gray-800')}>
+            Varatharajapuram SDA Church
           </span>
         </Link>
 
@@ -67,9 +78,13 @@ export default function Navbar() {
                 href={href}
                 className={clsx(
                   'px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-                  pathname === href
-                    ? 'text-primary-600 bg-primary-50'
-                    : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+                  transparent
+                    ? pathname === href
+                      ? 'text-white bg-white/20'
+                      : 'text-white/80 hover:text-white hover:bg-white/10'
+                    : pathname === href
+                      ? 'text-primary-600 bg-primary-50'
+                      : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
                 )}
               >
                 {label[language]}
@@ -83,11 +98,17 @@ export default function Navbar() {
           {/* Language Toggle */}
           <button
             onClick={() => dispatch(setLanguage(language === 'en' ? 'ta' : 'en'))}
-            className="flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-primary-600 px-2 py-1.5 rounded-lg hover:bg-gray-50 transition-colors"
+            className={clsx(
+              'flex items-center gap-1 text-xs font-medium px-2 py-1.5 rounded-lg transition-colors',
+              transparent
+                ? 'text-white/80 hover:text-white hover:bg-white/10'
+                : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50'
+            )}
             title="Toggle language"
           >
             <Globe size={15} />
-            <span>{language === 'en' ? 'தமிழ்' : 'EN'}</span>
+            <span className="hidden sm:inline">{language === 'en' ? 'தமிழ்' : 'EN'}</span>
+            <span className="sm:hidden">{language === 'en' ? 'TA' : 'EN'}</span>
           </button>
 
           {/* Auth */}
@@ -132,18 +153,18 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <Link href="/login" className="btn-primary text-sm py-2">
+            <Link href="/login" className={clsx('hidden sm:flex text-sm py-2 px-3 sm:px-4 rounded-lg font-medium transition-all whitespace-nowrap', transparent ? 'border border-white/40 text-white hover:bg-white/10' : 'btn-primary')}>
               {language === 'ta' ? 'உள்நுழை' : 'Sign In'}
             </Link>
           )}
 
           {/* Mobile Menu Toggle */}
           <button
-            className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className={clsx('lg:hidden p-1.5 sm:p-2 rounded-lg transition-colors', transparent ? 'text-white hover:bg-white/10' : 'hover:bg-gray-100')}
             onClick={() => dispatch(toggleMobileMenu())}
             aria-label="Toggle menu"
           >
-            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+            {isMobileMenuOpen ? <X size={20} className="sm:w-[22px] sm:h-[22px]" /> : <Menu size={20} className="sm:w-[22px] sm:h-[22px]" />}
           </button>
         </div>
       </nav>
@@ -167,6 +188,16 @@ export default function Navbar() {
                 </Link>
               </li>
             ))}
+            {!isAuthenticated && (
+              <li className="sm:hidden border-t border-gray-100 mt-2 pt-2">
+                <Link
+                  href="/login"
+                  className="block px-4 py-2.5 rounded-lg text-sm font-bold text-primary-600 bg-primary-50"
+                >
+                  {language === 'ta' ? 'உள்நுழை' : 'Sign In'}
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       )}

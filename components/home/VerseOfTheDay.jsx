@@ -1,7 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Download, BookOpen, RefreshCw } from 'lucide-react';
+import { Download, BookOpen, RefreshCw, Loader2 } from 'lucide-react';
+import useSWR from 'swr';
+import api from '@/lib/api';
+
+const fetcher = (url) => api.get(url).then((r) => r.data.data);
 
 const BIBLE_VERSES = [
   { ref: 'John 3:16', en: 'For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.', ta: 'தேவன் இந்த உலகத்தை மிகவும் நேசித்தார், அதனால் தம்முடைய ஒரே குமாரனை கொடுத்தார்.' },
@@ -13,12 +17,22 @@ const BIBLE_VERSES = [
 
 export default function VerseOfTheDay() {
   const { language } = useSelector((s) => s.ui);
+  const { data: dynamicVerse, error, isLoading } = useSWR('/verses/today', fetcher);
   const [verse, setVerse] = useState(null);
 
   useEffect(() => {
-    const dayIndex = new Date().getDate() % BIBLE_VERSES.length;
-    setVerse(BIBLE_VERSES[dayIndex]);
-  }, []);
+    if (dynamicVerse) {
+      setVerse({
+        ref: dynamicVerse.reference,
+        en: dynamicVerse.contentEn,
+        ta: dynamicVerse.contentTa,
+      });
+    } else if (!isLoading) {
+      // Fallback to static verses if none active
+      const dayIndex = new Date().getDate() % BIBLE_VERSES.length;
+      setVerse(BIBLE_VERSES[dayIndex]);
+    }
+  }, [dynamicVerse, isLoading]);
 
   const downloadVerse = () => {
     if (!verse) return;
@@ -81,6 +95,14 @@ export default function VerseOfTheDay() {
     link.href = canvas.toDataURL();
     link.click();
   };
+
+  if (isLoading) {
+    return (
+      <div className="bg-primary-900 py-16 flex justify-center items-center">
+        <Loader2 className="text-gold animate-spin" size={32} />
+      </div>
+    );
+  }
 
   if (!verse) return null;
 

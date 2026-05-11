@@ -53,6 +53,7 @@ export default function AdminDashboard() {
             { href: '/admin/events', label: 'Add Event', icon: Calendar, color: 'text-blue-600 bg-blue-50' },
             { href: '/admin/gallery', label: 'Upload Media', icon: Image, color: 'text-green-600 bg-green-50' },
             { href: '/admin/articles', label: 'Write Article', icon: FileText, color: 'text-orange-600 bg-orange-50' },
+            { href: '/admin/verses', label: 'Add Verses', icon: Heart, color: 'text-rose-600 bg-rose-50' },
           ].map(({ href, label, icon: Icon, color }) => (
             <a
               key={href}

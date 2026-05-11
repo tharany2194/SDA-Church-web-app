@@ -103,15 +103,18 @@ export default function VerseOfTheDay() {
       ctx.font = `bold ${canvas.width * 0.025}px sans-serif`;
       ctx.fillText(language === 'ta' ? 'இன்றைய வசனம்' : 'VERSE OF THE DAY', canvas.width / 2, canvas.height * 0.1);
 
-      // Verse
+      // Verse text
       ctx.fillStyle = '#ffffff';
-      ctx.font = `italic ${canvas.width * 0.045}px Georgia`;
+      const fontSize = language === 'ta' ? canvas.width * 0.038 : canvas.width * 0.045;
+      ctx.font = `italic ${fontSize}px Georgia`;
+      
       const text = language === 'ta' ? verse.ta : verse.en;
+      const maxWidth = canvas.width * 0.8;
       const words = text.split(' ');
       const lines = [];
       let currentLine = '';
       words.forEach(word => {
-        if (ctx.measureText(currentLine + word).width > canvas.width * 0.8) {
+        if (ctx.measureText(currentLine + word).width > maxWidth) {
           lines.push(currentLine.trim());
           currentLine = word + ' ';
         } else {
@@ -120,8 +123,11 @@ export default function VerseOfTheDay() {
       });
       lines.push(currentLine.trim());
 
-      const lineHeight = canvas.width * 0.065;
-      const startY = (canvas.height / 2) - ((lines.length - 1) * lineHeight / 2);
+      const lineHeight = fontSize * 1.4;
+      // Ensure startY doesn't overlap the title (top Label is at 0.1, so startY should be at least 0.25)
+      let startY = (canvas.height / 2) - ((lines.length - 1) * lineHeight / 2);
+      const minStartY = canvas.height * 0.25;
+      if (startY < minStartY) startY = minStartY;
 
       lines.forEach((line, i) => {
         let content = line;

@@ -39,6 +39,14 @@
   .container-custom {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
+
+  .parallax-section {
+    @apply relative overflow-hidden bg-fixed bg-center bg-cover;
+  }
+
+  .curve-tl-br {
+    @apply rounded-tl-[60px] md:rounded-tl-[120px] rounded-br-[60px] md:rounded-br-[120px];
+  }
 }
 
 /* Custom scrollbar */

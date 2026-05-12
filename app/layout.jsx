@@ -9,14 +9,14 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata = {
   title: {
-    default: 'Grace Church',
-    template: '%s | Grace Church',
+    default: 'Varadarajapuram SDA Church',
+    template: '%s | Varadarajapuram SDA Church',
   },
-  description: 'Welcome to Grace Church — a community of faith, hope, and love.',
+  description: 'Welcome to Varadarajapuram SDA Church — a community of faith, hope, and love.',
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    siteName: 'Grace Church',
+    siteName: 'Varadarajapuram SDA Church',
   },
 };
 

@@ -16,9 +16,9 @@ export default function HeroSection() {
 
   const content = {
     en: {
-      location: 'Varatharajapuram, TN',
-      title: 'Welcome to Varatharajapuram',
-      subtitle: 'Seventh Day Adventist Church',
+      location: 'Varadharajapuram,Poonamallee, TN',
+      title: 'Welcome to Varadharajapuram',
+      subtitle: 'Seventh-Day Adventist Church',
       desc: 'Discover a community rooted in faith, united by love, and sent to serve. Join us every Saturday as we worship together.',
       cta: 'Join Us',
       cta2: 'Watch Service',
@@ -30,7 +30,7 @@ export default function HeroSection() {
     ta: {
       location: 'வரதராஜபுரம், தமிழ்நாடு',
       title: 'வரதராஜபுரம் திருச்சபைக்கு வரவேற்கிறோம்',
-      subtitle: 'செவ்வாய் நாள் அட்வென்டிஸ்ட் திருச்சபை',
+      subtitle: 'ஏழாம் நாள் அட்வென்டிஸ்ட் திருச்சபை',
       desc: 'விசுவாசத்தில் வேரூன்றிய, அன்பால் ஒன்றிணைந்த, சேவை செய்ய அனுப்பப்பட்ட சமூகம்.',
       cta: 'எங்களுடன் சேருங்கள்',
       cta2: 'ஆராதனை காண்க',

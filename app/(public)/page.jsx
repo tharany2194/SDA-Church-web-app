@@ -5,7 +5,7 @@ import UpcomingEvents from '../../components/home/UpcomingEvents';
 
 export const metadata = {
   title: 'Home',
-  description: 'Welcome to Grace Church – a community of faith, hope, and love.',
+  description: 'Welcome to Varadarajapuram SDA Church – a community of faith, hope, and love.',
 };
 
 export default function HomePage() {

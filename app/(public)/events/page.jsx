@@ -32,7 +32,7 @@ export default function EventsPage() {
     : events.slice(0, 5);
 
   return (
-    <div className="py-12">
+    <div className="pt-28 pb-12 min-h-screen">
       <div className="container-custom">
         <h1 className="section-title">
           {language === 'ta' ? 'நிகழ்வுகள்' : 'Events Calendar'}
@@ -43,56 +43,65 @@ export default function EventsPage() {
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Calendar */}
-          <div className="lg:col-span-2 card p-6">
+          <div className="lg:col-span-2 card p-6 shadow-xl border-t-4 border-t-primary-600">
             {/* Month Navigation */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-8">
               <button
                 onClick={() => setCurrentDate(new Date(year, month - 2))}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="p-3 rounded-xl hover:bg-primary-50 text-primary-600 transition-all active:scale-90"
               >
-                <ChevronLeft size={20} />
+                <ChevronLeft size={24} />
               </button>
-              <h2 className="font-bold text-xl text-gray-900">
+              <h2 className="font-bold text-2xl text-gray-900 tracking-tight">
                 {format(currentDate, 'MMMM yyyy')}
               </h2>
               <button
                 onClick={() => setCurrentDate(new Date(year, month))}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="p-3 rounded-xl hover:bg-primary-50 text-primary-600 transition-all active:scale-90"
               >
-                <ChevronRight size={20} />
+                <ChevronRight size={24} />
               </button>
             </div>
 
             {/* Day Headers */}
-            <div className="grid grid-cols-7 mb-2">
+            <div className="grid grid-cols-7 mb-4">
               {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
-                <div key={d} className="text-xs font-medium text-gray-500 text-center py-2">{d}</div>
+                <div key={d} className="text-sm font-bold text-gray-400 text-center py-2 uppercase tracking-widest">{d}</div>
               ))}
             </div>
 
             {/* Days Grid */}
-            <div className="grid grid-cols-7 gap-1">
+            <div className="grid grid-cols-7 gap-2">
               {Array.from({ length: startDay }).map((_, i) => <div key={`empty-${i}`} />)}
               {daysInMonth.map((day) => {
                 const dayEvents = getEventsForDay(day);
                 const isSelected = selectedDate && isSameDay(day, selectedDate);
+                const today = isToday(day);
+                const hasEvents = dayEvents.length > 0;
+
                 return (
                   <button
                     key={day.toISOString()}
                     onClick={() => setSelectedDate(isSameDay(day, selectedDate) ? null : day)}
                     className={clsx(
-                      'relative p-2 rounded-xl text-sm text-center transition-colors min-h-[44px]',
-                      isSelected ? 'bg-primary-600 text-white' :
-                      isToday(day) ? 'bg-primary-50 text-primary-700 font-bold' :
-                      'hover:bg-gray-50 text-gray-700'
+                      'relative p-2 rounded-2xl text-base font-medium text-center transition-all duration-200 min-h-[56px] flex flex-col items-center justify-center gap-1',
+                      'hover:scale-105 active:scale-95',
+                      isSelected ? 'bg-primary-100 text-primary-900 border-2 border-primary-500 shadow-md z-10' :
+                      today ? 'bg-amber-100 text-amber-700 border-2 border-amber-400 ring-4 ring-amber-50 shadow-sm animate-pulse' :
+                      hasEvents ? 'bg-primary-600 text-white font-bold shadow-lg shadow-primary-100' :
+                      'hover:bg-gray-50 text-gray-600'
                     )}
                   >
-                    {format(day, 'd')}
-                    {dayEvents.length > 0 && (
-                      <span className={clsx(
-                        'absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full',
-                        isSelected ? 'bg-white' : 'bg-primary-600'
-                      )} />
+                    <span>{format(day, 'd')}</span>
+                    {hasEvents && (
+                      <div className="flex gap-0.5">
+                        {dayEvents.slice(0, 3).map((_, idx) => (
+                          <span key={idx} className={clsx(
+                            'w-1.5 h-1.5 rounded-full',
+                            isSelected ? 'bg-primary-500' : 'bg-white/80'
+                          )} />
+                        ))}
+                      </div>
                     )}
                   </button>
                 );

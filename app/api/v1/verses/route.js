@@ -29,7 +29,7 @@ export async function POST(request) {
   if (roleError) return roleError;
 
   try {
-    const { contentEn, contentTa, reference } = await request.json();
+    const { contentEn, contentTa, reference, referenceTa } = await request.json();
 
     await connectDB();
 
@@ -44,6 +44,7 @@ export async function POST(request) {
       contentEn,
       contentTa,
       reference,
+      referenceTa,
       isActive: true,
       expiresAt,
     });

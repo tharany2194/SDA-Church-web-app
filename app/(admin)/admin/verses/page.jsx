@@ -14,6 +14,7 @@ export default function VerseManagement() {
     contentEn: '',
     contentTa: '',
     reference: '',
+    referenceTa: '',
   });
 
   const handleSubmit = async (e) => {
@@ -22,8 +23,9 @@ export default function VerseManagement() {
     try {
       await api.post('/verses', formData);
       toast.success('Verse updated successfully!');
-      setFormData({ contentEn: '', contentTa: '', reference: '' });
+      setFormData({ contentEn: '', contentTa: '', reference: '', referenceTa: '' });
       mutate('/verses');
+      mutate('/verses/today');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to update verse');
     } finally {
@@ -38,9 +40,11 @@ export default function VerseManagement() {
         contentEn: verse.contentEn,
         contentTa: verse.contentTa,
         reference: verse.reference,
+        referenceTa: verse.referenceTa,
       });
       toast.success('Verse re-activated!');
       mutate('/verses');
+      mutate('/verses/today');
     } catch (err) {
       toast.error('Failed to re-activate verse');
     } finally {
@@ -84,16 +88,29 @@ export default function VerseManagement() {
               />
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Reference (e.g. John 3:16)</label>
-            <input
-              type="text"
-              required
-              className="input"
-              placeholder="Book Chapter:Verse"
-              value={formData.reference}
-              onChange={(e) => setFormData({ ...formData, reference: e.target.value })}
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">English Reference (e.g. John 3:16)</label>
+              <input
+                type="text"
+                required
+                className="input"
+                placeholder="Book Chapter:Verse"
+                value={formData.reference}
+                onChange={(e) => setFormData({ ...formData, reference: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Tamil Reference (எ.கா. யோவான் 3:16)</label>
+              <input
+                type="text"
+                required
+                className="input"
+                placeholder="புத்தகம் அதிகாரம்:வசனம்"
+                value={formData.referenceTa}
+                onChange={(e) => setFormData({ ...formData, referenceTa: e.target.value })}
+              />
+            </div>
           </div>
           <button
             type="submit"
@@ -143,7 +160,10 @@ export default function VerseManagement() {
                     <td className="px-6 py-4">
                       <p className="text-sm font-medium text-gray-900 line-clamp-1">{verse.contentEn}</p>
                       <p className="text-xs text-gray-400 line-clamp-1 italic mb-1">{verse.contentTa}</p>
-                      <p className="text-xs font-semibold text-primary-600">{verse.reference}</p>
+                      <div className="flex gap-4">
+                        <p className="text-xs font-semibold text-primary-600">{verse.reference}</p>
+                        <p className="text-xs font-semibold text-primary-600 italic">{verse.referenceTa}</p>
+                      </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
                       {new Date(verse.expiresAt).toLocaleString()}

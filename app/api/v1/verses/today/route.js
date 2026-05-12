@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
 import { connectDB } from '@/lib/db';
 import { handleError, ok } from '@/lib/apiHelpers';
 import Verse from '@/models/Verse';

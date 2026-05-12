@@ -9,11 +9,11 @@ import api from '@/lib/api';
 const fetcher = (url) => api.get(url).then((r) => r.data.data);
 
 const BIBLE_VERSES = [
-  { ref: 'John 3:16', en: 'For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.', ta: 'தேவன் இந்த உலகத்தை மிகவும் நேசித்தார், அதனால் தம்முடைய ஒரே குமாரனை கொடுத்தார்.' },
-  { ref: 'Psalm 23:1', en: 'The Lord is my shepherd, I lack nothing.', ta: 'கர்த்தர் என் மேய்ப்பர்; எனக்கு குறைவு இராது.' },
-  { ref: 'Philippians 4:13', en: 'I can do all this through him who gives me strength.', ta: 'என்னை பலப்படுத்துகிற கிறிஸ்துவினால் எல்லாவற்றையும் செய்யக்கூடும்.' },
-  { ref: 'Romans 8:28', en: 'And we know that in all things God works for the good of those who love him.', ta: 'தேவனிடத்தில் அன்பு கூர்கிறவர்களுக்கு எல்லாம் நன்மைக்கு ஏதுவாக நடக்கிறது.' },
-  { ref: 'Jeremiah 29:11', en: 'For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you.', ta: 'உங்களுக்கு நான் நினைக்கும் நினைவுகளை அறிவேன்; அவைகள் தீமையல்ல, நன்மையாயிருக்கும்.' },
+  { ref: 'John 3:16', refTa: 'யோவான் 3:16', en: 'For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.', ta: 'தேவன் இந்த உலகத்தை மிகவும் நேசித்தார், அதனால் தம்முடைய ஒரே குமாரனை கொடுத்தார்.' },
+  { ref: 'Psalm 23:1', refTa: 'சங்கீதம் 23:1', en: 'The Lord is my shepherd, I lack nothing.', ta: 'கர்த்தர் என் மேய்ப்பர்; எனக்கு குறைவு இராது.' },
+  { ref: 'Philippians 4:13', refTa: 'பிலிப்பியர் 4:13', en: 'I can do all this through him who gives me strength.', ta: 'என்னை பலப்படுத்துகிற கிறிஸ்துவினால் எல்லாவற்றையும் செய்யக்கூடும்.' },
+  { ref: 'Romans 8:28', refTa: 'ரோமர் 8:28', en: 'And we know that in all things God works for the good of those who love him.', ta: 'தேவனிடத்தில் அன்பு கூர்கிறவர்களுக்கு எல்லாம் நன்மைக்கு ஏதுவாக நடக்கிறது.' },
+  { ref: 'Jeremiah 29:11', refTa: 'எரேமியா 29:11', en: 'For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you.', ta: 'உங்களுக்கு நான் நினைக்கும் நினைவுகளை அறிவேன்; அவைகள் தீமையல்ல, நன்மையாயிருக்கும்.' },
 ];
 
 export default function VerseOfTheDay() {
@@ -25,6 +25,7 @@ export default function VerseOfTheDay() {
     if (dynamicVerse) {
       setVerse({
         ref: dynamicVerse.reference,
+        refTa: dynamicVerse.referenceTa,
         en: dynamicVerse.contentEn,
         ta: dynamicVerse.contentTa,
       });
@@ -51,7 +52,7 @@ export default function VerseOfTheDay() {
     logoImg.crossOrigin = 'anonymous';
     
     bgImg.src = isMobile ? '/images/verses_bg_portrait.png' : '/images/verses_bg_landscape.png';
-    logoImg.src = '/images/varadharajapuram_logo.png';
+    logoImg.src = '/images/logo.png';
 
     let imagesLoaded = 0;
     const onImageLoad = () => {
@@ -139,7 +140,8 @@ export default function VerseOfTheDay() {
       // Reference
       ctx.fillStyle = '#d4af37';
       ctx.font = `bold ${canvas.width * 0.035}px Georgia`;
-      ctx.fillText(`— ${verse.ref}`, canvas.width / 2, startY + (lines.length * lineHeight) + (canvas.height * 0.05));
+      const reference = language === 'ta' ? (verse.refTa || verse.ref) : verse.ref;
+      ctx.fillText(`— ${reference}`, canvas.width / 2, startY + (lines.length * lineHeight) + (canvas.height * 0.05));
 
       // Brand
       ctx.fillStyle = 'rgba(255,255,255,0.5)';
@@ -193,7 +195,7 @@ export default function VerseOfTheDay() {
       {/* Top Right Logo */}
       <div className="absolute top-8 right-8 z-20 w-36 md:w-48 drop-shadow-xl">
         <Image 
-          src="/images/varadharajapuram_logo.png" 
+          src="/images/logo.png" 
           alt="Church Logo" 
           width={225} 
           height={225} 
@@ -212,7 +214,7 @@ export default function VerseOfTheDay() {
           <blockquote className="text-white text-2xl md:text-3xl font-serif leading-relaxed italic mb-4 drop-shadow-lg">
             "{language === 'ta' ? verse.ta : verse.en}"
           </blockquote>
-          <cite className="text-gold font-bold text-xl not-italic drop-shadow-md">— {verse.ref}</cite>
+          <cite className="text-gold font-bold text-xl not-italic drop-shadow-md">— {language === 'ta' ? (verse.refTa || verse.ref) : verse.ref}</cite>
           <div className="mt-8">
             <button
               onClick={downloadVerse}

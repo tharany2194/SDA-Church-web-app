@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/db';
 import { authenticate, authorize, parseBody, handleError } from '@/lib/apiHelpers';
 import { uploadToR2 } from '@/lib/r2Server';
 import Event from '@/models/Event';
+import User from '@/models/User';
 
 // GET /api/v1/events
 export async function GET(request) {

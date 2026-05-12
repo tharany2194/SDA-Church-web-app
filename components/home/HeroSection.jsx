@@ -125,10 +125,10 @@ export default function HeroSection() {
           <div className="w-full md:w-auto flex flex-col items-center md:items-end gap-3 sm:gap-4 md:gap-6">
 
             {/* Image Cards */}
-            <div className="flex flex-row items-end gap-2 sm:gap-4 justify-center md:justify-end w-full">
+            <div className="flex flex-col items-center gap-3 min-[425px]:flex-row min-[425px]:items-end min-[425px]:gap-2 sm:gap-4 justify-center md:justify-end w-full">
 
               {/* Card 1 — Saturday Worship */}
-              <div className="relative w-[44%] xs:w-[110px] sm:w-[150px] md:w-48 lg:w-56 h-32 xs:h-36 sm:h-48 md:h-60 lg:h-72 rounded-xl sm:rounded-2xl overflow-hidden border border-white/30 shadow-2xl group cursor-pointer transition-transform hover:-translate-y-1">
+              <div className="relative w-[80%] min-[425px]:w-[44%] xs:w-[110px] sm:w-[150px] md:w-48 lg:w-56 h-40 min-[425px]:h-32 xs:h-36 sm:h-48 md:h-60 lg:h-72 rounded-xl sm:rounded-2xl overflow-hidden border border-white/30 shadow-2xl group cursor-pointer transition-transform hover:-translate-y-1">
                 <Image src="/images/img1.jpeg" alt={t.card1} fill className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/20 border border-white/30 flex items-center justify-center backdrop-blur-sm group-hover:bg-white/40 transition-all">
@@ -144,7 +144,7 @@ export default function HeroSection() {
               </div>
 
               {/* Card 2 — Prayer Meeting */}
-              <div className="relative w-[44%] xs:w-[110px] sm:w-[150px] md:w-48 lg:w-56 h-24 xs:h-28 sm:h-40 md:h-52 lg:h-64 rounded-xl sm:rounded-2xl overflow-hidden border border-white/30 shadow-2xl group cursor-pointer transition-transform hover:-translate-y-1">
+              <div className="relative w-[80%] min-[425px]:w-[44%] xs:w-[110px] sm:w-[150px] md:w-48 lg:w-56 h-36 min-[425px]:h-24 xs:h-28 sm:h-40 md:h-52 lg:h-64 rounded-xl sm:rounded-2xl overflow-hidden border border-white/30 shadow-2xl group cursor-pointer transition-transform hover:-translate-y-1">
                 <Image src="/images/img2.jpeg" alt={t.card2} fill className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/20 border border-white/30 flex items-center justify-center backdrop-blur-sm group-hover:bg-white/40 transition-all">

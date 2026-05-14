@@ -1,6 +1,6 @@
 export default function YouthPage() {
   const programs = [
-    { name: 'Youth Sunday', time: 'Sunday 10:30 AM', description: 'A special Sunday service designed for teens featuring relevant messages, worship, and small group discussions.' },
+    { name: 'Youth Sunday', time: 'Sunday 10:30 AM', description: 'A special Saturday service designed for teens featuring relevant messages, worship, and small group discussions.' },
     { name: 'Friday Night Live', time: 'Friday 7:00 PM', description: 'High-energy Friday night gatherings with worship, games, and a short message for youth aged 13–25.' },
     { name: 'Youth Bible Study', time: 'Wednesday 6:30 PM', description: 'In-depth Bible study groups for teenagers and young adults, exploring faith and life\'s big questions.' },
     { name: 'Community Service', time: 'Monthly Saturday', description: 'Monthly outreach projects where our youth serve the community, building character and compassion.' },

@@ -34,7 +34,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">Address</p>
-                  <p className="text-gray-600 text-sm">123 Church Street, City, State 600001</p>
+                  <p className="text-gray-600 text-sm">332J+4FP, Varadharajapuram, Poonamallee, Tamil Nadu 600123, India.</p>
                 </div>
               </li>
               <li className="flex gap-4">
@@ -43,7 +43,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">Phone</p>
-                  <a href="tel:+919876543210" className="text-primary-600 text-sm hover:underline">+91 98765 43210</a>
+                  <a href="tel:+919876543210" className="text-primary-600 text-sm hover:underline">+91 9962589089</a>
                 </div>
               </li>
               <li className="flex gap-4">
@@ -52,7 +52,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">Email</p>
-                  <a href="mailto:info@gracechurch.com" className="text-primary-600 text-sm hover:underline">info@gracechurch.com</a>
+                  <a href="mailto:info@gracechurch.com" className="text-primary-600 text-sm hover:underline">info@varadharajapuramsdachurch.com</a>
                 </div>
               </li>
             </ul>
@@ -61,9 +61,9 @@ export default function ContactPage() {
             <div className="mt-8 p-5 bg-primary-50 rounded-2xl">
               <h3 className="font-bold text-primary-900 mb-3">Service Times</h3>
               <ul className="space-y-2 text-sm text-gray-700">
-                <li className="flex justify-between"><span>Sunday Service</span><span className="font-medium">10:00 AM</span></li>
-                <li className="flex justify-between"><span>Wednesday Prayer</span><span className="font-medium">7:00 PM</span></li>
-                <li className="flex justify-between"><span>Friday Youth</span><span className="font-medium">6:00 PM</span></li>
+                <li className="flex justify-between"><span>Saturday Service</span><span className="font-medium">7:30 AM</span></li>
+                <li className="flex justify-between"><span>Friday Prayer</span><span className="font-medium">7:00 PM</span></li>
+                <li className="flex justify-between"><span>Saturday Evening Youth Meeting</span><span className="font-medium">6:00 PM</span></li>
               </ul>
             </div>
           </div>

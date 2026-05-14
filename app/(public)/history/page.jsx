@@ -1,8 +1,8 @@
 export default function HistoryPage() {
   const milestones = [
-    { year: '1985', title: 'Founding', description: 'Grace Community Church was established by Pastor Samuel and a group of 12 families with a vision to serve the Tamil community in the city.' },
+    { year: '1985', title: 'Founding', description: 'SDA Church Varadharajapuram was established by Pastor James Alexander and a group of 4 families with a vision to serve the Tamil community in the city.' },
     { year: '1992', title: 'First Building', description: 'After years of meeting in homes and rented halls, the congregation built its first dedicated worship hall with 200 seats.' },
-    { year: '1999', title: 'Youth Ministry Launch', description: 'The Grace Youth Ministry was formed, creating a vibrant space for teenagers and young adults to grow in faith.' },
+    { year: '1999', title: 'Youth Ministry Launch', description: 'The SDA   Youth Ministry was formed, creating a vibrant space for teenagers and young adults to grow in faith.' },
     { year: '2005', title: 'Community Outreach', description: 'Launched the Grace Care Centre, providing food, education support, and counseling to underprivileged families in the community.' },
     { year: '2012', title: 'New Sanctuary', description: 'The congregation grew and a new 800-seat sanctuary was constructed, along with dedicated children\'s ministry and fellowship halls.' },
     { year: '2018', title: 'Digital Ministry', description: 'Began live streaming Sunday services on YouTube, reaching Tamil-speaking believers across the globe.' },

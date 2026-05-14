@@ -78,8 +78,8 @@ export default function AboutPage() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
               {[
-                { name: 'Rev. Samuel Paul', role: 'Senior Pastor', desc: '25 years of ministry' },
-                { name: 'Dr. Mary John', role: 'Associate Pastor', desc: 'Youth & Family Ministry' },
+                { name: 'Pastor. James Alexander', role: 'Senior Pastor', desc: '25 years of ministry' },
+                { name: 'Dr. Jebaseeli Sudha', role: 'Associate Pastor', desc: 'Youth & Family Ministry' },
                 { name: 'Deacon Thomas', role: 'Church Elder', desc: 'Community Outreach' },
               ].map((leader) => (
                 <div key={leader.name} className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center border border-white/10 hover:bg-white/20 transition-all hover:-translate-y-2 group">

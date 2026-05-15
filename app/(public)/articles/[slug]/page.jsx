@@ -28,9 +28,15 @@ export default function ArticleDetailPage({ params }) {
     );
   }
 
-  const coverUrl = article.coverImage?.startsWith('http')
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || '';
+  let coverUrl = article.coverImage?.startsWith('http')
     ? article.coverImage
-    : article.coverImage ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '')}${article.coverImage}` : null;
+    : article.coverImage ? `${baseUrl}${article.coverImage}` : null;
+
+  // Legacy support
+  if (coverUrl && (article.coverImage?.startsWith('/images/') || article.coverImage?.startsWith('/videos/')) && !article.coverImage?.includes('/api/v1/media')) {
+    coverUrl = `${baseUrl}/api/v1/media${article.coverImage}`;
+  }
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
   const shareText = `${article.title} — Read this article`;

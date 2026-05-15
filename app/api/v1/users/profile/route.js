@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import { authenticate, parseBody, handleError } from '@/lib/apiHelpers';
-import { uploadToR2 } from '@/lib/r2Server';
+import { uploadToR2, deleteFromR2 } from '@/lib/r2Server';
 import User from '@/models/User';
 
 // GET /api/v1/users/profile
@@ -35,8 +35,10 @@ export async function PUT(request) {
     });
 
     if (file) {
-      const { url } = await uploadToR2(file.buffer, file.mimetype, file.originalname, 'avatars');
+      const { url, key } = await uploadToR2(file.buffer, file.mimetype, file.originalname, 'avatars');
+      if (user.avatarR2Key) await deleteFromR2(user.avatarR2Key);
       updates.avatar = url;
+      updates.avatarR2Key = key;
     }
 
     await connectDB();

@@ -46,9 +46,15 @@ export default function ArticlesPage() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {articles.map((article) => {
-            const coverUrl = article.coverImage?.startsWith('http')
+            const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || '';
+            let coverUrl = article.coverImage?.startsWith('http')
               ? article.coverImage
-              : article.coverImage ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '')}${article.coverImage}` : null;
+              : article.coverImage ? `${baseUrl}${article.coverImage}` : null;
+            
+            // Legacy support
+            if (coverUrl && (article.coverImage?.startsWith('/images/') || article.coverImage?.startsWith('/videos/')) && !article.coverImage?.includes('/api/v1/media')) {
+              coverUrl = `${baseUrl}/api/v1/media${article.coverImage}`;
+            }
 
             return (
               <Link href={`/articles/${article.slug}`} key={article._id} className="card group overflow-hidden hover:shadow-md transition-shadow">

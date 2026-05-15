@@ -6,7 +6,7 @@ import { Play, X } from 'lucide-react';
 import api from '../../../lib/api';
 import { useSelector } from 'react-redux';
 
-const fetcher = (url) => api.get(url).then((r) => r.data.data);
+const fetcher = (url) => api.get(url).then((r) => r.data);
 const tabs = ['all', 'image', 'video'];
 
 export default function GalleryPage() {
@@ -15,10 +15,21 @@ export default function GalleryPage() {
   const [selected, setSelected] = useState(null);
 
   const query = `/gallery?limit=50${type !== 'all' ? `&type=${type}` : ''}`;
-  const { data: items = [] } = useSWR(query, fetcher);
+  const { data } = useSWR(query, fetcher);
+  const items = data?.data || [];
 
-  const getUrl = (item) =>
-    item.url?.startsWith('http') ? item.url : `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '')}${item.url}`;
+  const getUrl = (item) => {
+    if (!item.url) return '';
+    if (item.url.startsWith('http')) return item.url;
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || '';
+    
+    // Legacy support: if URL starts with /images or /videos but is NOT already proxied
+    if ((item.url.startsWith('/images/') || item.url.startsWith('/videos/')) && !item.url.includes('/api/v1/media')) {
+      return `${baseUrl}/api/v1/media${item.url}`;
+    }
+    
+    return `${baseUrl}${item.url}`;
+  };
   const getThumbnail = (item) =>
     item.thumbnail || (item.youtubeVideoId ? `https://img.youtube.com/vi/${item.youtubeVideoId}/hqdefault.jpg` : getUrl(item));
 

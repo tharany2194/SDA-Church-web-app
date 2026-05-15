@@ -45,8 +45,9 @@ export async function POST(request) {
     body.createdBy = authResult.user.id;
 
     if (file) {
-      const { url } = await uploadToR2(file.buffer, file.mimetype, file.originalname, 'images');
+      const { url, key } = await uploadToR2(file.buffer, file.mimetype, file.originalname, 'images');
       body.image = url;
+      body.imageR2Key = key;
     }
 
     await connectDB();

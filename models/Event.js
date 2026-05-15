@@ -13,6 +13,7 @@ const eventSchema = new mongoose.Schema(
     image: { type: String, default: null },
     isPublished: { type: Boolean, default: true },
     isFeatured: { type: Boolean, default: false },
+    imageR2Key: { type: String, default: null },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   },
   { timestamps: true }

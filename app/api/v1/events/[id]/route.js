@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import { authenticate, authorize, parseBody, fail, handleError } from '@/lib/apiHelpers';
-import { uploadToR2 } from '@/lib/r2Server';
+import { uploadToR2, deleteFromR2 } from '@/lib/r2Server';
 import Event from '@/models/Event';
 
 // GET /api/v1/events/[id]
@@ -30,15 +30,20 @@ export async function PUT(request, { params }) {
     const { fields, file } = parsed;
 
     const body = { ...fields };
-    if (file) {
-      const { url } = await uploadToR2(file.buffer, file.mimetype, file.originalname, 'images');
-      body.image = url;
-    }
 
     await connectDB();
     const { id } = await params;
+    const existing = await Event.findById(id);
+    if (!existing) return fail('Event not found', 404);
+
+    if (file) {
+      const { url, key } = await uploadToR2(file.buffer, file.mimetype, file.originalname, 'images');
+      if (existing.imageR2Key) await deleteFromR2(existing.imageR2Key);
+      body.image = url;
+      body.imageR2Key = key;
+    }
+
     const event = await Event.findByIdAndUpdate(id, body, { new: true, runValidators: true });
-    if (!event) return fail('Event not found', 404);
     return NextResponse.json({ success: true, data: event });
   } catch (error) {
     return handleError(error);
@@ -55,8 +60,12 @@ export async function DELETE(request, { params }) {
 
     await connectDB();
     const { id } = await params;
-    const event = await Event.findByIdAndDelete(id);
+    const event = await Event.findById(id);
     if (!event) return fail('Event not found', 404);
+
+    if (event.imageR2Key) await deleteFromR2(event.imageR2Key);
+
+    await event.deleteOne();
     return NextResponse.json({ success: true, message: 'Event deleted' });
   } catch (error) {
     return handleError(error);

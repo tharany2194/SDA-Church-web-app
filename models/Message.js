@@ -20,6 +20,8 @@ const messageSchema = new mongoose.Schema(
     isPublished: { type: Boolean, default: true },
     isFeatured: { type: Boolean, default: false },
     order: { type: Number, default: 0 },
+    videoFileR2Key: { type: String, default: null },
+    thumbnailR2Key: { type: String, default: null },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   },
   { timestamps: true }

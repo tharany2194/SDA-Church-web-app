@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema(
     },
     phone: { type: String, trim: true },
     avatar: { type: String, default: null },
+    avatarR2Key: { type: String, default: null },
     isActive: { type: Boolean, default: true },
     lastLogin: { type: Date, default: null },
     preferredLanguage: { type: String, enum: ['en', 'ta'], default: 'en' },

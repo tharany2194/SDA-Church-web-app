@@ -16,6 +16,7 @@ const articleSchema = new mongoose.Schema(
     isPublished: { type: Boolean, default: false },
     isFeatured: { type: Boolean, default: false },
     order: { type: Number, default: 0 },
+    coverImageR2Key: { type: String, default: null },
     publishedAt: { type: Date },
   },
   { timestamps: true }

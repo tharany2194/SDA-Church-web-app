@@ -23,7 +23,8 @@ export default function SermonsPage() {
   const totalPages = data?.totalPages || 1;
 
   return (
-    <div className="py-12">
+    <div className="pt-24 pb-12">
+
       <div className="container-custom">
         <h1 className="section-title">
           {language === 'ta' ? 'பிரசங்கங்கள் & செய்திகள்' : 'Sermons & Messages'}

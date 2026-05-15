@@ -47,12 +47,13 @@ export default function GalleryPreview() {
                   />
                 ) : (
                   <Image
-                    src={item.thumbnail || `https://img.youtube.com/vi/${item.youtubeVideoId}/mqdefault.jpg`}
+                    src={item.thumbnail || (item.youtubeVideoId ? `https://img.youtube.com/vi/${item.youtubeVideoId}/mqdefault.jpg` : '/placeholder-gallery.jpg')}
                     alt={item.title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                 )}
+
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
                   {item.type === 'video' && (
                     <Play size={32} className="text-white opacity-80 drop-shadow-lg" />

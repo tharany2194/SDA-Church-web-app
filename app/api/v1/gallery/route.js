@@ -76,8 +76,12 @@ export async function POST(request) {
           body.thumbnail ||
           `https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
         body.url = body.url || `https://www.youtube.com/watch?v=${vid}`;
+      } else {
+        // If it's not a valid ID or URL, clear it to prevent broken links
+        delete body.youtubeVideoId;
       }
     }
+
 
     await connectDB();
     const item = await Gallery.create(body);

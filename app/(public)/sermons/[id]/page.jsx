@@ -55,10 +55,10 @@ export default function SermonDetailPage({ params }) {
               />
             </div>
           ) : sermon.videoFile ? (
-            <video controls className="w-full aspect-video bg-black" src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '')}${sermon.videoFile}`} />
+            <video controls className="w-full aspect-video bg-black" src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || ''}${sermon.videoFile?.includes('/api/v1/media') ? '' : '/api/v1/media'}${sermon.videoFile}`} />
           ) : sermon.thumbnail && (
             <div className="relative aspect-video bg-gray-900">
-              <img src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '')}${sermon.thumbnail}`} alt={sermon.title} className="w-full h-full object-cover opacity-70" />
+              <img src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || ''}${sermon.thumbnail?.includes('/api/v1/media') ? '' : '/api/v1/media'}${sermon.thumbnail}`} alt={sermon.title} className="w-full h-full object-cover opacity-70" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <Play size={64} className="text-white" />
               </div>

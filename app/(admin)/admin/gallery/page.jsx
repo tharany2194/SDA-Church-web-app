@@ -121,7 +121,18 @@ export default function AdminGallery() {
   const getThumbnail = (item) => {
     if (item.thumbnail) return item.thumbnail;
     if (item.youtubeVideoId) return `https://img.youtube.com/vi/${item.youtubeVideoId}/mqdefault.jpg`;
-    return item.url?.startsWith('http') ? item.url : `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '')}${item.url}`;
+    if (!item.url) return '/placeholder.png'; // Fallback
+    if (item.url.startsWith('http')) return item.url;
+    
+    // If it's a relative path, try to prepend API URL if available, else return as is
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || '';
+    
+    // Legacy support: if URL starts with /images or /videos but is NOT already proxied
+    if ((item.url.startsWith('/images/') || item.url.startsWith('/videos/')) && !item.url.includes('/api/v1/media')) {
+      return `${baseUrl}/api/v1/media${item.url}`;
+    }
+
+    return `${baseUrl}${item.url}`;
   };
 
   return (

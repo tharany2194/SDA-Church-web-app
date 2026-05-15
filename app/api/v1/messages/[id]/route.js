@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import { authenticate, authorize, parseBody, fail, handleError } from '@/lib/apiHelpers';
-import { uploadToR2 } from '@/lib/r2Server';
+import { uploadToR2, deleteFromR2 } from '@/lib/r2Server';
 import Message from '@/models/Message';
-
-const YOUTUBE_REGEX =
-  /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+import { getYouTubeId } from '@/lib/youtube';
 
 // GET /api/v1/messages/[id]
 export async function GET(request, { params }) {
@@ -37,21 +35,32 @@ export async function PUT(request, { params }) {
     const { fields, file } = parsed;
 
     const body = { ...fields };
-    if (file) {
-      const folder = file.mimetype.startsWith('video/') ? 'videos' : 'images';
-      const { url } = await uploadToR2(file.buffer, file.mimetype, file.originalname, folder);
-      if (file.mimetype.startsWith('video/')) body.videoFile = url;
-      else body.thumbnail = url;
-    }
-    if (body.youtubeUrl) {
-      const match = body.youtubeUrl.match(YOUTUBE_REGEX);
-      if (match) body.youtubeVideoId = match[1];
-    }
 
     await connectDB();
     const { id } = await params;
+    const existing = await Message.findById(id);
+    if (!existing) return fail('Message not found', 404);
+
+    if (file) {
+      const folder = file.mimetype.startsWith('video/') ? 'videos' : 'images';
+      const { url, key } = await uploadToR2(file.buffer, file.mimetype, file.originalname, folder);
+      if (file.mimetype.startsWith('video/')) {
+        if (existing.videoFileR2Key) await deleteFromR2(existing.videoFileR2Key);
+        body.videoFile = url;
+        body.videoFileR2Key = key;
+      } else {
+        if (existing.thumbnailR2Key) await deleteFromR2(existing.thumbnailR2Key);
+        body.thumbnail = url;
+        body.thumbnailR2Key = key;
+      }
+    }
+
+    if (body.youtubeUrl) {
+      const vid = getYouTubeId(body.youtubeUrl);
+      if (vid) body.youtubeVideoId = vid;
+    }
+
     const message = await Message.findByIdAndUpdate(id, body, { new: true, runValidators: true });
-    if (!message) return fail('Message not found', 404);
     return NextResponse.json({ success: true, data: message });
   } catch (error) {
     return handleError(error);
@@ -68,8 +77,13 @@ export async function DELETE(request, { params }) {
 
     await connectDB();
     const { id } = await params;
-    const message = await Message.findByIdAndDelete(id);
+    const message = await Message.findById(id);
     if (!message) return fail('Message not found', 404);
+
+    if (message.videoFileR2Key) await deleteFromR2(message.videoFileR2Key);
+    if (message.thumbnailR2Key) await deleteFromR2(message.thumbnailR2Key);
+
+    await message.deleteOne();
     return NextResponse.json({ success: true, message: 'Message deleted' });
   } catch (error) {
     return handleError(error);

@@ -3,9 +3,7 @@ import { connectDB } from '@/lib/db';
 import { authenticate, authorize, parseBody, handleError } from '@/lib/apiHelpers';
 import { uploadToR2 } from '@/lib/r2Server';
 import Message from '@/models/Message';
-
-const YOUTUBE_REGEX =
-  /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+import { getYouTubeId } from '@/lib/youtube';
 
 // GET /api/v1/messages
 export async function GET(request) {
@@ -61,14 +59,19 @@ export async function POST(request) {
 
     if (file) {
       const folder = file.mimetype.startsWith('video/') ? 'videos' : 'images';
-      const { url } = await uploadToR2(file.buffer, file.mimetype, file.originalname, folder);
-      if (file.mimetype.startsWith('video/')) body.videoFile = url;
-      else body.thumbnail = url;
+      const { url, key } = await uploadToR2(file.buffer, file.mimetype, file.originalname, folder);
+      if (file.mimetype.startsWith('video/')) {
+        body.videoFile = url;
+        body.videoFileR2Key = key;
+      } else {
+        body.thumbnail = url;
+        body.thumbnailR2Key = key;
+      }
     }
 
     if (body.youtubeUrl) {
-      const match = body.youtubeUrl.match(YOUTUBE_REGEX);
-      if (match) body.youtubeVideoId = match[1];
+      const vid = getYouTubeId(body.youtubeUrl);
+      if (vid) body.youtubeVideoId = vid;
     }
 
     await connectDB();

@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/db';
 import { authenticate, authorize, parseBody, handleError } from '@/lib/apiHelpers';
 import { uploadToR2 } from '@/lib/r2Server';
 import Gallery from '@/models/Gallery';
+import { getYouTubeId } from '@/lib/youtube';
 
 // GET /api/v1/gallery
 export async function GET(request) {
@@ -67,11 +68,15 @@ export async function POST(request) {
 
     // YouTube video item
     if (body.youtubeVideoId) {
-      body.type = 'video';
-      body.thumbnail =
-        body.thumbnail ||
-        `https://img.youtube.com/vi/${body.youtubeVideoId}/hqdefault.jpg`;
-      body.url = body.url || `https://www.youtube.com/watch?v=${body.youtubeVideoId}`;
+      const vid = getYouTubeId(body.youtubeVideoId);
+      if (vid) {
+        body.youtubeVideoId = vid;
+        body.type = 'video';
+        body.thumbnail =
+          body.thumbnail ||
+          `https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
+        body.url = body.url || `https://www.youtube.com/watch?v=${vid}`;
+      }
     }
 
     await connectDB();

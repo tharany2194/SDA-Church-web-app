@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import { authenticate, authorize, parseBody, fail, handleError } from '@/lib/apiHelpers';
-import { uploadToR2 } from '@/lib/r2Server';
+import { uploadToR2, deleteFromR2 } from '@/lib/r2Server';
 import Article from '@/models/Article';
 
 // GET /api/v1/articles/[id]  — param is slug for GET, _id for PUT/DELETE
@@ -34,11 +34,6 @@ export async function PUT(request, { params }) {
     const { fields, file } = parsed;
 
     const body = { ...fields };
-    if (file) {
-      const { url } = await uploadToR2(file.buffer, file.mimetype, file.originalname, 'images');
-      body.coverImage = url;
-    }
-
     await connectDB();
     const { id } = await params;
     const filter =
@@ -46,8 +41,17 @@ export async function PUT(request, { params }) {
         ? { _id: id }
         : { _id: id, author: authResult.user.id };
 
+    const existing = await Article.findOne(filter);
+    if (!existing) return fail('Article not found or unauthorized', 404);
+
+    if (file) {
+      const { url, key } = await uploadToR2(file.buffer, file.mimetype, file.originalname, 'images');
+      if (existing.coverImageR2Key) await deleteFromR2(existing.coverImageR2Key);
+      body.coverImage = url;
+      body.coverImageR2Key = key;
+    }
+
     const article = await Article.findOneAndUpdate(filter, body, { new: true, runValidators: true });
-    if (!article) return fail('Article not found or unauthorized', 404);
     return NextResponse.json({ success: true, data: article });
   } catch (error) {
     return handleError(error);
@@ -64,8 +68,12 @@ export async function DELETE(request, { params }) {
 
     await connectDB();
     const { id } = await params;
-    const article = await Article.findByIdAndDelete(id);
+    const article = await Article.findById(id);
     if (!article) return fail('Article not found', 404);
+
+    if (article.coverImageR2Key) await deleteFromR2(article.coverImageR2Key);
+
+    await article.deleteOne();
     return NextResponse.json({ success: true, message: 'Article deleted' });
   } catch (error) {
     return handleError(error);

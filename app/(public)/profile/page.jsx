@@ -57,9 +57,15 @@ function ProfilePage() {
     }
   };
 
-  const avatarUrl = user?.avatar?.startsWith('http')
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || '';
+  let avatarUrl = user?.avatar?.startsWith('http')
     ? user.avatar
-    : user?.avatar ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '')}${user.avatar}` : null;
+    : user?.avatar ? `${baseUrl}${user.avatar}` : null;
+
+  // Legacy support
+  if (avatarUrl && (user?.avatar?.startsWith('/avatars/') || user?.avatar?.startsWith('/images/')) && !user?.avatar?.includes('/api/v1/media')) {
+    avatarUrl = `${baseUrl}/api/v1/media${user.avatar}`;
+  }
 
   return (
     <div className="py-12 bg-gray-50 flex-1">

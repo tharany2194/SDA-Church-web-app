@@ -30,11 +30,23 @@ export default function GalleryPage() {
     
     return `${baseUrl}${item.url}`;
   };
-  const getThumbnail = (item) =>
-    item.thumbnail || (item.youtubeVideoId ? `https://img.youtube.com/vi/${item.youtubeVideoId}/hqdefault.jpg` : getUrl(item));
+  const getThumbnail = (item) => {
+    if (item.thumbnail) return item.thumbnail;
+    if (item.type === 'video') {
+      if (item.youtubeVideoId) {
+        return `https://img.youtube.com/vi/${item.youtubeVideoId}/hqdefault.jpg`;
+      }
+      return '/placeholder-gallery.jpg';
+    }
+    // For images, use the actual URL
+    return getUrl(item);
+  };
+
+
 
   return (
-    <div className="py-12">
+    <div className="pt-24 pb-12">
+
       <div className="container-custom">
         <h1 className="section-title">{language === 'ta' ? 'படத்தொகுப்பு' : 'Gallery'}</h1>
         <p className="section-subtitle">{language === 'ta' ? 'எங்கள் நிகழ்வு நினைவுகள்' : 'Photos and videos from our church community'}</p>

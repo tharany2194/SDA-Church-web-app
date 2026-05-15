@@ -71,8 +71,13 @@ export async function POST(request) {
 
     if (body.youtubeUrl) {
       const vid = getYouTubeId(body.youtubeUrl);
-      if (vid) body.youtubeVideoId = vid;
+      if (vid) {
+        body.youtubeVideoId = vid;
+        // Optionally update youtubeUrl to standard format
+        body.youtubeUrl = `https://www.youtube.com/watch?v=${vid}`;
+      }
     }
+
 
     await connectDB();
     const message = await Message.create(body);

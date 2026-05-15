@@ -36,7 +36,7 @@ export default function SermonDetailPage({ params }) {
   const shareText = `${sermon.title} — ${sermon.speaker ? `by ${sermon.speaker}` : 'Church Sermon'}`;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10">
+    <div className="min-h-screen bg-gray-50 pt-24 pb-10">
       <div className="container-custom max-w-4xl">
         <Link href="/sermons" className="inline-flex items-center gap-2 text-gray-500 hover:text-primary-600 text-sm mb-6">
           <ArrowLeft size={16} /> Back to Sermons
@@ -58,10 +58,7 @@ export default function SermonDetailPage({ params }) {
             <video controls className="w-full aspect-video bg-black" src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || ''}${sermon.videoFile?.includes('/api/v1/media') ? '' : '/api/v1/media'}${sermon.videoFile}`} />
           ) : sermon.thumbnail && (
             <div className="relative aspect-video bg-gray-900">
-              <img src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || ''}${sermon.thumbnail?.includes('/api/v1/media') ? '' : '/api/v1/media'}${sermon.thumbnail}`} alt={sermon.title} className="w-full h-full object-cover opacity-70" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Play size={64} className="text-white" />
-              </div>
+              <img src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || ''}${sermon.thumbnail?.includes('/api/v1/media') ? '' : '/api/v1/media'}${sermon.thumbnail}`} alt={sermon.title} className="w-full h-full object-cover" />
             </div>
           )}
 
@@ -114,16 +111,40 @@ export default function SermonDetailPage({ params }) {
               >
                 <Share2 size={15} /> Facebook
               </button>
-              <button
-                onClick={() => downloadSermonPDF(sermon)}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors"
-              >
-                <Download size={15} /> Download PDF
-              </button>
+              
+              {sermon.videoFile ? (
+                <a
+                  href={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || ''}${sermon.videoFile?.includes('/api/v1/media') ? '' : '/api/v1/media'}${sermon.videoFile}`}
+                  download={`${sermon.title}.mp4`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors"
+                >
+                  <Download size={15} /> Download Video
+                </a>
+              ) : (!sermon.youtubeVideoId && sermon.thumbnail) ? (
+                <a
+                  href={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || ''}${sermon.thumbnail?.includes('/api/v1/media') ? '' : '/api/v1/media'}${sermon.thumbnail}`}
+                  download={`${sermon.title}.jpg`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors"
+                >
+                  <Download size={15} /> Download Image
+                </a>
+              ) : (
+                <button
+                  onClick={() => downloadSermonPDF(sermon)}
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors"
+                >
+                  <Download size={15} /> Download PDF
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
     </div>
+
   );
 }

@@ -1,11 +1,17 @@
 import './globals.css';
-import { Inter } from 'next/font/google';
+import { Inter, Libre_Baskerville } from 'next/font/google';
 import ReduxProvider from '../store/Provider';
 import { Toaster } from 'react-hot-toast';
 import AuthInitializer from '../components/auth/AuthInitializer';
 import ServiceWorkerCleanup from '../components/layout/ServiceWorkerCleanup';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const libreBaskerville = Libre_Baskerville({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  variable: '--font-libre-baskerville',
+});
 
 export const metadata = {
   title: {
@@ -22,8 +28,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
-      <body suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${libreBaskerville.variable}`} suppressHydrationWarning>
+      <body className={libreBaskerville.className} suppressHydrationWarning>
         <ServiceWorkerCleanup />
         <ReduxProvider>
           <AuthInitializer />

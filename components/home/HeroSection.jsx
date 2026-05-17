@@ -98,7 +98,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative w-full -mt-20 overflow-hidden"
+      className="relative w-full -mt-20 overflow-hidden rounded-b-[40px] md:rounded-b-[80px] shadow-lg"
       style={{
         minHeight: 'calc(100vh + 5rem)',
       }}

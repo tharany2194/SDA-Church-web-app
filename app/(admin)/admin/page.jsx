@@ -47,11 +47,12 @@ export default function AdminDashboard() {
       {/* Quick Actions */}
       <div className="card p-6">
         <h3 className="font-semibold text-gray-900 mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           {[
             { href: '/admin/messages', label: 'Add Sermon', icon: MessageSquare, color: 'text-primary-600 bg-primary-50' },
             { href: '/admin/events', label: 'Add Event', icon: Calendar, color: 'text-blue-600 bg-blue-50' },
             { href: '/admin/gallery', label: 'Upload Media', icon: Image, color: 'text-green-600 bg-green-50' },
+            { href: '/admin/gallery?category=carousel&action=upload', label: 'Upload Carousel Media', icon: Image, color: 'text-purple-600 bg-purple-50' },
             { href: '/admin/articles', label: 'Write Article', icon: FileText, color: 'text-orange-600 bg-orange-50' },
             { href: '/admin/verses', label: 'Add Verses', icon: Heart, color: 'text-rose-600 bg-rose-50' },
           ].map(({ href, label, icon: Icon, color }) => (

@@ -54,3 +54,21 @@
 ::-webkit-scrollbar-track { background: #f1f1f1; }
 ::-webkit-scrollbar-thumb { background: #6d28d9; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #5b21b6; }
+
+/* Carousel Background Animation (Ken Burns) */
+@keyframes kenburns-slow {
+  0% {
+    transform: scale(1.02) translate(0%, 0%);
+  }
+  50% {
+    transform: scale(1.12) translate(1%, -0.8%);
+  }
+  100% {
+    transform: scale(1.02) translate(0%, 0%);
+  }
+}
+
+.animate-kenburns-active {
+  animation: kenburns-slow 12s ease-in-out infinite;
+}
+

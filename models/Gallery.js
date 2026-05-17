@@ -10,7 +10,7 @@ const gallerySchema = new mongoose.Schema(
     url: { type: String, required: [true, 'Media URL is required'] },
     thumbnail: { type: String },
     youtubeVideoId: { type: String },
-    category: { type: String, enum: ['service', 'event', 'youth', 'outreach', 'general'], default: 'general' },
+    category: { type: String, enum: ['service', 'event', 'youth', 'outreach', 'general', 'carousel'], default: 'general' },
     tags: [{ type: String }],
     isPublished: { type: Boolean, default: true },
     isFeatured: { type: Boolean, default: false },

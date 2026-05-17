@@ -1,6 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useSWR from 'swr';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Plus, Edit2, Trash2, X, Play } from 'lucide-react';
 import api from '../../../../lib/api';
@@ -9,31 +10,65 @@ import { useSelector } from 'react-redux';
 
 const fetcher = (url) => api.get(url).then((r) => r.data);
 
-function GalleryForm({ initial, onSave, onCancel }) {
+function GalleryForm({ initial, onSave, onCancel, forceCarousel }) {
   const [form, setForm] = useState(
-    initial || { title: '', type: 'image', youtubeVideoId: '', category: 'general', isPublished: true, isFeatured: false }
+    initial || { 
+      title: forceCarousel ? 'Carousel Background' : '', 
+      type: 'image', 
+      youtubeVideoId: '', 
+      category: forceCarousel ? 'carousel' : 'general', 
+      isPublished: true, 
+      isFeatured: false 
+    }
   );
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [saving, setSaving] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
+    let uploadToastId;
     try {
-      const fd = new FormData();
-      Object.entries(form).forEach(([k, v]) => { if (v !== undefined) fd.append(k, v); });
-      if (file) fd.append('media', file);
-
       if (initial) {
+        // Standard single item update
+        const fd = new FormData();
+        Object.entries(form).forEach(([k, v]) => { if (v !== undefined) fd.append(k, v); });
+        if (files.length > 0) fd.append('media', files[0]);
+
         await api.put(`/gallery/${initial._id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
         toast.success('Gallery item updated');
       } else {
-        await api.post('/gallery', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
-        toast.success('Gallery item added');
+        // Multi-file bulk creation
+        if (files.length === 0) {
+          toast.error('Please select at least one file');
+          setSaving(false);
+          return;
+        }
+
+        uploadToastId = toast.loading(`Uploading 1 of ${files.length} items...`);
+
+        for (let i = 0; i < files.length; i++) {
+          if (i > 0) {
+            toast.loading(`Uploading ${i + 1} of ${files.length} items...`, { id: uploadToastId });
+          }
+
+          const fd = new FormData();
+          Object.entries(form).forEach(([k, v]) => { if (v !== undefined) fd.append(k, v); });
+          fd.append('media', files[i]);
+
+          await api.post('/gallery', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+        }
+
+        toast.success(`Successfully uploaded ${files.length} items!`, { id: uploadToastId });
       }
       onSave();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to save');
+      const errMsg = err.response?.data?.message || 'Failed to save';
+      if (uploadToastId) {
+        toast.error(errMsg, { id: uploadToastId });
+      } else {
+        toast.error(errMsg);
+      }
     } finally {
       setSaving(false);
     }
@@ -65,16 +100,33 @@ function GalleryForm({ initial, onSave, onCancel }) {
             </div>
           )}
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">Upload File</label>
-            <input type="file" accept={form.type === 'image' ? 'image/*' : 'video/*,image/*'} onChange={(e) => setFile(e.target.files[0])} className="text-sm text-gray-600" />
+            <label className="text-sm font-medium text-gray-700 block mb-1">Upload {initial ? 'File' : 'File(s)'}</label>
+            <input 
+              type="file" 
+              accept={form.type === 'image' ? 'image/*' : 'video/*,image/*'} 
+              multiple={!initial}
+              onChange={(e) => setFiles(Array.from(e.target.files))} 
+              className="text-sm text-gray-600 cursor-pointer" 
+            />
+            {!initial && files.length > 0 && (
+              <span className="text-xs text-purple-600 font-semibold mt-1 block">
+                Selected {files.length} file{files.length > 1 ? 's' : ''} to upload
+              </span>
+            )}
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">Category</label>
-            <select className="input" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
-              {['service', 'event', 'youth', 'outreach', 'general'].map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </select>
+            {forceCarousel ? (
+              <select className="input bg-gray-50 border border-gray-200 text-gray-500 cursor-not-allowed" value="carousel" disabled>
+                <option value="carousel">Carousel (Locked)</option>
+              </select>
+            ) : (
+              <select className="input" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
+                {['service', 'event', 'youth', 'outreach', 'general'].map((c) => (
+                  <option key={c} value={c} className="capitalize">{c}</option>
+                ))}
+              </select>
+            )}
           </div>
           <div className="flex gap-4">
             <label className="flex items-center gap-2 text-sm cursor-pointer">
@@ -100,10 +152,24 @@ export default function AdminGallery() {
   const { user } = useSelector((s) => s.auth);
   const canDelete = ['super_admin', 'admin'].includes(user?.role);
   const [type, setType] = useState('all');
+  const [category, setCategory] = useState('all');
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
 
-  const query = `/gallery?limit=50${type !== 'all' ? `&type=${type}` : ''}`;
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category');
+  const actionParam = searchParams.get('action');
+
+  useEffect(() => {
+    if (categoryParam) {
+      setCategory(categoryParam);
+    }
+    if (actionParam === 'upload') {
+      setShowForm(true);
+    }
+  }, [categoryParam, actionParam]);
+
+  const query = `/gallery?limit=50${type !== 'all' ? `&type=${type}` : ''}${category !== 'all' ? `&category=${category}` : ''}`;
   const { data, mutate } = useSWR(query, fetcher);
   const items = data?.data || [];
 
@@ -144,12 +210,27 @@ export default function AdminGallery() {
         </button>
       </div>
 
-      <div className="flex gap-2 mb-5">
-        {['all', 'image', 'video'].map((t) => (
-          <button key={t} onClick={() => setType(t)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium capitalize ${type === t ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-          >{t}</button>
-        ))}
+      <div className="flex flex-wrap gap-4 items-center justify-between mb-5">
+        <div className="flex gap-2">
+          {['all', 'image', 'video'].map((t) => (
+            <button key={t} onClick={() => setType(t)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium capitalize ${type === t ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+            >{t}</button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500 font-medium font-sans">Category:</span>
+          <select 
+            value={category} 
+            onChange={(e) => setCategory(e.target.value)} 
+            className="px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700 outline-none cursor-pointer"
+          >
+            {['all', 'service', 'event', 'youth', 'outreach', 'general', 'carousel'].map((c) => (
+              <option key={c} value={c} className="capitalize">{c}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
@@ -162,11 +243,11 @@ export default function AdminGallery() {
               </div>
             )}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-colors flex items-end justify-center pb-2 gap-2 opacity-0 group-hover:opacity-100">
-              <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 bg-white rounded-lg text-primary-600 hover:bg-primary-50">
+              <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 bg-white rounded-lg text-primary-600 hover:bg-primary-50 cursor-pointer">
                 <Edit2 size={14} />
               </button>
               {canDelete && (
-                <button onClick={() => handleDelete(item._id)} className="p-2 bg-white rounded-lg text-red-600 hover:bg-red-50">
+                <button onClick={() => handleDelete(item._id)} className="p-2 bg-white rounded-lg text-red-600 hover:bg-red-50 cursor-pointer">
                   <Trash2 size={14} />
                 </button>
               )}
@@ -181,7 +262,14 @@ export default function AdminGallery() {
         )}
       </div>
 
-      {showForm && <GalleryForm initial={editing} onSave={() => { setShowForm(false); setEditing(null); mutate(); }} onCancel={() => { setShowForm(false); setEditing(null); }} />}
+      {showForm && (
+        <GalleryForm 
+          initial={editing} 
+          forceCarousel={category === 'carousel' || editing?.category === 'carousel'}
+          onSave={() => { setShowForm(false); setEditing(null); mutate(); }} 
+          onCancel={() => { setShowForm(false); setEditing(null); }} 
+        />
+      )}
     </div>
   );
 }

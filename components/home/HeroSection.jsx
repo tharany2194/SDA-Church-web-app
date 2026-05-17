@@ -1,8 +1,26 @@
 'use client';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { Play, MapPin, ChevronRight, Instagram, Facebook, Twitter, Linkedin } from 'lucide-react';
+import api from '@/lib/api';
+
+const IMAGES = [
+  '/images/c_1.img.jpeg',
+  '/images/c_2.img.jpeg',
+  '/images/c_3.img.jpeg',
+  '/images/c_4.img.jpeg',
+  '/images/c_5.img.jpeg',
+  '/images/c_6.img.jpeg',
+  '/images/c_7.img.jpeg',
+  '/images/c_8.img.jpeg',
+  '/images/c_9.img.jpeg',
+  '/images/c_10.img.jpeg',
+  '/images/c_11.img.jpeg',
+  '/images/c_12.img.jpeg',
+  '/images/c_13.img.jpeg',
+];
 
 const SOCIAL = [
   { Icon: Instagram, label: 'ig' },
@@ -13,6 +31,41 @@ const SOCIAL = [
 
 export default function HeroSection() {
   const { language } = useSelector((s) => s.ui);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [carouselImages, setCarouselImages] = useState([]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const { data } = await api.get('/gallery?category=carousel');
+        if (data?.success && data?.data?.length > 0) {
+          const urls = data.data.map(item => {
+            if (item.url.startsWith('http')) return item.url;
+            const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || '';
+            if (item.url.startsWith('/images/')) {
+              return `${baseUrl}/api/v1/media${item.url}`;
+            }
+            return `${baseUrl}${item.url}`;
+          });
+          setCarouselImages(urls);
+        }
+      } catch (err) {
+        console.error('Failed to fetch admin carousel images, using fallbacks', err);
+      }
+    };
+    fetchImages();
+  }, []);
+
+  const activeImages = carouselImages.length > 0 ? carouselImages : IMAGES;
+
+  useEffect(() => {
+    if (isHovered) return;
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % activeImages.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isHovered, activeImages.length]);
 
   const content = {
     en: {
@@ -48,29 +101,55 @@ export default function HeroSection() {
       className="relative w-full -mt-20 overflow-hidden"
       style={{
         minHeight: 'calc(100vh + 5rem)',
-        backgroundImage: "url('/images/hero_img.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
       }}
     >
+      {/* Outer Backdrop Carousel */}
+      {activeImages.map((img, idx) => (
+        <div
+          key={`outer-${img}`}
+          className={`absolute inset-0 transition-all duration-[1200ms] ease-in-out ${
+            idx === currentImageIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+          }`}
+          style={{
+            backgroundImage: `url('${img}')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+      ))}
+
       {/* Outer vignette */}
-      <div className="absolute inset-0 bg-black/15" />
+      <div className="absolute inset-0 bg-black/15 z-0" />
 
       {/* Inner glass card — starts beneath navbar (top: 10rem = navbar bottom) */}
       <div
         className="absolute z-10 inset-x-3 sm:inset-x-4 md:inset-x-6 lg:inset-x-8 rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 shadow-2xl"
         style={{ top: '10rem', bottom: '1.5rem' }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Card background image */}
-        <Image
-          src="/images/hero_img.png"
-          alt="bg"
-          fill
-          className="object-cover object-center scale-105"
-          priority
-        />
+        {/* Card background image carousel */}
+        {activeImages.map((img, idx) => (
+          <div
+            key={`inner-${img}`}
+            className={`absolute inset-0 transition-all duration-[1200ms] ease-in-out ${
+              idx === currentImageIndex ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+          >
+            <Image
+              src={img}
+              alt="bg"
+              fill
+              className={`object-cover object-center ${
+                idx === currentImageIndex ? 'scale-105 animate-kenburns-active' : 'scale-100'
+              }`}
+              priority={idx === 0}
+            />
+          </div>
+        ))}
+
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] pointer-events-none" />
 
         {/* Content wrapper */}
         <div className="relative z-10 h-full flex flex-col md:flex-row items-center md:items-end justify-between px-4 sm:px-6 md:px-10 lg:px-14 pb-4 sm:pb-5 md:pb-8 lg:pb-10 pt-4 sm:pt-6">
@@ -161,18 +240,37 @@ export default function HeroSection() {
 
             </div>
 
-            {/* Social Icons */}
-            <div className="flex gap-2 sm:gap-3 items-center">
+            {/* Carousel Indicators & Social Icons */}
+            <div className="flex gap-4 items-center">
+              {/* Modern Minimalist Indicators */}
+              <div className="flex gap-1.5 items-center bg-black/25 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+                {activeImages.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentImageIndex(idx)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      idx === currentImageIndex 
+                        ? 'w-4 bg-white' 
+                        : 'w-1.5 bg-white/40 hover:bg-white/60'
+                    }`}
+                    aria-label={`Go to slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+
               <span className="h-px w-6 bg-white/20 hidden md:block" />
-              {SOCIAL.map(({ Icon, label }) => (
-                <a
-                  key={label}
-                  href="#"
-                  className="w-7 h-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/25 transition-all"
-                >
-                  <Icon size={12} />
-                </a>
-              ))}
+
+              <div className="flex gap-2 sm:gap-3 items-center">
+                {SOCIAL.map(({ Icon, label }) => (
+                  <a
+                    key={label}
+                    href="#"
+                    className="w-7 h-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/25 transition-all"
+                  >
+                    <Icon size={12} />
+                  </a>
+                ))}
+              </div>
             </div>
 
           </div>

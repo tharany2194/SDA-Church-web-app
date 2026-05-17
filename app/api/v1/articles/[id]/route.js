@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/db';
 import { authenticate, authorize, parseBody, fail, handleError } from '@/lib/apiHelpers';
 import { uploadToR2, deleteFromR2 } from '@/lib/r2Server';
 import Article from '@/models/Article';
+import User from '@/models/User';
 
 // GET /api/v1/articles/[id]  — param is slug for GET, _id for PUT/DELETE
 export async function GET(request, { params }) {

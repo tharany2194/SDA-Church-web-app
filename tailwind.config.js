@@ -33,8 +33,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        serif: ['Georgia', 'Cambria', 'serif'],
+        sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-libre-baskerville)', 'Libre Baskerville', 'Georgia', 'Cambria', 'serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',

@@ -167,63 +167,74 @@ export default function VerseOfTheDay() {
   if (!verse) return null;
 
   return (
-    <section className="relative min-h-[500px] md:min-h-[600px] flex items-center py-24 md:py-32 overflow-hidden">
-      {/* Background Images */}
-      <div className="absolute inset-0 z-0">
-        <div className="hidden md:block h-full w-full relative">
-          <Image
-            src="/images/verses_bg_landscape.png"
-            alt="Verse background"
-            fill
-            className="object-cover object-top"
-            priority
-          />
-        </div>
-        <div className="block md:hidden h-full w-full relative">
-          <Image
-            src="/images/verses_bg_portrait.png"
-            alt="Verse background"
-            fill
-            className="object-cover object-top"
-            priority
-          />
-        </div>
-        {/* Overlay for readability */}
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]"></div>
-      </div>
-
-      {/* Top Right Logo */}
-      <div className="absolute top-8 right-8 z-20 w-36 md:w-48 drop-shadow-xl">
-        <Image 
-          src="/images/logo.png" 
-          alt="Church Logo" 
-          width={225} 
-          height={225} 
-          className="object-contain"
-        />
-      </div>
-
-      <div className="container-custom relative z-10">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <BookOpen size={20} className="text-gold" />
-            <span className="text-gold font-semibold tracking-wide uppercase text-sm">
-              {language === 'ta' ? 'இன்றைய வசனம்' : 'Verse of the Day'}
-            </span>
+    <section className="relative w-full py-16 md:py-24 bg-transparent overflow-hidden">
+      <div className="w-[94%] sm:w-[95%] max-w-7xl mx-auto glow-card-container">
+        {/* Animated Glow Border background */}
+        <div className="glow-card-border" />
+        
+        {/* Card Content Body */}
+        <div className="glow-card-content relative overflow-hidden flex flex-col items-center justify-center p-8 sm:p-12 md:p-16 lg:p-20 text-center min-h-[450px] md:min-h-[550px]">
+          
+          {/* Card background image inside the card */}
+          <div className="absolute inset-0 z-0">
+            <div className="hidden md:block h-full w-full relative">
+              <Image
+                src="/images/verses_bg_landscape.png"
+                alt="Verse background"
+                fill
+                className="object-cover object-center"
+                priority
+              />
+            </div>
+            <div className="block md:hidden h-full w-full relative">
+              <Image
+                src="/images/verses_bg_portrait.png"
+                alt="Verse background"
+                fill
+                className="object-cover object-center"
+                priority
+              />
+            </div>
+            {/* Dark glassmorphic overlay inside card */}
+            <div className="absolute inset-0 bg-black/55 backdrop-blur-[1px]"></div>
           </div>
-          <blockquote className="text-white text-2xl md:text-3xl font-serif leading-relaxed italic mb-4 drop-shadow-lg">
-            "{language === 'ta' ? verse.ta : verse.en}"
-          </blockquote>
-          <cite className="text-gold font-bold text-xl not-italic drop-shadow-md">— {language === 'ta' ? (verse.refTa || verse.ref) : verse.ref}</cite>
-          <div className="mt-8">
-            <button
-              onClick={downloadVerse}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gold text-church-dark font-bold text-sm hover:bg-gold-light transition-all transform hover:scale-105 shadow-xl"
-            >
-              <Download size={18} />
-              {language === 'ta' ? 'படமாக பதிவிறக்கு' : 'Download as Image'}
-            </button>
+
+          {/* Top Right Logo inside card */}
+          <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-20 w-24 sm:w-32 md:w-40 drop-shadow-xl opacity-90">
+            <Image 
+              src="/images/logo.png" 
+              alt="Church Logo" 
+              width={225} 
+              height={225} 
+              className="object-contain"
+            />
           </div>
+
+          {/* Text block (Relative z-10 for drawing above the inner image) */}
+          <div className="relative z-10 max-w-3xl flex flex-col items-center">
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <BookOpen size={20} className="text-gold" />
+              <span className="text-gold font-semibold tracking-wide uppercase text-sm">
+                {language === 'ta' ? 'இன்றைய வசனம்' : 'Verse of the Day'}
+              </span>
+            </div>
+            <blockquote className="text-white text-2xl md:text-3xl lg:text-4xl font-serif leading-relaxed italic mb-6 drop-shadow-lg max-w-3xl">
+              "{language === 'ta' ? verse.ta?.replace(/^"+|"+$/g, '').trim() : verse.en?.replace(/^"+|"+$/g, '').trim()}"
+            </blockquote>
+            <cite className="text-gold font-bold text-xl md:text-2xl not-italic drop-shadow-md">
+              — {language === 'ta' ? (verse.refTa || verse.ref) : verse.ref}
+            </cite>
+            <div className="mt-8 sm:mt-10">
+              <button
+                onClick={downloadVerse}
+                className="inline-flex items-center gap-2 px-6 py-2.5 sm:px-8 sm:py-3.5 rounded-full bg-gold text-church-dark font-bold text-xs sm:text-sm hover:bg-gold-light transition-all transform hover:scale-105 shadow-xl cursor-pointer"
+              >
+                <Download size={18} />
+                {language === 'ta' ? 'படமாக பதிவிறக்கு' : 'Download as Image'}
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>

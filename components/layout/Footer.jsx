@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Facebook, Youtube, Mail, Phone, MapPin, Navigation, Users, Play } from 'lucide-react';
 
 const footerLinks = {
@@ -100,11 +101,16 @@ export default function Footer() {
 
             {/* Brand */}
             <div className="lg:col-span-3">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">✝</span>
+              <div className="flex flex-col items-start gap-3 mb-4">
+                <div className="relative w-32 h-14 rounded-xl bg-white shadow-md overflow-hidden p-1">
+                  <Image 
+                    src="/images/logo.png" 
+                    alt="Varadharajapuram SDA Church Logo" 
+                    fill
+                    className="object-contain"
+                  />
                 </div>
-                <span className="text-white font-bold text-xl tracking-tight">Varadharajapuram SDA</span>
+                <span className="text-white font-bold text-xl tracking-tight">Varadharajapuram CSDA Church</span>
               </div>
               <p className="text-sm leading-relaxed text-gray-400 mb-8 max-w-xs">
                 Dedicated to sharing the everlasting gospel and serving the local community with grace and compassion.
@@ -165,12 +171,6 @@ export default function Footer() {
                     <Phone size={18} className="text-white/70 shrink-0" />
                     <a href="tel:+919962589089" className="hover:text-white transition-colors">+91 99625 89089</a>
                   </div>
-                  <div className="flex gap-3 text-sm text-gray-400">
-                    <Mail size={18} className="text-white/70 shrink-0" />
-                    <a href="mailto:info@sdachurchvaradharajapuram.com" className="hover:text-white transition-colors text-[11px] sm:text-sm">
-                      info@sdachurchvaradharajapuram.com
-                    </a>
-                  </div>
                 </div>
               </div>
 
@@ -202,12 +202,11 @@ export default function Footer() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-400">
-            <div className="text-sm font-medium">
-              © {currentYear} Varadharajapuram SDA Church. All rights reserved.
+          <div className="pt-6 border-t border-white/10 flex flex-col items-center justify-center gap-3 text-gray-400">
+            <div className="text-sm font-medium text-center">
+              © {currentYear} Varadharajapuram CSDA Church. All rights reserved.
             </div>
-            <div className="hidden md:block" />
-            <div className="flex items-center gap-6 text-sm">
+            <div className="flex items-center justify-center text-sm">
               <a href="mailto:info@sdachurchvaradharajapuram.com" className="flex items-center gap-2 hover:text-white transition-colors">
                 <Mail size={16} className="text-white/70" />
                 <span>info@sdachurchvaradharajapuram.com</span>

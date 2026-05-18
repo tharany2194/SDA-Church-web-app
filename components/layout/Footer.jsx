@@ -23,7 +23,7 @@ const navCards = [
   {
     icon: Navigation,
     title: 'Times & Locations',
-    desc: 'We have a campus near you',
+    desc: 'Find us across the globe',
     href: '/contact',
   },
   {
@@ -50,7 +50,7 @@ export default function Footer() {
         <div
           className="rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-white/10"
           style={{
-            background: 'linear-gradient(135deg, rgba(30,30,60,0.97) 0%, rgba(10,20,45,0.98) 100%)',
+            background: 'rgba(3,40,35,0.98)',
             backdropFilter: 'blur(20px)',
             boxShadow: '0 20px 60px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.08) inset',
           }}
@@ -83,21 +83,18 @@ export default function Footer() {
 
       {/* ── Main Footer ───────────────────────────────────────────── */}
       <footer
-        className="relative overflow-hidden bg-[#075e54] text-gray-300 rounded-tl-[60px] md:rounded-tl-[100px] rounded-tr-[60px] md:rounded-tr-[100px] min-h-screen flex flex-col justify-between"
+        className="relative overflow-hidden bg-[#075e54] text-gray-300 rounded-tl-[60px] md:rounded-tl-[100px] rounded-tr-[60px] md:rounded-tr-[100px] flex flex-col justify-between"
       >
-        {/* Watermark + grid bg */}
+        {/* Background Grids & Top Glow */}
         <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/[0.03] font-black text-[6rem] md:text-[10rem] whitespace-nowrap tracking-tighter">
-            SDA CHURCH
-          </div>
           <div className="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:20px_20px] opacity-30" />
           {/* Top glow to blend with overlap card */}
           <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#075e54]/80 to-transparent" />
         </div>
 
         {/* Content — padded generously from the top for the overlap card */}
-        <div className="relative z-10 container-custom pt-20 pb-8 flex-1">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 border-t border-white/5 pt-10 mb-10">
+        <div className="relative z-10 container-custom pt-20 flex-1 flex flex-col justify-between">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 border-t border-white/5 pt-10 mb-4">
 
             {/* Brand */}
             <div className="lg:col-span-3">
@@ -110,7 +107,7 @@ export default function Footer() {
                     className="object-contain"
                   />
                 </div>
-                <span className="text-white font-bold text-xl tracking-tight">Varadharajapuram CSDA Church</span>
+                <span className="text-white font-bold text-xl tracking-tight">Varadharajapuram</span>
               </div>
               <p className="text-sm leading-relaxed text-gray-400 mb-8 max-w-xs">
                 Dedicated to sharing the everlasting gospel and serving the local community with grace and compassion.
@@ -201,15 +198,19 @@ export default function Footer() {
 
           </div>
 
-          {/* Bottom Bar */}
-          <div className="pt-6 border-t border-white/10 flex flex-col items-center justify-center gap-3 text-gray-400">
-            <div className="text-sm font-medium text-center">
-              © {currentYear} Varadharajapuram CSDA Church. All rights reserved.
+          {/* Watermark */}
+          <div className="relative z-0 pointer-events-none select-none overflow-hidden w-full flex justify-center pb-1 pt-2 md:pt-4 mt-2">
+            <div className="text-white/[0.03] font-black text-[6rem] md:text-[10rem] whitespace-nowrap tracking-tighter leading-none">
+              SDA CHURCH
             </div>
-            <div className="flex items-center justify-center text-sm">
-              <a href="mailto:info@sdachurchvaradharajapuram.com" className="flex items-center gap-2 hover:text-white transition-colors">
-                <Mail size={16} className="text-white/70" />
-                <span>info@sdachurchvaradharajapuram.com</span>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="pt-3 pb-6 border-t border-white/10 flex flex-col items-center justify-center text-gray-400">
+            <div className="text-sm font-medium text-center flex flex-col md:flex-row items-center gap-2 md:gap-4">
+              <span>© {currentYear} Varadharajapuram CSDA Church. All rights reserved.</span>
+              <a href="mailto:info@sdachurchvaradharajapuram.com" className="hover:text-white transition-colors">
+                info@sdachurchvaradharajapuram.com
               </a>
             </div>
           </div>

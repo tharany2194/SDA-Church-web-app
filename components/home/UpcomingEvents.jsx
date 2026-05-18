@@ -43,7 +43,7 @@ export default function UpcomingEvents() {
   };
 
   return (
-    <div className="px-4 sm:px-8 md:px-12 py-8">
+    <div id="events" className="px-4 sm:px-8 md:px-12 py-8">
       <section
         className="relative overflow-hidden rounded-tr-[80px] md:rounded-tr-[120px] rounded-bl-[80px] md:rounded-bl-[120px] min-h-screen flex flex-col justify-start"
         style={{

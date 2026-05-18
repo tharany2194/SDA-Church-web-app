@@ -5,6 +5,7 @@ const uiSlice = createSlice({
   initialState: {
     language: 'en', // 'en' | 'ta'
     isMobileMenuOpen: false,
+    loginModalOpen: false,
   },
   reducers: {
     setLanguage(state, action) {
@@ -16,8 +17,14 @@ const uiSlice = createSlice({
     closeMobileMenu(state) {
       state.isMobileMenuOpen = false;
     },
+    openLoginModal(state) {
+      state.loginModalOpen = true;
+    },
+    closeLoginModal(state) {
+      state.loginModalOpen = false;
+    },
   },
 });
 
-export const { setLanguage, toggleMobileMenu, closeMobileMenu } = uiSlice.actions;
+export const { setLanguage, toggleMobileMenu, closeMobileMenu, openLoginModal, closeLoginModal } = uiSlice.actions;
 export default uiSlice.reducer;

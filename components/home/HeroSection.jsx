@@ -2,9 +2,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Play, MapPin, ChevronRight, Instagram, Facebook, Twitter, Linkedin } from 'lucide-react';
 import api from '@/lib/api';
+import { openLoginModal } from '../../store/slices/uiSlice';
 
 const IMAGES = [
   '/images/c_1.img.jpeg',
@@ -30,6 +31,7 @@ const SOCIAL = [
 ];
 
 export default function HeroSection() {
+  const dispatch = useDispatch();
   const { language } = useSelector((s) => s.ui);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -182,14 +184,15 @@ export default function HeroSection() {
 
             {/* CTAs */}
             <div className="flex flex-row items-center justify-center md:justify-start gap-3 mt-1 md:mt-0">
-              <Link
-                href="/about"
+              <button
+                type="button"
+                onClick={() => dispatch(openLoginModal())}
                 className="px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-full bg-white/95 text-gray-900 text-[10px] sm:text-xs md:text-sm font-bold hover:bg-white transition-all shadow-xl whitespace-nowrap"
               >
                 {t.cta}
-              </Link>
+              </button>
               <Link
-                href="/sermons"
+                href="#watch-live"
                 className="flex items-center gap-2 text-white text-[10px] sm:text-xs md:text-sm font-semibold group px-3 sm:px-5 py-2.5 rounded-full hover:bg-white/10 transition-all"
               >
                 <span className="w-7 h-7 sm:w-9 sm:h-10 rounded-full border border-white/30 bg-white/10 flex items-center justify-center group-hover:bg-white/30 transition-all flex-shrink-0">
@@ -207,7 +210,10 @@ export default function HeroSection() {
             <div className="flex flex-col items-center gap-3 min-[425px]:flex-row min-[425px]:items-end min-[425px]:gap-2 sm:gap-4 justify-center md:justify-end w-full">
 
               {/* Card 1 — Saturday Worship */}
-              <div className="relative w-[80%] min-[425px]:w-[44%] xs:w-[110px] sm:w-[150px] md:w-48 lg:w-56 h-40 min-[425px]:h-32 xs:h-36 sm:h-48 md:h-60 lg:h-72 rounded-xl sm:rounded-2xl overflow-hidden border border-white/30 shadow-2xl group cursor-pointer transition-transform hover:-translate-y-1">
+              <Link
+                href="/sermons"
+                className="relative block w-[80%] min-[425px]:w-[44%] xs:w-[110px] sm:w-[150px] md:w-48 lg:w-56 h-40 min-[425px]:h-32 xs:h-36 sm:h-48 md:h-60 lg:h-72 rounded-xl sm:rounded-2xl overflow-hidden border border-white/30 shadow-2xl group cursor-pointer transition-transform hover:-translate-y-1"
+              >
                 <Image src="/images/img1.jpeg" alt={t.card1} fill className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/20 border border-white/30 flex items-center justify-center backdrop-blur-sm group-hover:bg-white/40 transition-all">
@@ -220,10 +226,13 @@ export default function HeroSection() {
                   </div>
                   <p className="text-white/60 text-[7px] sm:text-[9px]">{t.card1sub}</p>
                 </div>
-              </div>
+              </Link>
 
               {/* Card 2 — Prayer Meeting */}
-              <div className="relative w-[80%] min-[425px]:w-[44%] xs:w-[110px] sm:w-[150px] md:w-48 lg:w-56 h-36 min-[425px]:h-24 xs:h-28 sm:h-40 md:h-52 lg:h-64 rounded-xl sm:rounded-2xl overflow-hidden border border-white/30 shadow-2xl group cursor-pointer transition-transform hover:-translate-y-1">
+              <Link
+                href="#events"
+                className="relative block w-[80%] min-[425px]:w-[44%] xs:w-[110px] sm:w-[150px] md:w-48 lg:w-56 h-36 min-[425px]:h-24 xs:h-28 sm:h-40 md:h-52 lg:h-64 rounded-xl sm:rounded-2xl overflow-hidden border border-white/30 shadow-2xl group cursor-pointer transition-transform hover:-translate-y-1"
+              >
                 <Image src="/images/img2.jpeg" alt={t.card2} fill className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/20 border border-white/30 flex items-center justify-center backdrop-blur-sm group-hover:bg-white/40 transition-all">
@@ -236,7 +245,7 @@ export default function HeroSection() {
                   </div>
                   <p className="text-white/60 text-[7px] sm:text-[9px]">{t.card2sub}</p>
                 </div>
-              </div>
+              </Link>
 
             </div>
 

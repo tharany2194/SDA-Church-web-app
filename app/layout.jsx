@@ -4,6 +4,7 @@ import ReduxProvider from '../store/Provider';
 import { Toaster } from 'react-hot-toast';
 import AuthInitializer from '../components/auth/AuthInitializer';
 import ServiceWorkerCleanup from '../components/layout/ServiceWorkerCleanup';
+import LoginModalLayer from '../components/auth/LoginModalLayer';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const libreBaskerville = Libre_Baskerville({
@@ -34,6 +35,7 @@ export default function RootLayout({ children }) {
         <ReduxProvider>
           <AuthInitializer />
           {children}
+          <LoginModalLayer />
           <Toaster
             position="top-right"
             toastOptions={{

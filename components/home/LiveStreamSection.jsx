@@ -41,7 +41,7 @@ export default function LiveStreamSection() {
 
   return (
     /* Outer margin wrapper — gives breathing room so the curved shape is fully visible */
-    <div className="px-4 sm:px-8 md:px-12 py-8">
+    <div id="watch-live" className="px-4 sm:px-8 md:px-12 py-8">
       <section
         className="relative overflow-hidden curve-tr-bl"
         style={{

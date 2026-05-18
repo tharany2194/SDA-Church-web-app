@@ -52,7 +52,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">Email</p>
-                  <a href="mailto:info@gracechurch.com" className="text-primary-600 text-sm hover:underline">info@varadharajapuramsdachurch.com</a>
+                  <a href="mailto:varadharajapuramsdachurch@gmail.com" className="text-primary-600 text-sm hover:underline">varadharajapuramsdachurch@gmail.com</a>
                 </div>
               </li>
             </ul>

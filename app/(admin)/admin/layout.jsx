@@ -12,6 +12,7 @@ import clsx from 'clsx';
 import withAuth from '../../../components/auth/withAuth';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import LogoutConfirmModal from '../../../components/auth/LogoutConfirmModal';
 
 const navItems = [
   { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
@@ -29,8 +30,14 @@ function AdminLayout({ children }) {
   const router = useRouter();
   const { user } = useSelector((s) => s.auth);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
+    setLogoutModalOpen(true);
+  };
+
+  const confirmLogout = async () => {
+    setLogoutModalOpen(false);
     await dispatch(logout());
     toast.success('Signed out');
     router.replace('/');
@@ -97,44 +104,52 @@ function AdminLayout({ children }) {
   );
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
-      {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-60 bg-primary-900 flex-col fixed inset-y-0 left-0">
-        <SidebarContent />
-      </aside>
+    <>
+      <div className="min-h-screen flex bg-gray-50">
+        {/* Desktop Sidebar */}
+        <aside className="hidden lg:flex w-60 bg-primary-900 flex-col fixed inset-y-0 left-0">
+          <SidebarContent />
+        </aside>
 
-      {/* Mobile Sidebar */}
-      {sidebarOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 flex">
-          <div className="w-60 bg-primary-900 flex flex-col">
-            <SidebarContent />
+        {/* Mobile Sidebar */}
+        {sidebarOpen && (
+          <div className="lg:hidden fixed inset-0 z-50 flex">
+            <div className="w-60 bg-primary-900 flex flex-col">
+              <SidebarContent />
+            </div>
+            <div className="flex-1 bg-black/50" onClick={() => setSidebarOpen(false)} />
           </div>
-          <div className="flex-1 bg-black/50" onClick={() => setSidebarOpen(false)} />
+        )}
+
+        {/* Main Content */}
+        <div className="lg:ml-60 flex-1 flex flex-col min-h-screen">
+          {/* Topbar */}
+          <header className="bg-white border-b border-gray-200 px-6 h-14 flex items-center justify-between sticky top-0 z-30">
+            <button
+              className="lg:hidden p-1.5 rounded-lg hover:bg-gray-100"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <Menu size={20} />
+            </button>
+            <h1 className="font-semibold text-gray-900 capitalize">
+              {navItems.find((n) => n.href === pathname)?.label || 'Admin'}
+            </h1>
+            <Link href="/" className="text-sm text-primary-600 hover:underline flex items-center gap-1">
+              View Site <ChevronRight size={14} />
+            </Link>
+          </header>
+
+          {/* Page Content */}
+          <main className="flex-1 p-6">{children}</main>
         </div>
-      )}
-
-      {/* Main Content */}
-      <div className="lg:ml-60 flex-1 flex flex-col min-h-screen">
-        {/* Topbar */}
-        <header className="bg-white border-b border-gray-200 px-6 h-14 flex items-center justify-between sticky top-0 z-30">
-          <button
-            className="lg:hidden p-1.5 rounded-lg hover:bg-gray-100"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu size={20} />
-          </button>
-          <h1 className="font-semibold text-gray-900 capitalize">
-            {navItems.find((n) => n.href === pathname)?.label || 'Admin'}
-          </h1>
-          <Link href="/" className="text-sm text-primary-600 hover:underline flex items-center gap-1">
-            View Site <ChevronRight size={14} />
-          </Link>
-        </header>
-
-        {/* Page Content */}
-        <main className="flex-1 p-6">{children}</main>
       </div>
-    </div>
+
+      <LogoutConfirmModal
+        open={logoutModalOpen}
+        onClose={() => setLogoutModalOpen(false)}
+        onConfirm={confirmLogout}
+      />
+    </>
   );
 }
 

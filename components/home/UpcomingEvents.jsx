@@ -27,7 +27,10 @@ export default function UpcomingEvents() {
     fetcher
   );
 
-  const upcoming = events || [];
+  const upcoming = (events || []).filter((event) => {
+    const eventEnd = event.endDate ? new Date(event.endDate) : new Date(event.startDate);
+    return eventEnd >= now;
+  });
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -42,7 +45,7 @@ export default function UpcomingEvents() {
   return (
     <div className="px-4 sm:px-8 md:px-12 py-8">
       <section
-        className="relative overflow-hidden rounded-tl-[80px] md:rounded-tl-[120px] rounded-br-[80px] md:rounded-br-[120px] min-h-screen flex flex-col justify-start"
+        className="relative overflow-hidden rounded-tr-[80px] md:rounded-tr-[120px] rounded-bl-[80px] md:rounded-bl-[120px] min-h-screen flex flex-col justify-start"
         style={{
           backgroundImage: "url('/images/parallax_img2.jpg')",
           backgroundAttachment: 'fixed',

@@ -84,24 +84,24 @@ export default function LiveStreamSection() {
               <Clock size={12} />
               <span>{language === 'ta' ? 'அடுத்த நேரலைக்கு இன்னும்' : 'Countdown to Next Live'}</span>
             </div>
-            <div className="flex items-center justify-center gap-3 sm:gap-5">
+            <div className="flex items-center justify-center gap-1.5 xs:gap-3 sm:gap-5">
               {[
                 { val: timeLeft.days, label: language === 'ta' ? 'நாட்கள்' : 'Days' },
                 { val: timeLeft.hours, label: language === 'ta' ? 'மணி' : 'Hours' },
                 { val: timeLeft.minutes, label: language === 'ta' ? 'நிமிடம்' : 'Mins' },
                 { val: timeLeft.seconds, label: language === 'ta' ? 'நொடி' : 'Secs' },
               ].map((item, i, arr) => (
-                <div key={i} className="flex items-center gap-3 sm:gap-5">
-                  <div className="flex flex-col items-center justify-center bg-black/40 backdrop-blur-md border border-white/15 rounded-2xl w-20 h-24 sm:w-24 sm:h-28 shadow-2xl hover:bg-black/55 transition-all">
-                    <span className="text-3xl sm:text-5xl font-extrabold text-gold tracking-tight leading-none">
+                <div key={i} className="flex items-center gap-1.5 xs:gap-3 sm:gap-5">
+                  <div className="flex flex-col items-center justify-center bg-black/40 backdrop-blur-md border border-white/15 rounded-xl sm:rounded-2xl w-14 h-18 xs:w-18 xs:h-22 sm:w-24 sm:h-28 shadow-2xl hover:bg-black/55 transition-all">
+                    <span className="text-xl xs:text-2xl sm:text-5xl font-extrabold text-gold tracking-tight leading-none">
                       {fmt(item.val)}
                     </span>
-                    <span className="text-[9px] sm:text-[11px] uppercase font-bold text-white/50 tracking-widest mt-2">
+                    <span className="text-[7px] xs:text-[9px] sm:text-[11px] uppercase font-bold text-white/50 tracking-widest mt-1 sm:mt-2">
                       {item.label}
                     </span>
                   </div>
                   {i < arr.length - 1 && (
-                    <span className="text-white/30 text-2xl sm:text-3xl font-bold animate-pulse -mt-4">:</span>
+                    <span className="text-white/30 text-lg sm:text-3xl font-bold animate-pulse -mt-2 sm:-mt-4">:</span>
                   )}
                 </div>
               ))}

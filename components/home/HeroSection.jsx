@@ -100,10 +100,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative w-full -mt-20 overflow-hidden rounded-b-[40px] md:rounded-b-[80px] shadow-lg"
-      style={{
-        minHeight: 'calc(100vh + 5rem)',
-      }}
+      className="relative w-full -mt-20 overflow-hidden rounded-b-[40px] md:rounded-b-[80px] shadow-lg min-h-screen md:min-h-[calc(100vh+5rem)] pb-8 md:pb-0 flex flex-col"
     >
       {/* Outer Backdrop Carousel */}
       {activeImages.map((img, idx) => (
@@ -125,8 +122,7 @@ export default function HeroSection() {
 
       {/* Inner glass card — starts beneath navbar (top: 10rem = navbar bottom) */}
       <div
-        className="absolute z-10 inset-x-3 sm:inset-x-4 md:inset-x-6 lg:inset-x-8 rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 shadow-2xl"
-        style={{ top: '10rem', bottom: '1.5rem' }}
+        className="relative md:absolute z-10 mx-3 sm:mx-4 md:mx-0 md:inset-x-6 lg:inset-x-8 mt-28 md:mt-0 rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 shadow-2xl md:top-[10rem] md:bottom-[1.5rem] flex flex-col flex-grow"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -154,10 +150,10 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] pointer-events-none" />
 
         {/* Content wrapper */}
-        <div className="relative z-10 h-full flex flex-col md:flex-row items-center md:items-end justify-between px-4 sm:px-6 md:px-10 lg:px-14 pb-4 sm:pb-5 md:pb-8 lg:pb-10 pt-4 sm:pt-6">
+        <div className="relative z-10 flex-grow md:h-full flex flex-col md:flex-row items-center md:items-end justify-between px-4 sm:px-6 md:px-10 lg:px-14 pb-6 md:pb-8 lg:pb-10 pt-6 sm:pt-8">
 
           {/* ── LEFT: Text block ── */}
-          <div className="w-full md:w-3/5 lg:w-1/2 text-center md:text-left flex flex-col justify-center md:justify-end h-full md:h-auto mb-3 md:mb-0">
+          <div className="w-full md:w-3/5 lg:w-1/2 text-center md:text-left flex flex-col justify-center md:justify-end flex-grow md:flex-grow-0 md:h-auto mb-6 md:mb-0">
 
             {/* Location badge */}
             <div className="inline-flex items-center gap-1 mb-2 sm:mb-3 self-center md:self-start">

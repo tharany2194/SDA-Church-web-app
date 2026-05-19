@@ -127,43 +127,45 @@ export default function AdminArticles() {
       </div>
 
       <div className="card overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50 border-b border-gray-100">
-            <tr>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Title</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600 hidden md:table-cell">Category</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Status</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600 hidden lg:table-cell">Views</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-600">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-50">
-            {articles.map((article) => (
-              <tr key={article._id} className="hover:bg-gray-50">
-                <td className="px-4 py-3">
-                  <p className="font-medium text-gray-900 line-clamp-1">{article.title}</p>
-                </td>
-                <td className="px-4 py-3 hidden md:table-cell">
-                  <span className="capitalize text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">{article.category}</span>
-                </td>
-                <td className="px-4 py-3">
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${article.isPublished ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
-                    {article.isPublished ? 'Published' : 'Draft'}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-gray-600 hidden lg:table-cell">{article.views}</td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center justify-end gap-2">
-                    <button onClick={() => { setEditing(article); setShowForm(true); }} className="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"><Edit2 size={15} /></button>
-                    {canDelete && (
-                      <button onClick={() => handleDelete(article._id)} className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><Trash2 size={15} /></button>
-                    )}
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th className="text-left px-4 py-3 font-medium text-gray-600">Title</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-600 hidden md:table-cell">Category</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-600">Status</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-600 hidden lg:table-cell">Views</th>
+                <th className="text-right px-4 py-3 font-medium text-gray-600">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {articles.map((article) => (
+                <tr key={article._id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3">
+                    <p className="font-medium text-gray-900 line-clamp-1">{article.title}</p>
+                  </td>
+                  <td className="px-4 py-3 hidden md:table-cell">
+                    <span className="capitalize text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">{article.category}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${article.isPublished ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                      {article.isPublished ? 'Published' : 'Draft'}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-gray-600 hidden lg:table-cell">{article.views}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center justify-end gap-2">
+                      <button onClick={() => { setEditing(article); setShowForm(true); }} className="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"><Edit2 size={15} /></button>
+                      {canDelete && (
+                        <button onClick={() => handleDelete(article._id)} className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><Trash2 size={15} /></button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {articles.length === 0 && <div className="text-center py-12"><FileText size={40} className="text-gray-200 mx-auto mb-2" /><p className="text-gray-400">No articles yet.</p></div>}
       </div>
 

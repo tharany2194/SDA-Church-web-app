@@ -141,48 +141,50 @@ export default function AdminMessages() {
       </div>
 
       <div className="card overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50 border-b border-gray-100">
-            <tr>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Title</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600 hidden md:table-cell">Speaker</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600 hidden lg:table-cell">Category</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Status</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-600">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-50">
-            {messages.map((msg) => (
-              <tr key={msg._id} className="hover:bg-gray-50 transition-colors">
-                <td className="px-4 py-3">
-                  <p className="font-medium text-gray-900 line-clamp-1">{msg.title}</p>
-                  <p className="text-xs text-gray-400">{new Date(msg.date).toLocaleDateString()}</p>
-                </td>
-                <td className="px-4 py-3 text-gray-600 hidden md:table-cell">{msg.speaker || '—'}</td>
-                <td className="px-4 py-3 hidden lg:table-cell">
-                  <span className="capitalize text-xs bg-gray-100 px-2 py-0.5 rounded-full text-gray-600">{msg.category}</span>
-                </td>
-                <td className="px-4 py-3">
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${msg.isPublished ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
-                    {msg.isPublished ? 'Published' : 'Draft'}
-                  </span>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center justify-end gap-2">
-                    <button onClick={() => { setEditing(msg); setShowForm(true); }} className="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors">
-                      <Edit2 size={15} />
-                    </button>
-                    {canDelete && (
-                      <button onClick={() => handleDelete(msg._id)} className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                        <Trash2 size={15} />
-                      </button>
-                    )}
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th className="text-left px-4 py-3 font-medium text-gray-600">Title</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-600 hidden md:table-cell">Speaker</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-600 hidden lg:table-cell">Category</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-600">Status</th>
+                <th className="text-right px-4 py-3 font-medium text-gray-600">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {messages.map((msg) => (
+                <tr key={msg._id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-4 py-3">
+                    <p className="font-medium text-gray-900 line-clamp-1">{msg.title}</p>
+                    <p className="text-xs text-gray-400">{new Date(msg.date).toLocaleDateString()}</p>
+                  </td>
+                  <td className="px-4 py-3 text-gray-600 hidden md:table-cell">{msg.speaker || '—'}</td>
+                  <td className="px-4 py-3 hidden lg:table-cell">
+                    <span className="capitalize text-xs bg-gray-100 px-2 py-0.5 rounded-full text-gray-600">{msg.category}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${msg.isPublished ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                      {msg.isPublished ? 'Published' : 'Draft'}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center justify-end gap-2">
+                      <button onClick={() => { setEditing(msg); setShowForm(true); }} className="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors">
+                        <Edit2 size={15} />
+                      </button>
+                      {canDelete && (
+                        <button onClick={() => handleDelete(msg._id)} className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                          <Trash2 size={15} />
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {messages.length === 0 && (
           <p className="text-center text-gray-400 py-8">No sermons yet. Add your first one!</p>
         )}

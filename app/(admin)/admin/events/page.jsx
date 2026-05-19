@@ -137,37 +137,39 @@ export default function AdminEvents() {
       </div>
 
       <div className="card overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50 border-b border-gray-100">
-            <tr>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Title</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600 hidden md:table-cell">Date</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600 hidden lg:table-cell">Location</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Category</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-600">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-50">
-            {events.map((event) => (
-              <tr key={event._id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 font-medium text-gray-900">{event.title}</td>
-                <td className="px-4 py-3 text-gray-600 hidden md:table-cell">{format(new Date(event.startDate), 'MMM d, yyyy h:mm a')}</td>
-                <td className="px-4 py-3 text-gray-600 hidden lg:table-cell">{event.location || '—'}</td>
-                <td className="px-4 py-3">
-                  <span className="capitalize text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{event.category}</span>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center justify-end gap-2">
-                    <button onClick={() => { setEditing(event); setShowForm(true); }} className="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"><Edit2 size={15} /></button>
-                    {canDelete && (
-                      <button onClick={() => handleDelete(event._id)} className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><Trash2 size={15} /></button>
-                    )}
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th className="text-left px-4 py-3 font-medium text-gray-600">Title</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-600 hidden md:table-cell">Date</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-600 hidden lg:table-cell">Location</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-600">Category</th>
+                <th className="text-right px-4 py-3 font-medium text-gray-600">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {events.map((event) => (
+                <tr key={event._id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3 font-medium text-gray-900">{event.title}</td>
+                  <td className="px-4 py-3 text-gray-600 hidden md:table-cell">{format(new Date(event.startDate), 'MMM d, yyyy h:mm a')}</td>
+                  <td className="px-4 py-3 text-gray-600 hidden lg:table-cell">{event.location || '—'}</td>
+                  <td className="px-4 py-3">
+                    <span className="capitalize text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{event.category}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center justify-end gap-2">
+                      <button onClick={() => { setEditing(event); setShowForm(true); }} className="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"><Edit2 size={15} /></button>
+                      {canDelete && (
+                        <button onClick={() => handleDelete(event._id)} className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><Trash2 size={15} /></button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {events.length === 0 && <p className="text-center text-gray-400 py-8">No events this month.</p>}
       </div>
 

@@ -119,7 +119,7 @@ export default function Footer() {
                 <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-red-600 transition-all group" aria-label="YouTube">
                   <Youtube size={18} className="text-gray-400 group-hover:text-white" />
                 </a>
-                <a href="mailto:info@sdachurchvaradharajapuram.com" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-green-600 transition-all group" aria-label="Email">
+                <a href="mailto:varadharajapuramsdachurch@gmail.com" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-green-600 transition-all group" aria-label="Email">
                   <Mail size={18} className="text-gray-400 group-hover:text-white" />
                 </a>
               </div>
@@ -209,8 +209,8 @@ export default function Footer() {
           <div className="pt-3 pb-6 border-t border-white/10 flex flex-col items-center justify-center text-gray-400">
             <div className="text-sm font-medium text-center flex flex-col md:flex-row items-center gap-2 md:gap-4">
               <span>© {currentYear} Varadharajapuram CSDA Church. All rights reserved.</span>
-              <a href="mailto:info@sdachurchvaradharajapuram.com" className="hover:text-white transition-colors">
-                info@sdachurchvaradharajapuram.com
+              <a href="mailto:varadharajapuramsdachurch@gmail.com" className="hover:text-white transition-colors">
+                varadharajapuramsdachurch@gmail.com
               </a>
             </div>
           </div>

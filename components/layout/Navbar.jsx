@@ -118,8 +118,7 @@ export default function Navbar() {
               title="Toggle language"
             >
               <Globe size={15} />
-              <span className="hidden sm:inline">{language === 'en' ? 'தமிழ்' : 'EN'}</span>
-              <span className="sm:hidden">{language === 'en' ? 'TA' : 'EN'}</span>
+              <span>{language === 'en' ? 'தமிழ்' : 'EN'}</span>
             </button>
 
             {/* Auth */}

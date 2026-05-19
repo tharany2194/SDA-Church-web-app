@@ -52,12 +52,12 @@ export default function GalleryPage() {
         <p className="section-subtitle">{language === 'ta' ? 'எங்கள் நிகழ்வு நினைவுகள்' : 'Photos and videos from our church community'}</p>
 
         {/* Tabs */}
-        <div className="flex justify-center gap-2 mb-10">
+        <div className="flex flex-wrap justify-center gap-2 mb-10 px-2 sm:px-0">
           {tabs.map((t) => (
             <button
               key={t}
               onClick={() => setType(t)}
-              className={`px-5 py-2 rounded-full text-sm font-medium capitalize transition-colors ${
+              className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-medium capitalize transition-colors whitespace-nowrap ${
                 type === t ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >

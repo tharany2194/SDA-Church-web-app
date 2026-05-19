@@ -66,46 +66,46 @@ export default function VerseManagement() {
       <div className="card p-6 mb-8">
         <h3 className="font-semibold text-gray-900 mb-4">Set New Verse</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div className="w-full min-w-0 flex flex-col">
               <label className="block text-sm font-medium text-gray-700 mb-1">English Content</label>
               <textarea
                 required
-                className="input min-h-[100px]"
+                className="input min-h-[100px] w-full resize-y"
                 placeholder="Enter English verse..."
                 value={formData.contentEn}
                 onChange={(e) => setFormData({ ...formData, contentEn: e.target.value })}
               />
             </div>
-            <div>
+            <div className="w-full min-w-0 flex flex-col">
               <label className="block text-sm font-medium text-gray-700 mb-1">Tamil Content</label>
               <textarea
                 required
-                className="input min-h-[100px]"
+                className="input min-h-[100px] w-full resize-y"
                 placeholder="வசனத்தை உள்ளிடவும்..."
                 value={formData.contentTa}
                 onChange={(e) => setFormData({ ...formData, contentTa: e.target.value })}
               />
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div className="w-full min-w-0 flex flex-col">
               <label className="block text-sm font-medium text-gray-700 mb-1">English Reference (e.g. John 3:16)</label>
               <input
                 type="text"
                 required
-                className="input"
+                className="input w-full"
                 placeholder="Book Chapter:Verse"
                 value={formData.reference}
                 onChange={(e) => setFormData({ ...formData, reference: e.target.value })}
               />
             </div>
-            <div>
+            <div className="w-full min-w-0 flex flex-col">
               <label className="block text-sm font-medium text-gray-700 mb-1">Tamil Reference (எ.கா. யோவான் 3:16)</label>
               <input
                 type="text"
                 required
-                className="input"
+                className="input w-full"
                 placeholder="புத்தகம் அதிகாரம்:வசனம்"
                 value={formData.referenceTa}
                 onChange={(e) => setFormData({ ...formData, referenceTa: e.target.value })}

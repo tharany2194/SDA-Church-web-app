@@ -5,6 +5,7 @@ import { Trash2, Shield, UserCheck, User, ShieldAlert, UserCog } from 'lucide-re
 import api from '../../../../lib/api';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
+import Pagination from '../../../../components/Pagination';
 
 const fetcher = (url) => api.get(url).then((r) => r.data);
 
@@ -201,19 +202,11 @@ export default function AdminUsers() {
       </div>
 
       {/* Pagination */}
-      {data?.totalPages > 1 && (
-        <div className="flex justify-center gap-2 mt-4">
-          {Array.from({ length: data.totalPages }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => setPage(i + 1)}
-              className={`px-3 py-1 rounded-lg text-sm ${page === i + 1 ? 'bg-primary-600 text-white' : 'bg-white text-gray-600 border hover:bg-gray-50'}`}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
-      )}
+      <Pagination 
+        currentPage={page} 
+        totalPages={data?.totalPages || 1} 
+        onPageChange={setPage} 
+      />
     </div>
   );
 }

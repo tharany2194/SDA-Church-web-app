@@ -5,6 +5,7 @@ import { Plus, Edit2, Trash2, X, FileText } from 'lucide-react';
 import api from '../../../../lib/api';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
+import Pagination from '../../../../components/Pagination';
 
 const fetcher = (url) => api.get(url).then((r) => r.data);
 
@@ -167,6 +168,12 @@ export default function AdminArticles() {
           </table>
         </div>
         {articles.length === 0 && <div className="text-center py-12"><FileText size={40} className="text-gray-200 mx-auto mb-2" /><p className="text-gray-400">No articles yet.</p></div>}
+        
+        <Pagination 
+          currentPage={page} 
+          totalPages={data?.totalPages || 1} 
+          onPageChange={setPage} 
+        />
       </div>
 
       {showForm && <ArticleForm initial={editing} onSave={() => { setShowForm(false); setEditing(null); mutate(); }} onCancel={() => { setShowForm(false); setEditing(null); }} />}

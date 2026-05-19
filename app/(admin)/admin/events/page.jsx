@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import api from '../../../../lib/api';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
+import Pagination from '../../../../components/Pagination';
 
 const fetcher = (url) => api.get(url).then((r) => r.data);
 
@@ -110,10 +111,11 @@ export default function AdminEvents() {
   const now = new Date();
   const [month, setMonth] = useState(now.getMonth() + 1);
   const [year, setYear] = useState(now.getFullYear());
+  const [page, setPage] = useState(1);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
 
-  const { data, mutate } = useSWR(`/events?month=${month}&year=${year}`, fetcher);
+  const { data, mutate } = useSWR(`/events?month=${month}&year=${year}&page=${page}&limit=10`, fetcher);
   const events = data?.data || [];
 
   const handleDelete = async (id) => {
@@ -171,6 +173,12 @@ export default function AdminEvents() {
           </table>
         </div>
         {events.length === 0 && <p className="text-center text-gray-400 py-8">No events this month.</p>}
+        
+        <Pagination 
+          currentPage={page} 
+          totalPages={data?.totalPages || 1} 
+          onPageChange={setPage} 
+        />
       </div>
 
       {showForm && <EventForm initial={editing} onSave={() => { setShowForm(false); setEditing(null); mutate(); }} onCancel={() => { setShowForm(false); setEditing(null); }} />}

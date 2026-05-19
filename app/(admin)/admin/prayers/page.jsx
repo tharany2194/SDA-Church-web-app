@@ -5,13 +5,15 @@ import { Trash2, Heart, ChevronRight } from 'lucide-react';
 import api from '../../../../lib/api';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
+import Pagination from '../../../../components/Pagination';
 
 const fetcher = (url) => api.get(url).then((r) => r.data);
 
 export default function AdminPrayers() {
   const { user } = useSelector((s) => s.auth);
   const canDelete = ['super_admin', 'admin'].includes(user?.role);
-  const { data, mutate } = useSWR('/prayers', fetcher);
+  const [page, setPage] = useState(1);
+  const { data, mutate } = useSWR(`/prayers?page=${page}&limit=10`, fetcher);
   const prayers = data?.data || [];
   const [expanded, setExpanded] = useState(null);
 
@@ -123,6 +125,12 @@ export default function AdminPrayers() {
           </div>
         )}
       </div>
+      {/* Pagination */}
+      <Pagination 
+        currentPage={page} 
+        totalPages={data?.totalPages || 1} 
+        onPageChange={setPage} 
+      />
     </div>
   );
 }

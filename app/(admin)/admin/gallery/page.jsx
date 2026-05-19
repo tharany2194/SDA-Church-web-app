@@ -7,6 +7,7 @@ import { Plus, Edit2, Trash2, X, Play } from 'lucide-react';
 import api from '../../../../lib/api';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
+import Pagination from '../../../../components/Pagination';
 
 const fetcher = (url) => api.get(url).then((r) => r.data);
 
@@ -156,6 +157,7 @@ export default function AdminGallery() {
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
 
+  const [page, setPage] = useState(1);
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
   const actionParam = searchParams.get('action');
@@ -163,13 +165,14 @@ export default function AdminGallery() {
   useEffect(() => {
     if (categoryParam) {
       setCategory(categoryParam);
+      setPage(1);
     }
     if (actionParam === 'upload') {
       setShowForm(true);
     }
   }, [categoryParam, actionParam]);
 
-  const query = `/gallery?limit=50${type !== 'all' ? `&type=${type}` : ''}${category !== 'all' ? `&category=${category}` : ''}`;
+  const query = `/gallery?limit=50&page=${page}${type !== 'all' ? `&type=${type}` : ''}${category !== 'all' ? `&category=${category}` : ''}`;
   const { data, mutate } = useSWR(query, fetcher);
   const items = data?.data || [];
 
@@ -261,6 +264,12 @@ export default function AdminGallery() {
           <div className="col-span-full text-center text-gray-400 py-12">No gallery items yet.</div>
         )}
       </div>
+
+      <Pagination 
+        currentPage={page} 
+        totalPages={data?.totalPages || 1} 
+        onPageChange={setPage} 
+      />
 
       {showForm && (
         <GalleryForm 

@@ -105,7 +105,7 @@ function AdminLayout({ children }) {
 
   return (
     <>
-      <div className="min-h-screen flex bg-gray-50">
+      <div className="min-h-screen flex bg-gray-50 max-w-[100vw] overflow-x-hidden">
         {/* Desktop Sidebar */}
         <aside className="hidden lg:flex w-60 bg-primary-900 flex-col fixed inset-y-0 left-0">
           <SidebarContent />
@@ -122,7 +122,7 @@ function AdminLayout({ children }) {
         )}
 
         {/* Main Content */}
-        <div className="lg:ml-60 flex-1 flex flex-col min-h-screen">
+        <div className="lg:ml-60 flex-1 flex flex-col min-h-screen min-w-0 w-full">
           {/* Topbar */}
           <header className="bg-white border-b border-gray-200 px-6 h-14 flex items-center justify-between sticky top-0 z-30">
             <button

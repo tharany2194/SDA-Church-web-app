@@ -167,13 +167,13 @@ export default function VerseOfTheDay() {
   if (!verse) return null;
 
   return (
-    <section className="relative w-full py-16 md:py-24 bg-transparent overflow-hidden">
+    <section className="relative w-full pt-16 pb-10 md:pt-24 md:pb-16 bg-transparent overflow-hidden">
       <div className="w-[94%] sm:w-[95%] max-w-7xl mx-auto glow-card-container">
         {/* Animated Glow Border background */}
         <div className="glow-card-border" />
         
         {/* Card Content Body */}
-        <div className="glow-card-content relative overflow-hidden flex flex-col items-center justify-center p-8 sm:p-12 md:p-16 lg:p-20 text-center min-h-[450px] md:min-h-[550px]">
+        <div className="glow-card-content relative overflow-hidden flex flex-col items-center justify-center p-5 sm:p-10 md:p-16 lg:p-20 text-center min-h-[450px] md:min-h-[550px] w-full">
           
           {/* Card background image inside the card */}
           <div className="absolute inset-0 z-0">
@@ -199,8 +199,8 @@ export default function VerseOfTheDay() {
             <div className="absolute inset-0 bg-black/55 backdrop-blur-[1px]"></div>
           </div>
 
-          {/* Top Right Logo inside card */}
-          <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-20 w-24 sm:w-32 md:w-40 drop-shadow-xl opacity-90">
+          {/* Top Right Logo inside card (Hidden on mobile) */}
+          <div className="hidden sm:block absolute top-6 right-6 sm:top-8 sm:right-8 z-20 w-24 sm:w-32 md:w-40 drop-shadow-xl opacity-90">
             <Image 
               src="/images/logo.png" 
               alt="Church Logo" 
@@ -211,19 +211,32 @@ export default function VerseOfTheDay() {
           </div>
 
           {/* Text block (Relative z-10 for drawing above the inner image) */}
-          <div className="relative z-10 max-w-3xl flex flex-col items-center">
-            <div className="flex items-center justify-center gap-2 mb-6">
+          <div className="relative z-10 w-full max-w-3xl flex flex-col items-center">
+            <div className="flex items-center justify-center gap-2 mb-4">
               <BookOpen size={20} className="text-gold" />
-              <span className="text-gold font-semibold tracking-wide uppercase text-sm">
+              <span className="text-gold font-semibold tracking-wide uppercase text-sm sm:text-base">
                 {language === 'ta' ? 'இன்றைய வசனம்' : 'Verse of the Day'}
               </span>
             </div>
-            <blockquote className="text-white text-2xl md:text-3xl lg:text-4xl font-serif leading-relaxed italic mb-6 drop-shadow-lg max-w-3xl">
+
+            {/* Mobile Logo Centered below the verse of the day title */}
+            <div className="block sm:hidden mb-5 w-20 drop-shadow-xl opacity-90">
+              <Image 
+                src="/images/logo.png" 
+                alt="Church Logo" 
+                width={225} 
+                height={225} 
+                className="object-contain mx-auto"
+              />
+            </div>
+
+            <blockquote className={`text-white font-serif leading-relaxed italic mb-5 drop-shadow-lg w-full px-2 sm:px-4 break-words ${language === 'ta' ? 'text-lg sm:text-2xl md:text-3xl' : 'text-xl sm:text-2xl md:text-3xl lg:text-4xl'}`}>
               "{language === 'ta' ? verse.ta?.replace(/^"+|"+$/g, '').trim() : verse.en?.replace(/^"+|"+$/g, '').trim()}"
             </blockquote>
-            <cite className="text-gold font-bold text-xl md:text-2xl not-italic drop-shadow-md">
+            <cite className={`text-gold font-bold not-italic drop-shadow-md w-full px-2 break-words ${language === 'ta' ? 'text-base sm:text-xl' : 'text-lg sm:text-xl md:text-2xl'}`}>
               — {language === 'ta' ? (verse.refTa || verse.ref) : verse.ref}
             </cite>
+
             <div className="mt-8 sm:mt-10">
               <button
                 onClick={downloadVerse}

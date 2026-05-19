@@ -43,7 +43,7 @@ export default function UpcomingEvents() {
   };
 
   return (
-    <div id="events" className="px-4 sm:px-8 md:px-12 py-8">
+    <div id="events" className="px-2 sm:px-8 md:px-12 py-8">
       <section
         className="relative overflow-hidden rounded-tr-[80px] md:rounded-tr-[120px] rounded-bl-[80px] md:rounded-bl-[120px] min-h-screen flex flex-col justify-start"
         style={{
@@ -57,10 +57,10 @@ export default function UpcomingEvents() {
         <div className="absolute inset-0 bg-black/45" />
 
         {/* Content */}
-        <div className="relative z-10 w-full px-4 sm:px-8 md:px-14 pt-12 pb-16">
+        <div className="relative z-10 w-full px-2 sm:px-8 md:px-14 pt-12 pb-16">
 
           {/* Header */}
-          <div className="text-center mb-10">
+          <div className="text-center mb-10 px-2">
             <p className="text-gold text-xs font-bold tracking-widest uppercase mb-2">
               {language === 'ta' ? 'நிகழ்வுகள்' : '— Our Events —'}
             </p>
@@ -76,7 +76,7 @@ export default function UpcomingEvents() {
           {error ? (
             <p className="text-center text-white/50 py-20">Failed to load events.</p>
           ) : !events ? (
-            <div className="flex gap-5 overflow-hidden max-w-7xl mx-auto w-full px-4">
+            <div className="flex gap-5 overflow-hidden max-w-7xl mx-auto w-full px-2">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="min-w-[300px] bg-white/5 border border-white/10 rounded-3xl p-6 animate-pulse flex flex-col gap-4 h-72" />
               ))}
@@ -84,7 +84,7 @@ export default function UpcomingEvents() {
           ) : upcoming.length === 0 ? (
             <p className="text-center text-white/40 py-24">No upcoming events this month.</p>
           ) : (
-            <div className="relative max-w-7xl mx-auto w-full px-4 md:px-16">
+            <div className="relative max-w-7xl mx-auto w-full px-1 md:px-16">
               {/* Arrows */}
               <button
                 onClick={() => scroll('left')}
@@ -110,7 +110,7 @@ export default function UpcomingEvents() {
                   return (
                     <div
                       key={event._id}
-                      className="min-w-[300px] md:min-w-[320px] flex-shrink-0 flex flex-col rounded-3xl overflow-hidden cursor-pointer group transition-all duration-300 hover:-translate-y-3"
+                      className="w-[260px] sm:w-[300px] md:w-[320px] flex-shrink-0 flex flex-col rounded-3xl overflow-hidden cursor-pointer group transition-all duration-300 hover:-translate-y-3"
                       style={{
                         background: 'linear-gradient(160deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 100%)',
                         backdropFilter: 'blur(20px)',

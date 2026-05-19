@@ -26,7 +26,7 @@ export default function ArticlesPage() {
   const totalPages = data?.totalPages || 1;
 
   return (
-    <section className="py-12 min-h-screen bg-gray-50">
+    <section className="pt-28 sm:pt-32 pb-12 min-h-screen bg-gray-50">
       <div className="container-custom">
         <div className="text-center mb-10">
           <h1 className="section-title">Articles & Devotionals</h1>

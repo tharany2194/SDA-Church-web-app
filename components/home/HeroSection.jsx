@@ -122,7 +122,7 @@ export default function HeroSection() {
 
       {/* Inner glass card — starts beneath navbar (top: 10rem = navbar bottom) */}
       <div
-        className="relative md:absolute z-10 mx-3 sm:mx-4 md:mx-0 md:inset-x-6 lg:inset-x-8 mt-28 md:mt-0 rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 shadow-2xl md:top-[10rem] md:bottom-[1.5rem] flex flex-col flex-grow"
+        className="relative md:absolute z-10 mx-3 sm:mx-4 md:mx-0 md:inset-x-6 lg:inset-x-8 mt-32 sm:mt-36 md:mt-0 rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 shadow-2xl md:top-[10rem] md:bottom-[1.5rem] flex flex-col flex-grow"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -179,17 +179,17 @@ export default function HeroSection() {
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-row items-center justify-center md:justify-start gap-3 mt-1 md:mt-0">
+            <div className="flex flex-col min-[425px]:flex-row items-center justify-center md:justify-start gap-3 mt-1 md:mt-0 w-full md:w-auto">
               <button
                 type="button"
                 onClick={() => dispatch(openLoginModal())}
-                className="px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-full bg-white/95 text-gray-900 text-[10px] sm:text-xs md:text-sm font-bold hover:bg-white transition-all shadow-xl whitespace-nowrap"
+                className="w-[85%] min-[425px]:w-auto px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-full bg-white/95 text-gray-900 text-[11px] sm:text-xs md:text-sm font-bold hover:bg-white transition-all shadow-xl whitespace-nowrap"
               >
                 {t.cta}
               </button>
               <Link
                 href="#watch-live"
-                className="flex items-center gap-2 text-white text-[10px] sm:text-xs md:text-sm font-semibold group px-3 sm:px-5 py-2.5 rounded-full hover:bg-white/10 transition-all"
+                className="w-[85%] min-[425px]:w-auto justify-center flex items-center gap-2 text-white text-[11px] sm:text-xs md:text-sm font-semibold group px-3 sm:px-5 py-2.5 rounded-full hover:bg-white/10 transition-all border min-[425px]:border-transparent border-white/20"
               >
                 <span className="w-7 h-7 sm:w-9 sm:h-10 rounded-full border border-white/30 bg-white/10 flex items-center justify-center group-hover:bg-white/30 transition-all flex-shrink-0">
                   <Play size={10} fill="white" className="text-white ml-0.5" />
@@ -246,9 +246,9 @@ export default function HeroSection() {
             </div>
 
             {/* Carousel Indicators & Social Icons */}
-            <div className="flex gap-4 items-center">
+            <div className="flex flex-wrap justify-center md:justify-end gap-3 sm:gap-4 items-center w-full max-w-full">
               {/* Modern Minimalist Indicators */}
-              <div className="flex gap-1.5 items-center bg-black/25 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+              <div className="flex flex-wrap justify-center gap-1.5 items-center bg-black/25 backdrop-blur-md px-3 py-1.5 sm:py-2 rounded-2xl sm:rounded-full border border-white/10 max-w-full">
                 {activeImages.map((_, idx) => (
                   <button
                     key={idx}

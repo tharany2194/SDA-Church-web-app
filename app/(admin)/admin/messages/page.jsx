@@ -6,6 +6,7 @@ import { Plus, Edit2, Trash2, Eye, X, Check } from 'lucide-react';
 import api from '../../../../lib/api';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
+import Pagination from '../../../../components/Pagination';
 
 const fetcher = (url) => api.get(url).then((r) => r.data);
 
@@ -191,15 +192,11 @@ export default function AdminMessages() {
       </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex gap-2 mt-4">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <button key={p} onClick={() => setPage(p)}
-              className={`w-8 h-8 rounded-lg text-sm ${page === p ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-            >{p}</button>
-          ))}
-        </div>
-      )}
+      <Pagination 
+        currentPage={page} 
+        totalPages={totalPages} 
+        onPageChange={setPage} 
+      />
 
       {showForm && (
         <MessageForm initial={editing} onSave={handleSave} onCancel={() => { setShowForm(false); setEditing(null); }} />

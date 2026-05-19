@@ -28,7 +28,7 @@
     @apply bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden;
   }
   .input {
-    @apply w-full px-4 py-2.5 rounded-3xl border border-slate-700 bg-slate-950/90 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-shadow;
+    @apply w-full px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-shadow placeholder-gray-400;
   }
   .section-title {
     @apply text-3xl md:text-4xl font-bold text-church-dark text-center mb-4;

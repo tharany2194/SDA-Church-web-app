@@ -108,93 +108,95 @@ export default function AdminUsers() {
       </div>
 
       <div className="card overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50 border-b border-gray-100">
-            <tr>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">User</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600 hidden md:table-cell">Email</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Role</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600 hidden lg:table-cell">Status</th>
-              {isSuperAdmin && <th className="text-right px-4 py-3 font-medium text-gray-600">Actions</th>}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-50">
-            {users.map((u) => {
-              const meta = ROLE_META[u.role] || ROLE_META.member;
-              const RoleIcon = meta.icon;
-              const isSelf = u._id === currentUser?._id;
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th className="text-left px-4 py-3 font-medium text-gray-600">User</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-600 hidden md:table-cell">Email</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-600">Role</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-600 hidden lg:table-cell">Status</th>
+                {isSuperAdmin && <th className="text-right px-4 py-3 font-medium text-gray-600">Actions</th>}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {users.map((u) => {
+                const meta = ROLE_META[u.role] || ROLE_META.member;
+                const RoleIcon = meta.icon;
+                const isSelf = u._id === currentUser?._id;
 
-              return (
-                <tr key={u._id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-medium text-sm shrink-0">
-                        {u.name?.charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">
-                          {u.name}
-                          {isSelf && <span className="ml-1 text-xs text-gray-400">(you)</span>}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-gray-600 hidden md:table-cell">{u.email}</td>
-                  <td className="px-4 py-3">
-                    {isSuperAdmin && !isSelf ? (
-                      <select
-                        value={u.role}
-                        onChange={(e) => handleRoleChange(u._id, e.target.value)}
-                        className="text-xs border rounded-lg px-2 py-1 text-gray-700 focus:outline-none focus:ring-1 focus:ring-primary-500"
-                      >
-                        {ALL_ROLES.map((r) => (
-                          <option key={r} value={r}>{ROLE_META[r].label}</option>
-                        ))}
-                      </select>
-                    ) : (
-                      <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium ${meta.color}`}>
-                        <RoleIcon size={11} />{meta.label}
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 hidden lg:table-cell">
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${u.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
-                      {u.isActive ? 'Active' : 'Inactive'}
-                    </span>
-                  </td>
-                  {isSuperAdmin && (
+                return (
+                  <tr key={u._id} className="hover:bg-gray-50">
                     <td className="px-4 py-3">
-                      <div className="flex items-center justify-end gap-2">
-                        {!isSelf && u.role !== 'super_admin' && (
-                          <>
-                            <button
-                              onClick={() => handleToggleStatus(u._id, u.isActive)}
-                              className={`p-1.5 rounded-lg text-xs transition-colors ${
-                                u.isActive
-                                  ? 'text-gray-400 hover:text-orange-600 hover:bg-orange-50'
-                                  : 'text-gray-400 hover:text-green-600 hover:bg-green-50'
-                              }`}
-                              title={u.isActive ? 'Deactivate user' : 'Activate user'}
-                            >
-                              <UserCheck size={15} />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(u._id)}
-                              className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                              title="Delete user"
-                            >
-                              <Trash2 size={15} />
-                            </button>
-                          </>
-                        )}
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-medium text-sm shrink-0">
+                          {u.name?.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">
+                            {u.name}
+                            {isSelf && <span className="ml-1 text-xs text-gray-400">(you)</span>}
+                          </p>
+                        </div>
                       </div>
                     </td>
-                  )}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                    <td className="px-4 py-3 text-gray-600 hidden md:table-cell">{u.email}</td>
+                    <td className="px-4 py-3">
+                      {isSuperAdmin && !isSelf ? (
+                        <select
+                          value={u.role}
+                          onChange={(e) => handleRoleChange(u._id, e.target.value)}
+                          className="text-xs border rounded-lg px-2 py-1 text-gray-700 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                        >
+                          {ALL_ROLES.map((r) => (
+                            <option key={r} value={r}>{ROLE_META[r].label}</option>
+                          ))}
+                        </select>
+                      ) : (
+                        <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium ${meta.color}`}>
+                          <RoleIcon size={11} />{meta.label}
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 hidden lg:table-cell">
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${u.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
+                        {u.isActive ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
+                    {isSuperAdmin && (
+                      <td className="px-4 py-3">
+                        <div className="flex items-center justify-end gap-2">
+                          {!isSelf && u.role !== 'super_admin' && (
+                            <>
+                              <button
+                                onClick={() => handleToggleStatus(u._id, u.isActive)}
+                                className={`p-1.5 rounded-lg text-xs transition-colors ${
+                                  u.isActive
+                                    ? 'text-gray-400 hover:text-orange-600 hover:bg-orange-50'
+                                    : 'text-gray-400 hover:text-green-600 hover:bg-green-50'
+                                }`}
+                                title={u.isActive ? 'Deactivate user' : 'Activate user'}
+                              >
+                                <UserCheck size={15} />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(u._id)}
+                                className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                title="Delete user"
+                              >
+                                <Trash2 size={15} />
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    )}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
         {users.length === 0 && <p className="text-center text-gray-400 py-8">No users found.</p>}
       </div>
 

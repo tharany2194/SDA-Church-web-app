@@ -18,8 +18,13 @@ const BIBLE_VERSES = [
 
 export default function VerseOfTheDay() {
   const { language } = useSelector((s) => s.ui);
-  const { data: dynamicVerse, error, isLoading } = useSWR('/verses/today', fetcher);
-  const [verse, setVerse] = useState(null);
+  const { data: dynamicVerse } = useSWR('/verses/today', fetcher);
+  
+  // Initialize with fallback verse instantly for immediate render
+  const [verse, setVerse] = useState(() => {
+    const dayIndex = new Date().getDate() % BIBLE_VERSES.length;
+    return BIBLE_VERSES[dayIndex];
+  });
 
   useEffect(() => {
     if (dynamicVerse) {
@@ -29,12 +34,8 @@ export default function VerseOfTheDay() {
         en: dynamicVerse.contentEn,
         ta: dynamicVerse.contentTa,
       });
-    } else if (!isLoading) {
-      // Fallback to static verses if none active
-      const dayIndex = new Date().getDate() % BIBLE_VERSES.length;
-      setVerse(BIBLE_VERSES[dayIndex]);
     }
-  }, [dynamicVerse, isLoading]);
+  }, [dynamicVerse]);
 
   const downloadVerse = () => {
     if (!verse) return;
@@ -155,14 +156,6 @@ export default function VerseOfTheDay() {
       link.click();
     }
   };
-
-  if (isLoading) {
-    return (
-      <div className="bg-primary-900 py-16 flex justify-center items-center">
-        <Loader2 className="text-gold animate-spin" size={32} />
-      </div>
-    );
-  }
 
   if (!verse) return null;
 

@@ -80,12 +80,19 @@ export default function EventsPage() {
                 const hasEvents = dayEvents.length > 0;
                 const isPast = hasEvents && isBefore(startOfDay(day), startOfDay(new Date()));
 
+                let hoverText = '';
+                if (today) {
+                  hoverText = 'current date';
+                } else if (hasEvents) {
+                  hoverText = isPast ? 'Past events' : 'upcoming events';
+                }
+
                 return (
                   <button
                     key={day.toISOString()}
                     onClick={() => setSelectedDate(isSameDay(day, selectedDate) ? null : day)}
                     className={clsx(
-                      'relative p-2 rounded-2xl text-base font-medium text-center transition-all duration-200 min-h-[56px] flex flex-col items-center justify-center gap-1',
+                      'group relative p-2 rounded-2xl text-base font-medium text-center transition-all duration-200 min-h-[56px] flex flex-col items-center justify-center gap-1',
                       'hover:scale-105 active:scale-95',
                       isSelected ? 'bg-primary-100 text-primary-900 border-2 border-primary-500 shadow-md z-10' :
                       today ? 'bg-amber-100 text-amber-700 border-2 border-amber-500 ring-4 ring-amber-100/50 shadow-[0_0_20px_rgba(245,158,11,0.4)] animate-pulse scale-105 z-10 font-bold' :
@@ -105,6 +112,41 @@ export default function EventsPage() {
                             isSelected ? 'bg-primary-500' : 'bg-white/80'
                           )} />
                         ))}
+                      </div>
+                    )}
+                    {hoverText && (
+                      <div className="absolute -top-14 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:-translate-y-2 transition-all duration-500 pointer-events-none z-[60] flex flex-col items-center">
+                        <div className={clsx(
+                          "relative flex items-center gap-2 text-[15px] font-extrabold px-4 py-2 rounded-xl shadow-2xl whitespace-nowrap tracking-wide capitalize transform transition-all duration-300 group-hover:scale-110",
+                          today ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-[0_0_20px_rgba(245,158,11,0.6)]" :
+                          isPast ? "bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-800 text-white ring-2 ring-blue-300/50 shadow-[0_0_20px_rgba(59,130,246,0.5)]" :
+                          "bg-gradient-to-r from-fuchsia-500 via-purple-500 to-pink-500 text-white ring-2 ring-fuchsia-300/70 shadow-[0_0_25px_rgba(217,70,239,0.7)]"
+                        )}>
+                          {hasEvents && !isPast && !today && (
+                            <span className="text-xl animate-bounce">🤩</span>
+                          )}
+                          {isPast && !today && (
+                            <span className="text-xl animate-pulse">😔</span>
+                          )}
+                          {today && (
+                            <span className="text-xl animate-pulse">✨</span>
+                          )}
+                          
+                          <span className="drop-shadow-sm">{hoverText}</span>
+                          
+                          {hasEvents && !isPast && !today && (
+                            <span className="text-xl animate-bounce" style={{ animationDelay: '0.2s'}}>🎉</span>
+                          )}
+                          {hasEvents && !isPast && !today && (
+                            <span className="text-2xl animate-ping opacity-60 absolute -top-1 -right-1 pointer-events-none">✨</span>
+                          )}
+                        </div>
+                        <div className={clsx(
+                          "w-4 h-4 rotate-45 transform origin-center -mt-2.5 rounded-sm",
+                          today ? "bg-orange-500 shadow-lg" :
+                          isPast ? "bg-blue-800 shadow-lg" :
+                          "bg-pink-500 shadow-lg"
+                        )}></div>
                       </div>
                     )}
                   </button>

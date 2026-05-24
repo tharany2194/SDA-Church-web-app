@@ -2,8 +2,9 @@
 import useSWR from 'swr';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Play, ChevronRight, Eye } from 'lucide-react';
+import { ChevronRight, Eye } from 'lucide-react';
 import { useSelector } from 'react-redux';
+import SermonMedia from '../sermons/SermonMedia';
 import api from '../../lib/api';
 
 const fetcher = (url) => api.get(url).then((r) => r.data.data);
@@ -20,19 +21,14 @@ function SermonCard({ message, language }) {
   return (
     <Link href={`/sermons/${message._id}`} className="card group hover:shadow-lg transition-shadow duration-300">
       <div className="relative aspect-video bg-gray-900 overflow-hidden">
-        <Image
-          src={thumbnail}
-          alt={title}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
+        <SermonMedia 
+          message={message}
+          title={title}
+          thumbnail={thumbnail}
+          isFeatured={false}
         />
-        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-          <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center">
-            <Play size={24} className="text-primary-600 ml-1" />
-          </div>
-        </div>
         {message.category && (
-          <span className="absolute top-2 left-2 bg-primary-600 text-white text-xs px-2 py-0.5 rounded-full capitalize">
+          <span className="absolute top-2 left-2 z-20 pointer-events-none bg-primary-600 text-white text-xs px-2 py-0.5 rounded-full capitalize">
             {message.category}
           </span>
         )}

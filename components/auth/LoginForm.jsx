@@ -39,11 +39,11 @@ export default function LoginForm({ onClose, onViewChange }) {
     <div className="space-y-5">
       {/* Top Welcome Quote & Title Group */}
       <div className="flex flex-col items-center text-center">
-        <p className="text-[11px] font-bold tracking-[0.18em] text-[#e2b755] uppercase font-sans mb-3 max-w-[18rem] leading-normal text-center">
+        <p className="text-[11px] font-bold tracking-[0.18em] text-white uppercase font-sans mb-3 max-w-[18rem] leading-normal text-center">
           Welcome to Varadharajapuram SDA Church
         </p>
 
-        <h1 className="text-lg sm:text-xl font-semibold text-white tracking-wide font-sans mb-0.5">
+        <h1 className="text-lg sm:text-xl font-bold text-white tracking-wide font-sans mb-0.5">
           Welcome Back
         </h1>
       </div>
@@ -62,7 +62,7 @@ export default function LoginForm({ onClose, onViewChange }) {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Email Address */}
         <div className="space-y-1">
-          <label className="block text-xs text-white/60 font-medium ml-1">
+          <label className="block text-xs text-white font-bold ml-1">
             Email address
           </label>
           <input
@@ -81,7 +81,7 @@ export default function LoginForm({ onClose, onViewChange }) {
 
         {/* Password */}
         <div className="space-y-1 relative">
-          <label className="block text-xs text-white/60 font-medium ml-1">
+          <label className="block text-xs text-white font-bold ml-1">
             Password
           </label>
           <div className="relative">
@@ -110,7 +110,7 @@ export default function LoginForm({ onClose, onViewChange }) {
           <div className="flex justify-start pt-0.5">
             <Link 
               href="/forgot-password" 
-              className="text-white/50 hover:text-white transition-colors text-xs font-medium ml-1"
+              className="text-white hover:text-white/80 transition-colors text-xs font-bold ml-1"
               onClick={() => {
                 if (onClose) onClose();
               }}

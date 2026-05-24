@@ -25,11 +25,18 @@ export async function GET() {
         { isActive: true, expiresAt: { $lte: now } },
         { isActive: false }
       );
-      
-      // Select a random verse from history
+
+      // Select a random verse from history and make it the active verse for 24 hours
       const randomVerses = await Verse.aggregate([{ $sample: { size: 1 } }]);
       if (randomVerses.length > 0) {
-        return ok(randomVerses[0]);
+        const newExpiry = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours from now
+
+        const activatedVerse = await Verse.findByIdAndUpdate(
+          randomVerses[0]._id,
+          { isActive: true, expiresAt: newExpiry },
+          { new: true }
+        );
+        return ok(activatedVerse);
       }
 
       return ok(null);

@@ -66,7 +66,7 @@ export default function Navbar() {
       >
         <nav className="container-custom flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex flex-col items-center gap-1.5">
             <div className="relative w-28 h-12 rounded-xl bg-white shadow-md overflow-hidden p-1">
               <Image 
                 src="/images/logo.png" 
@@ -76,8 +76,8 @@ export default function Navbar() {
                 priority
               />
             </div>
-            <span className={clsx('font-bold text-sm hidden sm:block leading-tight max-w-[140px]', transparent ? 'text-white' : 'text-gray-800')}>
-              Varadharajapuram SDA Church
+            <span className={clsx('font-bold text-xs hidden sm:block leading-tight text-center tracking-wide', transparent ? 'text-white' : 'text-gray-800')}>
+              Varadharajapuram
             </span>
           </Link>
 
@@ -124,16 +124,61 @@ export default function Navbar() {
             {/* Auth */}
             {isAuthenticated ? (
               <div className="relative">
-                <button
-                  onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <div className="w-7 h-7 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-medium text-sm">
-                    {user?.name?.charAt(0).toUpperCase()}
+                <div className="relative flex items-center justify-center p-[4px] rounded-full overflow-hidden shadow-md cursor-pointer group/authbox">
+                  {/* Revolving Background Effect around the entire pill */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square w-[300%] pointer-events-none">
+                    <div className={clsx(
+                      "w-full h-full animate-spin [animation-duration:4s] opacity-90 group-hover/authbox:opacity-100 transition-opacity",
+                      transparent 
+                        ? "bg-[conic-gradient(from_0deg,transparent_40%,#d4af37_100%)]" 
+                        : "bg-[conic-gradient(from_0deg,transparent_40%,#6d28d9_100%)]"
+                    )} />
                   </div>
-                  <span className="text-sm font-medium text-gray-700 hidden sm:block">{user?.name}</span>
-                  <ChevronDown size={14} className="text-gray-500" />
-                </button>
+
+                  <button
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                    className={clsx(
+                      "relative flex items-center gap-2 sm:gap-2.5 px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-full transition-all duration-300 w-full h-full",
+                      transparent 
+                        ? "bg-black/80 hover:bg-black/90 backdrop-blur-xl" 
+                        : "bg-white hover:bg-gray-50/90"
+                    )}
+                  >
+                    <div className="relative flex-shrink-0">
+                      {/* Deep Blinking glow effect inside the box */}
+                      <div className="absolute inset-0 rounded-full animate-ping opacity-40 bg-primary-400 blur-[2px] [animation-duration:2.5s]" />
+                      
+                      <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-primary-600 to-primary-400 flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-inner group-hover/authbox:scale-105 transition-transform duration-300">
+                        {user?.name?.charAt(0).toUpperCase()}
+                      </div>
+                      
+                      {/* Pulsating Online Dot */}
+                      <span className={clsx("absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 rounded-full z-10", transparent ? "border-transparent" : "border-white")}></span>
+                      <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full animate-ping opacity-75 z-0 [animation-duration:1.5s]"></span>
+                    </div>
+                    
+                    <div className="hidden sm:flex flex-col items-start leading-none mr-1 relative">
+                      <span className={clsx(
+                        "text-sm font-bold tracking-tight transition-colors z-10 relative",
+                        transparent ? "text-white group-hover/authbox:text-gold" : "text-gray-900 group-hover/authbox:text-primary-700"
+                      )}>
+                        {user?.name || "User"}
+                      </span>
+                      <span className={clsx(
+                        "text-[9px] uppercase tracking-wider font-bold mt-0.5 animate-pulse z-10 relative",
+                        transparent ? "text-white/80" : "text-primary-600"
+                      )}>
+                        {user?.role?.replace('_', ' ') || "Member"}
+                      </span>
+                    </div>
+                    
+                    <ChevronDown size={14} className={clsx(
+                      "transition-transform duration-300",
+                      userMenuOpen ? "rotate-180" : "rotate-0",
+                      transparent ? "text-white/60 group-hover/authbox:text-white" : "text-gray-400 group-hover/authbox:text-primary-600"
+                    )} />
+                  </button>
+                </div>
                 {userMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
                     {['super_admin', 'admin', 'editor', 'volunteer'].includes(user?.role) && (

@@ -193,14 +193,21 @@ export default function VerseOfTheDay() {
           </div>
 
           {/* Top Right Logo inside card (Hidden on mobile) */}
-          <div className="hidden sm:block absolute top-6 right-6 sm:top-8 sm:right-8 z-20 w-24 sm:w-32 md:w-40 drop-shadow-xl opacity-90">
-            <Image 
-              src="/images/logo.png" 
-              alt="Church Logo" 
-              width={225} 
-              height={225} 
-              className="object-contain"
-            />
+          <div className="hidden sm:flex absolute top-6 right-6 sm:top-8 sm:right-8 z-20 flex-col items-center gap-1 sm:gap-1.5 opacity-90 transition-opacity hover:opacity-100">
+            <div className="relative w-20 h-9 sm:w-24 sm:h-10 md:w-32 md:h-14 lg:w-36 lg:h-16 rounded-lg sm:rounded-xl bg-white shadow-xl p-1">
+              <div className="relative w-full h-full">
+                <Image 
+                  src="/images/logo.png" 
+                  alt="Varatharajapuram SDA Church Logo" 
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </div>
+            <span className="font-bold text-[10px] sm:text-xs md:text-sm leading-tight text-center tracking-wide text-white drop-shadow-md">
+              Varadharajapuram
+            </span>
           </div>
 
           {/* Text block (Relative z-10 for drawing above the inner image) */}
@@ -213,14 +220,21 @@ export default function VerseOfTheDay() {
             </div>
 
             {/* Mobile Logo Centered below the verse of the day title */}
-            <div className="block sm:hidden mb-5 w-20 drop-shadow-xl opacity-90">
-              <Image 
-                src="/images/logo.png" 
-                alt="Church Logo" 
-                width={225} 
-                height={225} 
-                className="object-contain mx-auto"
-              />
+            <div className="flex sm:hidden flex-col items-center gap-1 mb-6 opacity-95">
+              <div className="relative w-24 h-10 rounded-xl bg-white shadow-lg p-1">
+                <div className="relative w-full h-full">
+                  <Image 
+                    src="/images/logo.png" 
+                    alt="Varatharajapuram SDA Church Logo" 
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
+              </div>
+              <span className="font-bold text-[11px] leading-tight text-center tracking-wide text-white drop-shadow-md">
+                Varadharajapuram
+              </span>
             </div>
 
             <blockquote className={`text-white font-serif leading-relaxed italic mb-5 drop-shadow-lg w-full px-2 sm:px-4 break-words ${language === 'ta' ? 'text-lg sm:text-2xl md:text-3xl' : 'text-xl sm:text-2xl md:text-3xl lg:text-4xl'}`}>

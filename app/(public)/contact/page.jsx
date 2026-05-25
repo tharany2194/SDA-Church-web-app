@@ -23,74 +23,78 @@ export default function ContactPage() {
         <h1 className="section-title">Contact Us</h1>
         <p className="section-subtitle">We would love to hear from you. Reach out and we'll respond as soon as possible.</p>
 
-        <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+        <div className="flex flex-col gap-12 w-full mx-auto">
           {/* Contact Info */}
-          <div>
+          <div className="card p-6">
             <h2 className="text-xl font-bold mb-6 text-gray-900">Get in Touch</h2>
-            <ul className="space-y-5">
-              <li className="flex gap-4">
-                <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
-                  <MapPin size={18} className="text-primary-600" />
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">Address</p>
-                  <p className="text-gray-600 text-sm">332J+4FP, Varadharajapuram, Poonamallee, Tamil Nadu 600123, India.</p>
-                </div>
-              </li>
-              <li className="flex gap-4">
-                <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
-                  <Phone size={18} className="text-primary-600" />
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">Phone</p>
-                  <a href="tel:+919876543210" className="text-primary-600 text-sm hover:underline">+91 9962589089</a>
-                </div>
-              </li>
-              <li className="flex gap-4">
-                <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
-                  <Mail size={18} className="text-primary-600" />
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">Email</p>
-                  <a href="mailto:varadharajapuramsdachurch@gmail.com" className="text-primary-600 text-sm hover:underline break-all">varadharajapuramsdachurch@gmail.com</a>
-                </div>
-              </li>
-            </ul>
-
-            {/* Service Times */}
-            <div className="mt-8 p-5 bg-primary-50 rounded-2xl">
-              <h3 className="font-bold text-primary-900 mb-3">Service Times</h3>
-              <ul className="space-y-2 text-sm text-gray-700">
-                <li className="flex justify-between"><span>Saturday Service</span><span className="font-medium">7:30 AM</span></li>
-                <li className="flex justify-between"><span>Friday Prayer</span><span className="font-medium">7:00 PM</span></li>
-                <li className="flex justify-between"><span>Saturday Evening Youth Meeting</span><span className="font-medium">6:00 PM</span></li>
+            <div className="grid md:grid-cols-2 gap-8">
+              <ul className="space-y-5">
+                <li className="flex gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
+                    <MapPin size={18} className="text-primary-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Address</p>
+                    <p className="text-gray-600 text-sm">332J+4FP, Varadharajapuram, Poonamallee, Tamil Nadu 600123, India.</p>
+                  </div>
+                </li>
+                <li className="flex gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
+                    <Phone size={18} className="text-primary-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Phone</p>
+                    <a href="tel:+919876543210" className="text-primary-600 text-sm hover:underline">+91 9962589089</a>
+                  </div>
+                </li>
+                <li className="flex gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
+                    <Mail size={18} className="text-primary-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Email</p>
+                    <a href="mailto:varadharajapuramsdachurch@gmail.com" className="text-primary-600 text-sm hover:underline break-all">varadharajapuramsdachurch@gmail.com</a>
+                  </div>
+                </li>
               </ul>
+
+              {/* Service Times */}
+              <div className="p-5 bg-primary-50 rounded-2xl h-fit">
+                <h3 className="font-bold text-primary-900 mb-3">Service Times</h3>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex flex-wrap lg:justify-between gap-1"><span>Saturday Service</span><span className="font-medium text-primary-800">7:30 AM</span></li>
+                  <li className="flex flex-wrap lg:justify-between gap-1"><span>Friday Prayer</span><span className="font-medium text-primary-800">7:00 PM</span></li>
+                  <li className="flex flex-wrap lg:justify-between gap-1"><span>Saturday Evening Youth Meeting</span><span className="font-medium text-primary-800">6:00 PM</span></li>
+                </ul>
+              </div>
             </div>
           </div>
 
           {/* Contact Form */}
           <form onSubmit={handleSubmit} className="card p-6 space-y-4">
             <h2 className="text-xl font-bold text-gray-900">Send a Message</h2>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-              <input
-                className="input"
-                placeholder="Your name"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input
-                type="email"
-                className="input"
-                placeholder="your@email.com"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                required
-              />
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input
+                  className="input"
+                  placeholder="Your name"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input
+                  type="email"
+                  className="input"
+                  placeholder="your@email.com"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  required
+                />
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>

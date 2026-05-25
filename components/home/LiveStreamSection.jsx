@@ -45,7 +45,7 @@ export default function LiveStreamSection() {
       <section
         className="relative overflow-hidden curve-tr-bl"
         style={{
-          backgroundImage: "url('/images/parallax_img1.jpeg')",
+          backgroundImage: "url('/images/parallax_img1.jpg')",
           backgroundAttachment: 'fixed',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -110,7 +110,7 @@ export default function LiveStreamSection() {
 
           {/* Video Player — 90% width */}
           <div className="w-[90%] mx-auto">
-            <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-gray-900"
+            <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40 backdrop-blur-md"
               style={{ paddingBottom: '50.625%' /* 16:9 ratio for 90% width */ }}>
               <iframe
                 src={`https://www.youtube.com/embed/live_stream?channel=${YOUTUBE_LIVE_ID}&autoplay=0`}

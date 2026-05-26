@@ -229,7 +229,7 @@ export default function Footer() {
           {/* Bottom Bar */}
           <div className="pt-3 pb-6 border-t border-white/10 flex flex-col items-center justify-center text-gray-400 w-full px-2 sm:px-0">
             <div className="text-[10px] sm:text-xs font-medium text-center flex flex-col md:flex-row items-center gap-2 md:gap-4 break-words">
-              <span>© {currentYear} {language === 'ta' ? 'வரதராஜபுரம் CSDA திருச்சபை. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.' : 'Varadharajapuram CSDA Church. All rights reserved.'}</span>
+              <span>© {currentYear} {language === 'ta' ? 'வரதராஜபுரம் SDA திருச்சபை. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.' : 'Varadharajapuram SDA Church. All rights reserved.'}</span>
               <a href="mailto:varadharajapuramsdachurch@gmail.com" className="hover:text-white transition-colors break-all">
                 varadharajapuramsdachurch@gmail.com
               </a>

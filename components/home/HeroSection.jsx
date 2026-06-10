@@ -37,10 +37,10 @@ const IMAGES = [
 ];
 
 const SOCIAL = [
-  { Icon: Instagram, label: 'ig' },
-  { Icon: Facebook, label: 'fb' },
-  { Icon: Youtube, label: 'yt' },
-  { Icon: WhatsappIcon, label: 'wa' },
+  { Icon: Instagram, label: 'ig', url: 'https://www.instagram.com/sda_church_varadharajapuram?igsh=MWx6NWk3MDZkZ2Rmdg%3D%3D' },
+  { Icon: Facebook, label: 'fb', url: 'https://www.facebook.com/share/1AeHjgRr1W/' },
+  { Icon: Youtube, label: 'yt', url: 'https://youtube.com/@varadharajapuramsdachurch?si=bCOYhZnrY64SlaJt' },
+  { Icon: WhatsappIcon, label: 'wa', url: '#' },
 ];
 
 export default function HeroSection() {
@@ -290,13 +290,17 @@ export default function HeroSection() {
               <span className="h-px w-6 bg-white/20 hidden md:block" />
 
               <div className="flex gap-2 sm:gap-3 items-center">
-                {SOCIAL.map(({ Icon, label }) => (
+                {SOCIAL.map(({ Icon, label, url }) => (
                   <a
                     key={label}
-                    href="#"
-                    className="w-7 h-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/25 transition-all"
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative w-10 sm:w-11 h-10 sm:h-11 rounded-full flex items-center justify-center bg-white/10 border border-white/20 transition-all duration-300 group overflow-hidden hover:scale-110 hover:-translate-y-1 shadow-lg hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]"
                   >
-                    <Icon size={12} />
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/30 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500 opacity-0 group-hover:opacity-30 blur-sm transition-opacity duration-300 animate-pulse" />
+                    <Icon size={18} className="relative z-10 text-white/80 group-hover:text-white transition-all duration-300 drop-shadow-md" />
                   </a>
                 ))}
               </div>

@@ -25,7 +25,12 @@ function EventForm({ initial, onSave, onCancel }) {
     setSaving(true);
     try {
       const fd = new FormData();
-      Object.entries(form).forEach(([k, v]) => { if (v !== undefined && v !== '') fd.append(k, v); });
+      const excludeKeys = ['_id', 'createdBy', 'createdAt', 'updatedAt', '__v'];
+      Object.entries(form).forEach(([k, v]) => { 
+        if (!excludeKeys.includes(k) && v !== undefined && v !== '') {
+          fd.append(k, v); 
+        }
+      });
       if (file) fd.append('image', file);
 
       if (initial) {
@@ -44,60 +49,64 @@ function EventForm({ initial, onSave, onCancel }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-lg my-4">
-        <div className="flex justify-between items-center mb-5">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 sm:p-6">
+      <div className="bg-white rounded-2xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col">
+        <div className="flex justify-between items-center mb-5 sticky top-0 bg-white z-10 pb-2 border-b">
           <h3 className="font-bold text-lg">{initial ? 'Edit Event' : 'Add Event'}</h3>
-          <button onClick={onCancel}><X size={20} className="text-gray-400" /></button>
+          <button onClick={onCancel} className="p-1 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors">
+            <X size={20} className="text-gray-500" />
+          </button>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">Title (English) *</label>
-            <input className="input" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">Title (Tamil)</label>
-            <input className="input" value={form.titleTa} onChange={(e) => setForm({ ...form, titleTa: e.target.value })} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">Title (English) *</label>
+              <input className="input w-full" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">Title (Tamil)</label>
+              <input className="input w-full" value={form.titleTa} onChange={(e) => setForm({ ...form, titleTa: e.target.value })} />
+            </div>
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">Description *</label>
-            <textarea className="input resize-none" rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} required />
+            <textarea className="input resize-y w-full" rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} required />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">Start Date/Time *</label>
-              <input type="datetime-local" className="input" value={form.startDate} onChange={(e) => setForm({ ...form, startDate: e.target.value })} required />
+              <input type="datetime-local" className="input w-full" value={form.startDate} onChange={(e) => setForm({ ...form, startDate: e.target.value })} required />
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">End Date/Time</label>
-              <input type="datetime-local" className="input" value={form.endDate} onChange={(e) => setForm({ ...form, endDate: e.target.value })} />
+              <input type="datetime-local" className="input w-full" value={form.endDate} onChange={(e) => setForm({ ...form, endDate: e.target.value })} />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">Location</label>
-              <input className="input" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+              <input className="input w-full" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">Category</label>
-              <select className="input" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
+              <select className="input w-full" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
                 {['service', 'prayer', 'youth', 'outreach', 'special', 'other'].map((c) => (
-                  <option key={c} value={c}>{c}</option>
+                  <option key={c} value={c} className="capitalize">{c}</option>
                 ))}
               </select>
             </div>
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">Event Image</label>
-            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files[0])} className="text-sm text-gray-600" />
+            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files[0])} className="text-sm text-gray-600 block w-full border border-gray-200 rounded-lg p-2" />
           </div>
-          <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input type="checkbox" checked={form.isPublished} onChange={(e) => setForm({ ...form, isPublished: e.target.checked })} />
+          <label className="flex items-center gap-2 text-sm cursor-pointer mt-2 font-medium">
+            <input type="checkbox" checked={form.isPublished} onChange={(e) => setForm({ ...form, isPublished: e.target.checked })} className="w-4 h-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500" />
             Published
           </label>
-          <div className="flex gap-3 pt-2">
-            <button type="submit" className="btn-primary flex-1" disabled={saving}>{saving ? 'Saving...' : initial ? 'Update' : 'Create'}</button>
-            <button type="button" onClick={onCancel} className="btn-secondary flex-1">Cancel</button>
+          <div className="flex gap-3 pt-4 border-t mt-4">
+            <button type="submit" className="btn-primary flex-1 py-2.5" disabled={saving}>{saving ? 'Saving...' : initial ? 'Update Event' : 'Create Event'}</button>
+            <button type="button" onClick={onCancel} className="btn-secondary flex-1 py-2.5">Cancel</button>
           </div>
         </form>
       </div>

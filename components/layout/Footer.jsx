@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
-import { Facebook, Youtube, Mail, Phone, MapPin, Navigation, Users, Play } from 'lucide-react';
+import { Facebook, Youtube, Mail, Phone, MapPin, Navigation, Users, Play, Instagram } from 'lucide-react';
 
 const footerLinks = {
   pages: [
@@ -122,10 +122,13 @@ export default function Footer() {
                   : 'Dedicated to sharing the everlasting gospel and serving the local community with grace and compassion.'}
               </p>
               <div className="flex gap-4">
-                <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-blue-600 transition-all group" aria-label="Facebook">
+                <a href="https://www.facebook.com/share/1AeHjgRr1W/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-blue-600 transition-all group" aria-label="Facebook">
                   <Facebook size={18} className="text-gray-400 group-hover:text-white" />
                 </a>
-                <a href="#" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-red-600 transition-all group" aria-label="YouTube">
+                <a href="https://www.instagram.com/sda_church_varadharajapuram?igsh=MWx6NWk3MDZkZ2Rmdg%3D%3D" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-pink-600 transition-all group" aria-label="Instagram">
+                  <Instagram size={18} className="text-gray-400 group-hover:text-white" />
+                </a>
+                <a href="https://youtube.com/@varadharajapuramsdachurch?si=bCOYhZnrY64SlaJt" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-red-600 transition-all group" aria-label="YouTube">
                   <Youtube size={18} className="text-gray-400 group-hover:text-white" />
                 </a>
                 <a href="mailto:varadharajapuramsdachurch@gmail.com" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-green-600 transition-all group" aria-label="Email">

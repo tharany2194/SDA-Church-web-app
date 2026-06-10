@@ -24,8 +24,14 @@ export default function EventsPage() {
   });
   const startDay = getDay(startOfMonth(currentDate));
 
-  const getEventsForDay = (day) =>
-    events.filter((e) => isSameDay(new Date(e.startDate), day));
+  const getEventsForDay = (day) => {
+    const currentDay = startOfDay(day).getTime();
+    return events.filter((e) => {
+      const start = startOfDay(new Date(e.startDate)).getTime();
+      const end = e.endDate ? startOfDay(new Date(e.endDate)).getTime() : start;
+      return currentDay >= start && currentDay <= end;
+    });
+  };
 
   const selectedEvents = selectedDate
     ? getEventsForDay(selectedDate)
@@ -211,8 +217,11 @@ export default function EventsPage() {
                     >
                       <h4 className="font-semibold text-gray-900 text-sm">{title}</h4>
                       <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                        <Calendar size={12} />
-                        {format(new Date(event.startDate), 'MMM d, h:mm a')}
+                        <Calendar size={12} className="flex-shrink-0" />
+                        <span className="truncate">
+                          {format(new Date(event.startDate), 'MMM d, h:mm a')}
+                          {event.endDate && ` - ${format(new Date(event.endDate), 'MMM d, h:mm a')}`}
+                        </span>
                       </div>
                       {event.location && (
                         <div className="flex items-center gap-2 mt-0.5 text-xs text-gray-500">

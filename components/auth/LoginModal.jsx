@@ -4,8 +4,10 @@ import { X } from 'lucide-react';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 
+import ForgotPasswordForm from './ForgotPasswordForm';
+
 export default function LoginModal({ open, onClose }) {
-  const [view, setView] = useState('login'); // 'login' | 'register'
+  const [view, setView] = useState('login'); // 'login' | 'register' | 'forgot-password'
 
   useEffect(() => {
     if (!open) return;
@@ -41,11 +43,9 @@ export default function LoginModal({ open, onClose }) {
         </button>
 
         {/* Dynamic Form View Rendering */}
-        {view === 'login' ? (
-          <LoginForm onClose={onClose} onViewChange={setView} />
-        ) : (
-          <RegisterForm onClose={onClose} onViewChange={setView} />
-        )}
+        {view === 'login' && <LoginForm onClose={onClose} onViewChange={setView} />}
+        {view === 'register' && <RegisterForm onClose={onClose} onViewChange={setView} />}
+        {view === 'forgot-password' && <ForgotPasswordForm onClose={onClose} onViewChange={setView} />}
       </div>
     </div>
   );

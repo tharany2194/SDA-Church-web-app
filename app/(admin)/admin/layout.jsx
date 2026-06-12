@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   LayoutDashboard, MessageSquare, Calendar, Image, FileText,
-  Users, Heart, LogOut, ChevronRight, Menu, X
+  Users, Heart, LogOut, ChevronRight, Menu, X, BookOpen
 } from 'lucide-react';
 import { logout } from '../../../store/slices/authSlice';
 import { useState } from 'react';
@@ -21,6 +21,7 @@ const navItems = [
   { href: '/admin/gallery', icon: Image, label: 'Gallery' },
   { href: '/admin/articles', icon: FileText, label: 'Articles' },
   { href: '/admin/prayers', icon: Heart, label: 'Prayer Requests' },
+  { href: '/admin/verses', icon: BookOpen, label: 'Verse of the Day' },
   { href: '/admin/users', icon: Users, label: 'Users & Roles', superAdminOnly: true },
 ];
 

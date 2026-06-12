@@ -33,6 +33,7 @@ export default function VerseOfTheDay() {
         refTa: dynamicVerse.referenceTa,
         en: dynamicVerse.contentEn,
         ta: dynamicVerse.contentTa,
+        backgroundUrl: dynamicVerse.backgroundUrl || null,
       });
     }
   }, [dynamicVerse]);
@@ -52,7 +53,7 @@ export default function VerseOfTheDay() {
     bgImg.crossOrigin = 'anonymous';
     logoImg.crossOrigin = 'anonymous';
     
-    bgImg.src = isMobile ? '/images/verses_bg_portrait.png' : '/images/verses_bg_landscape.png';
+    bgImg.src = verse.backgroundUrl ? verse.backgroundUrl : (isMobile ? '/images/verses_bg_portrait.png' : '/images/verses_bg_landscape.png');
     logoImg.src = '/images/logo.png';
 
     let imagesLoaded = 0;
@@ -89,12 +90,59 @@ export default function VerseOfTheDay() {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 3. Draw Logo (Top Right) - Maintain Aspect Ratio
-      const logoAspect = logoImg.width / logoImg.height;
-      const logoWidth = canvas.width * 0.15;
-      const logoHeight = logoWidth / logoAspect;
+      // 3. Draw Logo with White Box (Top Right)
       const margin = canvas.width * 0.04;
-      ctx.drawImage(logoImg, canvas.width - logoWidth - margin, margin, logoWidth, logoHeight);
+      const boxWidth = canvas.width * 0.18; 
+      const boxHeight = boxWidth / 2.25; 
+      const boxX = canvas.width - boxWidth - margin;
+      const boxY = margin;
+      const cornerRadius = canvas.width * 0.015;
+
+      // Draw white rounded box
+      ctx.save();
+      ctx.fillStyle = '#ffffff';
+      // Fallback for older browsers without roundRect
+      if (ctx.roundRect) {
+         ctx.beginPath();
+         ctx.roundRect(boxX, boxY, boxWidth, boxHeight, cornerRadius);
+         ctx.fill();
+      } else {
+         ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+      }
+      
+      // Shadow for box (optional, mimics CSS shadow-xl)
+      ctx.shadowColor = "rgba(0, 0, 0, 0.2)";
+      ctx.shadowBlur = 15;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 10;
+      ctx.restore();
+
+      // Draw logo inside the box (object-contain with padding)
+      const logoAspect = logoImg.width / logoImg.height;
+      const padding = boxWidth * 0.08;
+      const availableW = boxWidth - (padding * 2);
+      const availableH = boxHeight - (padding * 2);
+      
+      let finalLogoW = availableW;
+      let finalLogoH = availableW / logoAspect;
+      if (finalLogoH > availableH) {
+         finalLogoH = availableH;
+         finalLogoW = finalLogoH * logoAspect;
+      }
+      
+      const logoX = boxX + padding + (availableW - finalLogoW) / 2;
+      const logoY = boxY + padding + (availableH - finalLogoH) / 2;
+      ctx.drawImage(logoImg, logoX, logoY, finalLogoW, finalLogoH);
+
+      // Draw "Varadharajapuram" text below the box
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `bold ${canvas.width * 0.02}px sans-serif`;
+      ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+      ctx.shadowBlur = 4;
+      ctx.fillText('Varadharajapuram', boxX + (boxWidth / 2), boxY + boxHeight + (canvas.height * 0.01));
+      ctx.shadowBlur = 0; // Reset shadow
 
       // 4. Draw Text
       ctx.textAlign = 'center';
@@ -172,20 +220,22 @@ export default function VerseOfTheDay() {
           <div className="absolute inset-0 z-0">
             <div className="hidden md:block h-full w-full relative">
               <Image
-                src="/images/verses_bg_landscape.png"
+                src={verse.backgroundUrl || "/images/verses_bg_landscape.png"}
                 alt="Verse background"
                 fill
                 className="object-cover object-center"
                 priority
+                unoptimized={!!verse.backgroundUrl}
               />
             </div>
             <div className="block md:hidden h-full w-full relative">
               <Image
-                src="/images/verses_bg_portrait.png"
+                src={verse.backgroundUrl || "/images/verses_bg_portrait.png"}
                 alt="Verse background"
                 fill
                 className="object-cover object-center"
                 priority
+                unoptimized={!!verse.backgroundUrl}
               />
             </div>
             {/* Dark glassmorphic overlay inside card */}

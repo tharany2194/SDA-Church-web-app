@@ -108,15 +108,21 @@ export default function LoginForm({ onClose, onViewChange }) {
 
           {/* Forget Password ? Link */}
           <div className="flex justify-start pt-0.5">
-            <Link 
-              href="/forgot-password" 
-              className="text-white hover:text-white/80 transition-colors text-xs font-bold ml-1"
-              onClick={() => {
-                if (onClose) onClose();
+            <button
+              type="button"
+              className="text-white hover:text-[#9b72ff] transition-colors text-xs font-bold ml-1"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onViewChange) {
+                  onViewChange('forgot-password');
+                } else {
+                  router.push('/forgot-password');
+                  if (onClose) onClose();
+                }
               }}
             >
               Forget Password ?
-            </Link>
+            </button>
           </div>
         </div>
 

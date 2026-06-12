@@ -1,11 +1,86 @@
 'use client';
 import { useState } from 'react';
 import useSWR, { mutate } from 'swr';
-import { Heart, Send, History, Trash2, CheckCircle, Clock } from 'lucide-react';
+import { Heart, Send, History, Trash2, CheckCircle, Clock, Image } from 'lucide-react';
 import api from '@/lib/api';
 import { toast } from 'react-hot-toast';
 
 const fetcher = (url) => api.get(url).then((r) => r.data.data);
+
+function VerseBackgroundManager() {
+  const { data: backgrounds, error, mutate } = useSWR('/verses/backgrounds', fetcher);
+  const [uploading, setUploading] = useState(false);
+
+  const handleUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    setUploading(true);
+    try {
+      await api.post('/verses/backgrounds', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      toast.success('Background uploaded successfully!');
+      mutate();
+    } catch (err) {
+      toast.error('Failed to upload background');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!confirm('Delete this background?')) return;
+    try {
+      await api.delete(`/verses/backgrounds/${id}`);
+      toast.success('Deleted successfully');
+      mutate();
+    } catch (err) {
+      toast.error('Failed to delete background');
+    }
+  };
+
+  return (
+    <div className="card mt-8 p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+          <Image size={18} className="text-primary-500" />
+          Verse Backgrounds
+        </h3>
+        <div>
+          <input type="file" id="bg-upload" className="hidden" accept="image/*" onChange={handleUpload} disabled={uploading} />
+          <label htmlFor="bg-upload" className="btn btn-secondary cursor-pointer text-sm py-1.5 px-3">
+            {uploading ? 'Uploading...' : 'Upload Image'}
+          </label>
+        </div>
+      </div>
+      <p className="text-gray-500 text-sm mb-4">Upload background images for the Verse of the Day. One will be randomly selected every day.</p>
+      
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+        {backgrounds?.map((bg) => (
+          <div key={bg._id} className="relative group rounded-xl overflow-hidden aspect-video border border-gray-100 shadow-sm">
+            <img src={bg.url} alt="Background" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+            <button 
+              type="button"
+              onClick={() => handleDelete(bg._id)}
+              className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 shadow-md"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+        ))}
+        {backgrounds?.length === 0 && (
+          <div className="col-span-full py-8 text-center text-gray-400 bg-gray-50 rounded-xl border border-dashed text-sm">
+            No backgrounds uploaded yet!
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function VerseManagement() {
   const { data: history, error } = useSWR('/verses', fetcher);
@@ -129,9 +204,9 @@ export default function VerseManagement() {
           <History size={18} className="text-gray-500" />
           <h3 className="font-semibold text-gray-900">Verse History & Records</h3>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead className="bg-gray-50 text-xs uppercase text-gray-500 font-semibold">
+        <div className="overflow-auto max-h-[400px] custom-scrollbar">
+          <table className="w-full text-left border-collapse relative">
+            <thead className="bg-gray-50 text-xs uppercase text-gray-500 font-semibold sticky top-0 z-10 shadow-sm">
               <tr>
                 <th className="px-6 py-3">Status</th>
                 <th className="px-6 py-3">Verse</th>
@@ -193,6 +268,8 @@ export default function VerseManagement() {
           </table>
         </div>
       </div>
+      
+      <VerseBackgroundManager />
     </div>
   );
 }

@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
 import { connectDB } from '@/lib/db';
 import { handleError, ok } from '@/lib/apiHelpers';
 import Verse from '@/models/Verse';
+
+import VerseBackground from '@/models/VerseBackground';
 
 /**
  * GET /api/v1/verses/today
@@ -18,6 +22,8 @@ export async function GET() {
       isActive: true,
       expiresAt: { $gt: now },
     });
+
+    let finalVerse = null;
 
     if (!verse) {
       // If the active one expired, mark it as inactive
@@ -36,13 +42,28 @@ export async function GET() {
           { isActive: true, expiresAt: newExpiry },
           { new: true }
         );
-        return ok(activatedVerse);
+        finalVerse = activatedVerse.toObject();
       }
-
-      return ok(null);
+    } else {
+      finalVerse = verse.toObject();
     }
 
-    return ok(verse);
+    if (finalVerse) {
+      // Select a random background
+      const randomBg = await VerseBackground.aggregate([{ $match: { isActive: true } }, { $sample: { size: 1 } }]);
+      if (randomBg && randomBg.length > 0) {
+        finalVerse.backgroundUrl = randomBg[0].url;
+      }
+      return NextResponse.json(
+        { success: true, data: finalVerse },
+        { status: 200, headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' } }
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, data: null },
+      { status: 200, headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' } }
+    );
   } catch (error) {
     return handleError(error);
   }

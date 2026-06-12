@@ -34,6 +34,8 @@ const userSchema = new mongoose.Schema(
     isActive: { type: Boolean, default: true },
     lastLogin: { type: Date, default: null },
     preferredLanguage: { type: String, enum: ['en', 'ta'], default: 'en' },
+    resetPasswordOtp: { type: String, select: false },
+    resetPasswordOtpExpire: { type: Date, select: false },
   },
   {
     timestamps: true,

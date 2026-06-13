@@ -77,8 +77,8 @@ function MessageForm({ initial, onSave, onCancel }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-xl my-4">
+    <div className="fixed inset-0 bg-black/50 z-50 flex p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl p-6 w-full max-w-3xl m-auto">
         <div className="flex justify-between items-center mb-5">
           <h3 className="font-bold text-lg">{initial ? 'Edit Sermon' : 'Add Sermon'}</h3>
           <button onClick={onCancel} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>

@@ -8,6 +8,7 @@ import api from '../../../../lib/api';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import Pagination from '../../../../components/Pagination';
+import VideoPreview from '../../../../components/VideoPreview';
 
 const fetcher = (url) => api.get(url).then((r) => r.data);
 
@@ -239,13 +240,20 @@ export default function AdminGallery() {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
         {items.map((item) => (
           <div key={item._id} className="relative group rounded-xl overflow-hidden bg-gray-100 aspect-square">
-            <Image src={getThumbnail(item)} alt={item.title} fill className="object-cover" />
+            {item.type === 'video' && !item.thumbnail && !item.youtubeVideoId && item.url ? (
+              <VideoPreview 
+                src={getThumbnail(item)} 
+                className="w-full h-full object-cover" 
+              />
+            ) : (
+              <Image src={getThumbnail(item)} alt={item.title} fill className="object-cover" />
+            )}
             {item.type === 'video' && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <Play size={24} className="text-white drop-shadow-lg" />
               </div>
             )}
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-colors flex items-end justify-center pb-2 gap-2 opacity-0 group-hover:opacity-100">
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-colors flex items-end justify-center pb-10 gap-2 opacity-0 group-hover:opacity-100 z-10">
               <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 bg-white rounded-lg text-primary-600 hover:bg-primary-50 cursor-pointer">
                 <Edit2 size={14} />
               </button>

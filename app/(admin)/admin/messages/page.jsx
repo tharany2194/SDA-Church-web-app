@@ -21,9 +21,45 @@ function MessageForm({ initial, onSave, onCancel }) {
     e.preventDefault();
     setSaving(true);
     try {
+      let finalForm = { ...form };
+
+      if (file) {
+        const folder = file.type.startsWith('video/') ? 'videos' : 'images';
+        const urlRes = await api.post('/messages/upload-url', {
+          filename: file.name,
+          contentType: file.type,
+          folder
+        });
+        
+        if (!urlRes.data.success) {
+          throw new Error('Failed to get upload URL');
+        }
+
+        const { presignedUrl, key, publicUrl } = urlRes.data.data;
+
+        const uploadRes = await fetch(presignedUrl, {
+          method: 'PUT',
+          body: file,
+          headers: { 'Content-Type': file.type }
+        });
+
+        if (!uploadRes.ok) {
+          throw new Error('Failed to upload file directly to storage');
+        }
+
+        if (folder === 'videos') {
+          finalForm.videoFile = publicUrl;
+          finalForm.videoFileR2Key = key;
+        } else {
+          finalForm.thumbnail = publicUrl;
+          finalForm.thumbnailR2Key = key;
+        }
+      }
+
       const fd = new FormData();
-      Object.entries(form).forEach(([k, v]) => fd.append(k, v));
-      if (file) fd.append('media', file);
+      Object.entries(finalForm).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== '') fd.append(k, v);
+      });
 
       if (initial) {
         await api.put(`/messages/${initial._id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
@@ -34,7 +70,7 @@ function MessageForm({ initial, onSave, onCancel }) {
       }
       onSave();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to save sermon');
+      toast.error(err.response?.data?.message || err.message || 'Failed to save sermon');
     } finally {
       setSaving(false);
     }

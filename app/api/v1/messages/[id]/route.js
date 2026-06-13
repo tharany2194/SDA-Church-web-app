@@ -53,6 +53,13 @@ export async function PUT(request, { params }) {
         body.thumbnail = url;
         body.thumbnailR2Key = key;
       }
+    } else {
+      if (body.videoFileR2Key && body.videoFileR2Key !== existing.videoFileR2Key) {
+        if (existing.videoFileR2Key) await deleteFromR2(existing.videoFileR2Key);
+      }
+      if (body.thumbnailR2Key && body.thumbnailR2Key !== existing.thumbnailR2Key) {
+        if (existing.thumbnailR2Key) await deleteFromR2(existing.thumbnailR2Key);
+      }
     }
 
     if (body.youtubeUrl) {

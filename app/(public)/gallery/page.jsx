@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Play, X } from 'lucide-react';
 import api from '../../../lib/api';
 import { useSelector } from 'react-redux';
+import VideoPreview from '../../../components/VideoPreview';
 
 const fetcher = (url) => api.get(url).then((r) => r.data);
 const tabs = ['all', 'image', 'video'];
@@ -36,6 +37,7 @@ export default function GalleryPage() {
       if (item.youtubeVideoId) {
         return `https://img.youtube.com/vi/${item.youtubeVideoId}/hqdefault.jpg`;
       }
+      if (item.url) return getUrl(item); // For raw videos, return URL for video tag poster extraction
       return '/placeholder-gallery.jpg';
     }
     // For images, use the actual URL
@@ -73,12 +75,19 @@ export default function GalleryPage() {
               onClick={() => setSelected(item)}
               className="relative aspect-square rounded-xl overflow-hidden group bg-gray-100"
             >
-              <Image
-                src={getThumbnail(item)}
-                alt={item.title}
-                fill
-                className="object-cover group-hover:scale-110 transition-transform duration-500"
-              />
+              {item.type === 'video' && !item.thumbnail && !item.youtubeVideoId && item.url ? (
+                <VideoPreview 
+                  src={getThumbnail(item)} 
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                />
+              ) : (
+                <Image
+                  src={getThumbnail(item)}
+                  alt={item.title}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              )}
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
                 {item.type === 'video' && (
                   <Play size={32} className="text-white opacity-0 group-hover:opacity-100 drop-shadow-lg transition-opacity" />

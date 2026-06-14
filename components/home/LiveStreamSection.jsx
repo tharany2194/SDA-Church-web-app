@@ -1,13 +1,13 @@
 'use client';
 import { useSelector } from 'react-redux';
-import { Radio, Clock } from 'lucide-react';
+import { Radio, Clock, BookOpen, Heart, Calendar, Edit3 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import InteractiveSidebar from '../bible/InteractiveSidebar';
 
 const YOUTUBE_LIVE_ID = process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID || 'live';
 
 export default function LiveStreamSection() {
   const { language } = useSelector((s) => s.ui);
-
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
@@ -79,7 +79,7 @@ export default function LiveStreamSection() {
           </div>
 
           {/* Countdown */}
-          <div className="flex flex-col items-center mb-8">
+          <div className="flex flex-col items-center mb-4">
             <div className="flex items-center gap-1.5 mb-4 text-gold text-xs font-bold tracking-widest uppercase bg-black/30 px-4 py-1.5 rounded-full border border-white/10">
               <Clock size={12} />
               <span>{language === 'ta' ? 'அடுத்த நேரலைக்கு இன்னும்' : 'Countdown to Next Live'}</span>
@@ -108,21 +108,29 @@ export default function LiveStreamSection() {
             </div>
           </div>
 
-          {/* Video Player — 90% width */}
-          <div className="w-[90%] mx-auto">
-            <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40 backdrop-blur-md"
-              style={{ paddingBottom: '50.625%' /* 16:9 ratio for 90% width */ }}>
-              <iframe
-                src={`https://www.youtube.com/embed/live_stream?channel=${YOUTUBE_LIVE_ID}&autoplay=0`}
-                title="Church Live Stream"
-                className="absolute inset-0 w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+          {/* Video Player and Sidebar (Permanently Docked) */}
+          <div className="mx-auto flex flex-col lg:flex-row gap-6 w-[95%] lg:w-full">
+            {/* Video Side */}
+            <div className="w-full lg:w-[65%] ease-in-out">
+              <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40 backdrop-blur-md"
+                style={{ paddingBottom: '56.25%' }}>
+                <iframe
+                  src={`https://www.youtube.com/embed/live_stream?channel=${YOUTUBE_LIVE_ID}&autoplay=0`}
+                  title="Church Live Stream"
+                  className="absolute inset-0 w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <div className="mt-5 flex items-center justify-center gap-2 text-sm text-white/60">
+                <Radio size={15} />
+                <span>{language === 'ta' ? 'ஒவ்வொரு சனிக்கிழமை காலை 7:30 மணி' : 'Every Saturday at 7:30 AM'}</span>
+              </div>
             </div>
-            <div className="mt-5 flex items-center justify-center gap-2 text-sm text-white/60">
-              <Radio size={15} />
-              <span>{language === 'ta' ? 'ஒவ்வொரு சனிக்கிழமை காலை 7:30 மணி' : 'Every Saturday at 7:30 AM'}</span>
+
+            {/* Sidebar Side */}
+            <div className="w-full lg:w-[35%] flex flex-col h-[500px]">
+              <InteractiveSidebar theme="dark" initialTab="pray" />
             </div>
           </div>
 

@@ -8,6 +8,7 @@ import api from '../../../lib/api';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import SermonMedia from '../../../components/sermons/SermonMedia';
+import InteractiveSidebar from '../../../components/bible/InteractiveSidebar';
 
 const fetcher = (url) => api.get(url).then((r) => r.data);
 
@@ -72,15 +73,15 @@ export default function SermonsPage() {
             {/* Featured Sermon */}
             {featuredMessage && (
               <div className="mb-12 overflow-hidden bg-white rounded-[2rem] p-4 md:p-6 shadow-sm border border-gray-100">
-                <div className="flex flex-col lg:flex-row gap-8 items-center">
-                  {/* Left Side: Video/Image */}
+                <div className="flex flex-col lg:flex-row gap-6 lg:items-stretch">
+                  {/* Left Side: Video/Image + Details */}
                   <motion.div
                     initial={{ opacity: 0, x: -60 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
-                    className="w-full lg:w-3/5"
+                    className="w-full lg:w-[65%] flex flex-col"
                   >
-                    <Link href={`/sermons/${featuredMessage._id}`}>
+                    <Link href={`/sermons/${featuredMessage._id}`} className="block rounded-2xl overflow-hidden mb-4 shadow-sm group">
                       <SermonMedia 
                         message={featuredMessage}
                         title={language === 'ta' && featuredMessage.titleTa ? featuredMessage.titleTa : featuredMessage.title}
@@ -88,34 +89,35 @@ export default function SermonsPage() {
                         isFeatured={true}
                       />
                     </Link>
+                    
+                    <div className="px-2 pb-2">
+                       <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2 tracking-tight">
+                         {language === 'ta' && featuredMessage.titleTa ? featuredMessage.titleTa : featuredMessage.title}
+                       </h2>
+                       
+                       <div className="text-gray-500 mb-4 flex flex-wrap items-center gap-2 text-sm font-medium">
+                         {featuredMessage.series && <span className="text-primary-700">{featuredMessage.series}</span>}
+                         {featuredMessage.series && <span className="text-gray-300">•</span>}
+                         <span>{new Date(featuredMessage.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                         {featuredMessage.speaker && <span className="text-gray-300">•</span>}
+                         {featuredMessage.speaker && <span>{featuredMessage.speaker}</span>}
+                       </div>
+                       
+                       <Link href={`/sermons/${featuredMessage._id}`} className="inline-block px-5 py-2.5 bg-primary-600 text-white rounded-xl font-semibold shadow-sm hover:bg-primary-700 hover:-translate-y-0.5 transition-all text-sm">
+                         Watch details
+                       </Link>
+                    </div>
                   </motion.div>
 
-                  {/* Right Side: Details */}
+                  {/* Right Side: Interactive Sidebar */}
                   <motion.div
                     initial={{ opacity: 0, x: 60 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-                    className="w-full lg:w-2/5 lg:pr-8 py-4"
+                    className="w-full lg:w-[35%] flex flex-col"
                   >
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6 tracking-tight leading-tight">
-                      {language === 'ta' && featuredMessage.titleTa ? featuredMessage.titleTa : featuredMessage.title}
-                    </h2>
-                    
-                    <div className="text-gray-500 mb-8 flex flex-wrap items-center gap-2 text-sm md:text-base font-medium">
-                      {featuredMessage.series && <span className="text-primary-700">{featuredMessage.series}</span>}
-                      {featuredMessage.series && <span className="text-gray-300">•</span>}
-                      <span>{new Date(featuredMessage.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                      {featuredMessage.speaker && <span className="text-gray-300">•</span>}
-                      {featuredMessage.speaker && <span>{featuredMessage.speaker}</span>}
-                    </div>
-                    
-                    <div className="flex flex-wrap gap-4">
-                      <Link href={`/sermons/${featuredMessage._id}`} className="px-8 py-3.5 bg-primary-600 text-white rounded-xl font-semibold text-lg shadow-md hover:bg-primary-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-center">
-                        Watch Now
-                      </Link>
-                      <Link href={`/sermons/${featuredMessage._id}`} className="px-8 py-3.5 border-2 border-gray-200 text-gray-700 hover:text-gray-900 bg-white rounded-xl font-semibold hover:border-gray-300 hover:bg-gray-50 transition-all duration-300 text-center text-lg">
-                        Details
-                      </Link>
+                    <div className="w-full bg-gray-50 border border-gray-100 rounded-2xl min-h-[400px] flex-1 flex flex-col overflow-hidden">
+                       <InteractiveSidebar theme="light" id={featuredMessage._id} initialTab="pray" />
                     </div>
                   </motion.div>
                 </div>

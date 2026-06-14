@@ -1,12 +1,13 @@
 'use client';
-import { use } from 'react';
+import { use, useState } from 'react';
 import useSWR from 'swr';
-import { ArrowLeft, Eye, Tag, Share2, Download, Play } from 'lucide-react';
+import { ArrowLeft, Eye, Tag, Share2, Download, Play, BookOpen, Heart, Calendar, Edit3, X } from 'lucide-react';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import api from '../../../../lib/api';
 import { shareToWhatsApp, shareToFacebook } from '../../../../lib/share';
 import { downloadSermonPDF } from '../../../../lib/pdfGenerator';
+import InteractiveSidebar from '../../../../components/bible/InteractiveSidebar';
 
 const fetcher = (url) => api.get(url).then((r) => r.data.data);
 
@@ -43,28 +44,37 @@ export default function SermonDetailPage({ params }) {
         </Link>
 
         <div className="card overflow-hidden">
-          {/* Video / Thumbnail */}
-          {sermon.youtubeVideoId ? (
-            <div className="relative aspect-video">
-              <iframe
-                src={`https://www.youtube.com/embed/${sermon.youtubeVideoId}`}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title={sermon.title}
-              />
+          <div className="flex flex-col lg:flex-row transition-all duration-500">
+            {/* Video / Thumbnail Side */}
+            <div className="transition-all duration-500 w-full lg:w-[65%]">
+              {sermon.youtubeVideoId ? (
+                <div className="relative aspect-video">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${sermon.youtubeVideoId}`}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title={sermon.title}
+                  />
+                </div>
+              ) : sermon.videoFile ? (
+                <video controls className="w-full aspect-video bg-black" src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || ''}${sermon.videoFile?.includes('/api/v1/media') ? '' : '/api/v1/media'}${sermon.videoFile}`} />
+              ) : sermon.thumbnail && (
+                <div className="relative aspect-video bg-gray-900 flex-shrink-0">
+                  <img src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || ''}${sermon.thumbnail?.includes('/api/v1/media') ? '' : '/api/v1/media'}${sermon.thumbnail}`} alt={sermon.title} className="w-full h-full object-cover" />
+                </div>
+              )}
             </div>
-          ) : sermon.videoFile ? (
-            <video controls className="w-full aspect-video bg-black" src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || ''}${sermon.videoFile?.includes('/api/v1/media') ? '' : '/api/v1/media'}${sermon.videoFile}`} />
-          ) : sermon.thumbnail && (
-            <div className="relative aspect-video bg-gray-900">
-              <img src={`${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '').replace('/api', '') || ''}${sermon.thumbnail?.includes('/api/v1/media') ? '' : '/api/v1/media'}${sermon.thumbnail}`} alt={sermon.title} className="w-full h-full object-cover" />
+            
+            {/* Sidebar Side */}
+            <div className="w-full lg:w-[35%] bg-gray-50 border-t lg:border-t-0 lg:border-l border-gray-100 min-h-[400px] flex flex-col">
+              <InteractiveSidebar theme="light" id={sermon._id} initialTab="pray" />
             </div>
-          )}
+          </div>
 
           <div className="p-6">
             {/* Header */}
-            <div className="flex flex-wrap gap-2 mb-3">
+            <div className="flex flex-wrap items-center gap-2 mb-4">
               <span className={`text-xs px-2.5 py-1 rounded-full font-medium capitalize ${categoryColors[sermon.category] || categoryColors.other}`}>
                 {sermon.category}
               </span>

@@ -38,6 +38,7 @@ export default function RootLayout({ children }) {
           <LoginModalLayer />
           <Toaster
             position="top-right"
+            containerStyle={{ zIndex: 999999 }}
             toastOptions={{
               duration: 4000,
               style: { borderRadius: '10px', background: '#333', color: '#fff' },

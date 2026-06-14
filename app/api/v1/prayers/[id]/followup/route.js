@@ -14,8 +14,12 @@ export async function POST(request, { params }) {
 
     await connectDB();
     const { id } = await params;
-    const prayer = await Prayer.findOne({ _id: id, submittedBy: authResult.user.id });
-    if (!prayer) return fail('Prayer request not found or unauthorized', 404);
+    const prayer = await Prayer.findById(id);
+
+    const isAdmin = ['super_admin', 'admin', 'editor', 'volunteer'].includes(authResult.user.role);
+    if (!prayer || (prayer.submittedBy.toString() !== authResult.user.id && !isAdmin)) {
+      return fail('Prayer request not found or unauthorized', 404);
+    }
 
     prayer.followUps.push({ message: message.trim(), author: authResult.user.id });
     await prayer.save();

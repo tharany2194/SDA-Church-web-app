@@ -20,11 +20,14 @@ export default function VerseOfTheDay() {
   const { language } = useSelector((s) => s.ui);
   const { data: dynamicVerse } = useSWR('/verses/today', fetcher);
   
-  // Initialize with fallback verse instantly for immediate render
-  const [verse, setVerse] = useState(() => {
+  // Initialize with fallback verse statically for SSR matching, then update on mount
+  const [verse, setVerse] = useState(BIBLE_VERSES[0]);
+
+  useEffect(() => {
+    // Client-side initialization based on user timezone
     const dayIndex = new Date().getDate() % BIBLE_VERSES.length;
-    return BIBLE_VERSES[dayIndex];
-  });
+    setVerse(BIBLE_VERSES[dayIndex]);
+  }, []);
 
   useEffect(() => {
     if (dynamicVerse) {

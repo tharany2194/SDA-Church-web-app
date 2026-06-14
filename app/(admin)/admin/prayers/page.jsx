@@ -16,6 +16,23 @@ export default function AdminPrayers() {
   const { data, mutate } = useSWR(`/prayers?page=${page}&limit=10`, fetcher);
   const prayers = data?.data || [];
   const [expanded, setExpanded] = useState(null);
+  const [followUpMsg, setFollowUpMsg] = useState('');
+  const [savingFollowUp, setSavingFollowUp] = useState(false);
+
+  const handleFollowUp = async (id) => {
+    if (!followUpMsg.trim()) return;
+    setSavingFollowUp(true);
+    try {
+      await api.post(`/prayers/${id}/followup`, { message: followUpMsg });
+      toast.success('Follow-up added successfully');
+      setFollowUpMsg('');
+      mutate();
+    } catch {
+      toast.error('Failed to add follow-up');
+    } finally {
+      setSavingFollowUp(false);
+    }
+  };
 
   const handleDelete = async (id) => {
     if (!confirm('Delete this prayer request?')) return;
@@ -113,6 +130,28 @@ export default function AdminPrayers() {
                   ) : (
                     <p className="text-sm text-gray-400 italic">No follow-up updates yet.</p>
                   )}
+
+                  {/* Admin Follow-up Form */}
+                  <div className="mt-5 border-t border-gray-200 pt-5">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Add Admin Follow-up</p>
+                    <div className="flex gap-3">
+                      <input
+                        type="text"
+                        placeholder="Type an update or response to this prayer..."
+                        className="flex-1 text-sm border border-gray-200 px-4 py-2 rounded-lg bg-white focus:outline-none focus:border-primary-500"
+                        value={followUpMsg}
+                        onChange={(e) => setFollowUpMsg(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleFollowUp(prayer._id)}
+                      />
+                      <button
+                        disabled={!followUpMsg.trim() || savingFollowUp}
+                        onClick={() => handleFollowUp(prayer._id)}
+                        className="bg-primary-600 hover:bg-primary-700 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50"
+                      >
+                        {savingFollowUp ? 'Saving...' : 'Post Update'}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>

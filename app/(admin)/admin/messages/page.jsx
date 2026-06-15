@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import useSWR from 'swr';
 import Image from 'next/image';
-import { Plus, Edit2, Trash2, Eye, X, Check } from 'lucide-react';
+import { Plus, Edit2, Trash2, Eye, X, Check, RefreshCw } from 'lucide-react';
 import api from '../../../../lib/api';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
@@ -146,10 +146,33 @@ export default function AdminMessages() {
   const [page, setPage] = useState(1);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [syncing, setSyncing] = useState(false);
 
   const { data, mutate } = useSWR(`/messages?page=${page}&limit=10`, fetcher);
   const messages = data?.data || [];
   const totalPages = data?.totalPages || 1;
+
+  const handleSync = async () => {
+    setSyncing(true);
+    const toastId = toast.loading('Syncing channel videos...');
+    try {
+      const res = await api.post('/messages/sync');
+      if (res.data.success) {
+        const { newCount, deletedCount, processedCount } = res.data.data;
+        toast.success(
+          `Sync complete! Processed ${processedCount} videos. Imported ${newCount} new, deleted ${deletedCount} old.`,
+          { id: toastId, duration: 6000 }
+        );
+        mutate();
+      } else {
+        throw new Error(res.data.message || 'Sync failed');
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || err.message || 'Failed to sync with YouTube', { id: toastId });
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   const handleDelete = async (id) => {
     if (!confirm('Delete this sermon?')) return;
@@ -172,9 +195,19 @@ export default function AdminMessages() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold text-gray-900">Sermons & Messages</h2>
-        <button onClick={() => setShowForm(true)} className="btn-primary gap-2 text-sm">
-          <Plus size={16} /> Add Sermon
-        </button>
+        <div className="flex gap-2">
+          <button 
+            onClick={handleSync} 
+            disabled={syncing}
+            className="btn-secondary gap-2 text-sm flex items-center border border-gray-200 hover:bg-gray-50"
+          >
+            <RefreshCw size={16} className={syncing ? 'animate-spin' : ''} />
+            {syncing ? 'Syncing...' : 'Sync from YouTube'}
+          </button>
+          <button onClick={() => setShowForm(true)} className="btn-primary gap-2 text-sm flex items-center">
+            <Plus size={16} /> Add Sermon
+          </button>
+        </div>
       </div>
 
       <div className="card overflow-hidden">

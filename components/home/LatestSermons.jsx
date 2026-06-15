@@ -49,7 +49,8 @@ function SermonCard({ message, language }) {
 
 export default function LatestSermons() {
   const { language } = useSelector((s) => s.ui);
-  const { data: messages, error } = useSWR('/messages?limit=4&featured=true', fetcher);
+  const { data: messages, error } = useSWR('/messages?limit=4', fetcher);
+
 
   return (
     <section className="py-16 bg-church-cream">

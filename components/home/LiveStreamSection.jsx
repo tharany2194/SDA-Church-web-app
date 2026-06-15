@@ -9,21 +9,56 @@ const YOUTUBE_LIVE_ID = process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID || 'live';
 export default function LiveStreamSection() {
   const { language } = useSelector((s) => s.ui);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [liveInfo, setLiveInfo] = useState({ isLive: false, videoId: null, title: null });
+  const [loadingLive, setLoadingLive] = useState(true);
+
+  useEffect(() => {
+    const checkLiveStatus = async () => {
+      try {
+        const res = await fetch('/api/v1/youtube/live-status');
+        const data = await res.json();
+        if (data.success) {
+          setLiveInfo({
+            isLive: data.isLive,
+            videoId: data.videoId,
+            title: data.title
+          });
+        }
+      } catch (err) {
+        console.error('Error fetching live status:', err);
+      } finally {
+        setLoadingLive(false);
+      }
+    };
+
+    checkLiveStatus();
+    const liveTimer = setInterval(checkLiveStatus, 2 * 60 * 1000);
+
+    return () => clearInterval(liveTimer);
+  }, []);
 
   useEffect(() => {
     const calculateTimeLeft = () => {
       const now = new Date();
-      const nextSaturday = new Date();
-      const currentDay = now.getDay(); // Saturday = 6
-      let daysUntilSaturday = (6 - currentDay + 7) % 7;
-      if (currentDay === 6) {
-        const today730 = new Date(now);
-        today730.setHours(7, 30, 0, 0);
-        if (now.getTime() > today730.getTime()) daysUntilSaturday = 7;
+      let targetTime;
+
+      if (liveInfo.hasScheduled && liveInfo.scheduledStartTime) {
+        targetTime = new Date(liveInfo.scheduledStartTime);
+      } else {
+        const nextSaturday = new Date();
+        const currentDay = now.getDay(); // Saturday = 6
+        let daysUntilSaturday = (6 - currentDay + 7) % 7;
+        if (currentDay === 6) {
+          const today730 = new Date(now);
+          today730.setHours(7, 30, 0, 0);
+          if (now.getTime() > today730.getTime()) daysUntilSaturday = 7;
+        }
+        nextSaturday.setDate(now.getDate() + daysUntilSaturday);
+        nextSaturday.setHours(7, 30, 0, 0);
+        targetTime = nextSaturday;
       }
-      nextSaturday.setDate(now.getDate() + daysUntilSaturday);
-      nextSaturday.setHours(7, 30, 0, 0);
-      const difference = nextSaturday.getTime() - now.getTime();
+
+      const difference = targetTime.getTime() - now.getTime();
       if (difference <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
       return {
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -35,9 +70,10 @@ export default function LiveStreamSection() {
     setTimeLeft(calculateTimeLeft());
     const timer = setInterval(() => setTimeLeft(calculateTimeLeft()), 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [liveInfo]);
 
   const fmt = (n) => String(n).padStart(2, '0');
+
 
   return (
     /* Outer margin wrapper — gives breathing room so the curved shape is fully visible */
@@ -80,9 +116,13 @@ export default function LiveStreamSection() {
 
           {/* Countdown */}
           <div className="flex flex-col items-center mb-4">
-            <div className="flex items-center gap-1.5 mb-4 text-gold text-xs font-bold tracking-widest uppercase bg-black/30 px-4 py-1.5 rounded-full border border-white/10">
-              <Clock size={12} />
-              <span>{language === 'ta' ? 'அடுத்த நேரலைக்கு இன்னும்' : 'Countdown to Next Live'}</span>
+            <div className="flex items-center gap-1.5 mb-4 text-gold text-xs font-bold tracking-widest uppercase bg-black/30 px-4 py-1.5 rounded-full border border-white/10 max-w-full">
+              <Clock size={12} className="flex-shrink-0" />
+              <span className="truncate">
+                {liveInfo.hasScheduled && liveInfo.title 
+                  ? `${language === 'ta' ? 'திட்டமிடப்பட்ட நேரலை' : 'Scheduled Live'}: ${liveInfo.title}` 
+                  : (language === 'ta' ? 'அடுத்த நேரலைக்கு இன்னும்' : 'Countdown to Next Live')}
+              </span>
             </div>
             <div className="flex items-center justify-center gap-0.5 min-[360px]:gap-1 sm:gap-5">
               {[
@@ -112,21 +152,52 @@ export default function LiveStreamSection() {
           <div className="mx-auto flex flex-col lg:flex-row gap-6 w-[95%] lg:w-full">
             {/* Video Side */}
             <div className="w-full lg:w-[65%] ease-in-out">
-              <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40 backdrop-blur-md"
-                style={{ paddingBottom: '56.25%' }}>
-                <iframe
-                  src={`https://www.youtube.com/embed/live_stream?channel=${YOUTUBE_LIVE_ID}&autoplay=0`}
-                  title="Church Live Stream"
-                  className="absolute inset-0 w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
+              {loadingLive ? (
+                <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40 backdrop-blur-md flex items-center justify-center"
+                  style={{ paddingBottom: '56.25%' }}>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-10 h-10 border-4 border-gold border-t-transparent rounded-full animate-spin" />
+                  </div>
+                </div>
+              ) : liveInfo.isLive ? (
+                <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40 backdrop-blur-md"
+                  style={{ paddingBottom: '56.25%' }}>
+                  <iframe
+                    src={`https://www.youtube.com/embed/${liveInfo.videoId}?autoplay=1&mute=1`}
+                    title={liveInfo.title || "Church Live Stream"}
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              ) : (
+                <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center"
+                  style={{ paddingBottom: '56.25%', minHeight: '350px' }}>
+                  <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: "url('/images/parallax_img1.jpg')" }} />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+                    <div className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/45 mb-4">
+                      <Radio size={24} className="text-gold animate-pulse" />
+                    </div>
+                    <h3 className="text-lg sm:text-2xl font-bold text-white tracking-wide mb-2">
+                      {language === 'ta' ? 'நேரலை ஆராதனை இன்னும் தொடங்கவில்லை' : 'Live Stream is Offline'}
+                    </h3>
+                    <p className="text-white/60 text-xs sm:text-sm max-w-md mb-4 leading-relaxed">
+                      {language === 'ta'
+                        ? 'எங்கள் அடுத்த நேரலை ஆராதனை சனிக்கிழமை காலை 7:30 மணிக்கு தொடங்கும். பிரசங்கங்கள் பிரிவில் எங்களது கடந்த கால செய்திகளை நீங்கள் பார்க்கலாம்.'
+                        : 'Our next livestreamed service will begin on Saturday at 7:30 AM. In the meantime, browse our Sermons section for previous messages.'}
+                    </p>
+                    <a href="/sermons" className="px-5 py-2 bg-gold hover:bg-gold-light text-black font-semibold rounded-lg shadow-md hover:-translate-y-0.5 transition-all text-xs sm:text-sm uppercase tracking-wider">
+                      {language === 'ta' ? 'பிரசங்கங்களை பார்க்கவும்' : 'Browse Sermons'}
+                    </a>
+                  </div>
+                </div>
+              )}
               <div className="mt-5 flex items-center justify-center gap-2 text-sm text-white/60">
                 <Radio size={15} />
                 <span>{language === 'ta' ? 'ஒவ்வொரு சனிக்கிழமை காலை 7:30 மணி' : 'Every Saturday at 7:30 AM'}</span>
               </div>
             </div>
+
 
             {/* Sidebar Side */}
             <div className="w-full lg:w-[35%] flex flex-col h-[500px]">

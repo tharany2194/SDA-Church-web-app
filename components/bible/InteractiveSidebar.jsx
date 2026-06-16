@@ -39,9 +39,9 @@ function MiniPrayerForm({ theme }) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="mb-4">
-        <h3 className={`font-bold text-lg mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>Submit Prayer Request</h3>
-        <p className={`text-sm ${isDark ? 'text-white/60' : 'text-gray-500'}`}>Let us know how we can pray for you.</p>
+      <div className="mb-2">
+        <h3 className={`font-bold text-sm mb-0.5 ${isDark ? 'text-white' : 'text-gray-900'}`}>Submit Prayer Request</h3>
+        <p className={`text-xs ${isDark ? 'text-white/60' : 'text-gray-500'}`}>Let us know how we can pray for you.</p>
       </div>
       
       {!user ? (
@@ -58,14 +58,14 @@ function MiniPrayerForm({ theme }) {
           <p className="text-sm opacity-80 mt-2">Our team will be praying for you.</p>
         </div>
       ) : (
-        <form onSubmit={submit} className="flex flex-col gap-4 flex-1">
+        <form onSubmit={submit} className="flex flex-col gap-2 flex-1">
           <input
             type="text"
             placeholder="Title / Subject"
             required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className={`w-full p-3 rounded-xl text-sm border focus:outline-none transition-all ${
+            className={`w-full p-2 px-3 rounded-lg text-xs border focus:outline-none transition-all ${
               isDark 
                 ? 'bg-black/50 border-white/20 text-white placeholder-white/40 focus:border-gold' 
                 : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-primary-500'
@@ -76,7 +76,7 @@ function MiniPrayerForm({ theme }) {
             placeholder="Share your prayer request here..."
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className={`w-full p-3 rounded-xl text-sm border focus:outline-none transition-all resize-none flex-1 ${
+            className={`w-full p-2 px-3 rounded-lg text-xs border focus:outline-none transition-all resize-none flex-1 ${
               isDark 
                 ? 'bg-black/50 border-white/20 text-white placeholder-white/40 focus:border-gold' 
                 : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-primary-500'
@@ -85,13 +85,13 @@ function MiniPrayerForm({ theme }) {
           <button
             type="submit"
             disabled={saving}
-            className={`flex items-center justify-center gap-2 p-3 rounded-xl font-bold transition-all ${
+            className={`flex items-center justify-center gap-2 p-2 rounded-lg text-sm font-bold transition-all ${
               isDark 
                 ? 'bg-gold text-black hover:bg-yellow-500 disabled:opacity-50' 
                 : 'bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50'
             }`}
           >
-            {saving ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+            {saving ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
             {saving ? 'Submitting...' : 'Submit Request'}
           </button>
         </form>
@@ -113,12 +113,12 @@ function MiniSchedule({ theme }) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="mb-4">
-        <h3 className={`font-bold text-lg mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>Upcoming Events</h3>
-        <p className={`text-sm ${isDark ? 'text-white/60' : 'text-gray-500'}`}>Join us for our upcoming activities.</p>
+      <div className="mb-2">
+        <h3 className={`font-bold text-sm mb-0.5 ${isDark ? 'text-white' : 'text-gray-900'}`}>Upcoming Events</h3>
+        <p className={`text-xs ${isDark ? 'text-white/60' : 'text-gray-500'}`}>Join us for our upcoming activities.</p>
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3">
+      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-1.5">
         {!events && !error && (
           <div className="flex justify-center py-10"><Loader2 className="animate-spin text-gray-400" /></div>
         )}
@@ -127,7 +127,7 @@ function MiniSchedule({ theme }) {
           <p className={`text-sm py-4 text-center ${isDark ? 'text-white/40' : 'text-gray-400'}`}>No upcoming events for this month.</p>
         )}
         {upcoming.map(event => (
-          <div key={event._id} className={`p-3 rounded-xl border ${isDark ? 'bg-white/5 border-white/10' : 'bg-gray-50 border-gray-100'}`}>
+          <div key={event._id} className={`p-2 rounded-lg border ${isDark ? 'bg-white/5 border-white/10' : 'bg-gray-50 border-gray-100'}`}>
             <h4 className={`font-bold text-sm mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>{event.title}</h4>
             <div className={`text-xs space-y-1 ${isDark ? 'text-white/60' : 'text-gray-500'}`}>
               <div className="flex items-center gap-1.5">
@@ -183,10 +183,10 @@ function MiniNotes({ id, theme }) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-2 flex items-center justify-between">
         <div>
-          <h3 className={`font-bold text-lg mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>My Notes</h3>
-          <p className={`text-sm ${isDark ? 'text-white/60' : 'text-gray-500'}`}>Your personal notes are auto-saved.</p>
+          <h3 className={`font-bold text-sm mb-0.5 ${isDark ? 'text-white' : 'text-gray-900'}`}>My Notes</h3>
+          <p className={`text-xs ${isDark ? 'text-white/60' : 'text-gray-500'}`}>Your personal notes are auto-saved.</p>
         </div>
         <div className="flex items-center gap-2">
           <div className={`text-xs font-semibold px-2 py-1 rounded-md transition-opacity duration-300 ${savedIndicator ? 'opacity-100' : 'opacity-0'} ${isDark ? 'bg-white/10 text-white/80' : 'bg-gray-200 text-gray-700'}`}>
@@ -208,7 +208,7 @@ function MiniNotes({ id, theme }) {
         placeholder="Type your notes here... They will be saved to your browser automatically."
         value={note}
         onChange={(e) => setNote(e.target.value)}
-        className={`w-full p-4 rounded-xl text-sm border focus:outline-none transition-all resize-none flex-1 custom-scrollbar ${
+        className={`w-full p-3 rounded-lg text-xs border focus:outline-none transition-all resize-none flex-1 custom-scrollbar ${
           isDark 
             ? 'bg-black/50 border-white/20 text-white placeholder-white/40 focus:border-gold' 
             : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-primary-500'
@@ -231,12 +231,12 @@ export default function InteractiveSidebar({ id, theme = 'dark', onClose, initia
   ];
 
   return (
-    <div className={`flex flex-col h-full w-full rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 border ${
+    <div className={`flex flex-col h-full w-full rounded-xl overflow-hidden shadow-md transition-all duration-300 border ${
       isDark ? 'bg-black/40 backdrop-blur-md border-white/10' : 'bg-white border-gray-100'
     }`}>
       
       {/* Top Header */}
-      <div className={`flex items-center justify-between p-4 border-b ${isDark ? 'border-white/10' : 'border-gray-100'}`}>
+      <div className={`flex items-center justify-between p-2 px-3 border-b ${isDark ? 'border-white/10' : 'border-gray-100'}`}>
         <div className="flex gap-2 items-center">
           {tabs.find(t => t.id === activeTab)?.icon && (
             <div className={isDark ? 'text-gold' : 'text-primary-600'}>
@@ -258,7 +258,7 @@ export default function InteractiveSidebar({ id, theme = 'dark', onClose, initia
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 overflow-hidden p-4 min-h-[350px]">
+      <div className="flex-1 overflow-hidden p-3 min-h-[300px]">
         {activeTab === 'pray' && <MiniPrayerForm theme={theme} />}
         {activeTab === 'schedule' && <MiniSchedule theme={theme} />}
         {activeTab === 'notes' && <MiniNotes id={id} theme={theme} />}
@@ -271,7 +271,7 @@ export default function InteractiveSidebar({ id, theme = 'dark', onClose, initia
       </div>
 
       {/* Bottom Tab Navigation */}
-      <div className={`flex justify-around items-center p-2 border-t ${isDark ? 'border-white/10 bg-black/40' : 'border-gray-100 bg-gray-50'}`}>
+      <div className={`flex justify-around items-center p-1 border-t ${isDark ? 'border-white/10 bg-black/40' : 'border-gray-100 bg-gray-50'}`}>
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -279,7 +279,7 @@ export default function InteractiveSidebar({ id, theme = 'dark', onClose, initia
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex flex-col items-center justify-center gap-1 w-full py-2 rounded-xl transition-all ${
+              className={`flex flex-col items-center justify-center gap-0.5 w-full py-1.5 rounded-lg transition-all ${
                 isActive 
                   ? (isDark ? 'text-gold bg-white/5' : 'text-primary-600 bg-primary-50')
                   : (isDark ? 'text-white/50 hover:text-white/80 hover:bg-white/5' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100')

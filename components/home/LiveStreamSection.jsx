@@ -9,7 +9,13 @@ const YOUTUBE_LIVE_ID = process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID || 'live';
 export default function LiveStreamSection() {
   const { language } = useSelector((s) => s.ui);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [liveInfo, setLiveInfo] = useState({ isLive: false, videoId: null, title: null });
+  const [liveInfo, setLiveInfo] = useState({
+    isLive: false,
+    hasScheduled: false,
+    videoId: null,
+    title: null,
+    scheduledStartTime: null
+  });
   const [loadingLive, setLoadingLive] = useState(true);
 
   useEffect(() => {
@@ -20,8 +26,10 @@ export default function LiveStreamSection() {
         if (data.success) {
           setLiveInfo({
             isLive: data.isLive,
+            hasScheduled: data.hasScheduled,
             videoId: data.videoId,
-            title: data.title
+            title: data.title,
+            scheduledStartTime: data.scheduledStartTime
           });
         }
       } catch (err) {
@@ -159,7 +167,7 @@ export default function LiveStreamSection() {
                     <div className="w-10 h-10 border-4 border-gold border-t-transparent rounded-full animate-spin" />
                   </div>
                 </div>
-              ) : liveInfo.isLive ? (
+              ) : (liveInfo.isLive || liveInfo.hasScheduled) ? (
                 <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40 backdrop-blur-md"
                   style={{ paddingBottom: '56.25%' }}>
                   <iframe

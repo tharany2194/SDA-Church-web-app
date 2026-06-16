@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../lib/api';
-import Cookies from 'js-cookie';
 
 // ─── Async Thunks ─────────────────────────────────────────────────────────────
 
@@ -19,15 +18,12 @@ function extractError(err, fallback) {
   return fallback;
 }
 
-const COOKIE_OPTS = {
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'strict',
-};
-
 export const register = createAsyncThunk('auth/register', async (userData, { rejectWithValue }) => {
   try {
     const { data } = await api.post('/auth/register', userData);
-    Cookies.set('accessToken', data.data.accessToken, COOKIE_OPTS);
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('accessToken', data.data.accessToken);
+    }
     return data.data.user;
   } catch (err) {
     return rejectWithValue(extractError(err, 'Registration failed. Please try again.'));
@@ -37,7 +33,9 @@ export const register = createAsyncThunk('auth/register', async (userData, { rej
 export const login = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
   try {
     const { data } = await api.post('/auth/login', credentials);
-    Cookies.set('accessToken', data.data.accessToken, COOKIE_OPTS);
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('accessToken', data.data.accessToken);
+    }
     return data.data.user;
   } catch (err) {
     return rejectWithValue(extractError(err, 'Login failed. Please check your credentials.'));
@@ -47,14 +45,21 @@ export const login = createAsyncThunk('auth/login', async (credentials, { reject
 export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValue }) => {
   try {
     await api.post('/auth/logout');
-    Cookies.remove('accessToken');
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('accessToken');
+    }
   } catch {
-    Cookies.remove('accessToken');
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('accessToken');
+    }
   }
 });
 
 export const fetchCurrentUser = createAsyncThunk('auth/fetchCurrentUser', async (_, { rejectWithValue }) => {
   try {
+    if (typeof window !== 'undefined' && !sessionStorage.getItem('accessToken')) {
+      return rejectWithValue('No active tab session');
+    }
     const { data } = await api.get('/auth/me');
     return data.data.user;
   } catch (err) {

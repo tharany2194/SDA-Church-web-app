@@ -11,7 +11,29 @@ const fetcher = (url) => api.get(url).then((r) => r.data);
 
 function ArticleForm({ initial, onSave, onCancel }) {
   const [form, setForm] = useState(
-    initial || { title: '', titleTa: '', excerpt: '', content: '', category: 'devotional', isPublished: false, isFeatured: false }
+    initial
+      ? {
+          title: initial.title || '',
+          titleTa: initial.titleTa || '',
+          excerpt: initial.excerpt || '',
+          excerptTa: initial.excerptTa || '',
+          content: initial.content || '',
+          contentTa: initial.contentTa || '',
+          category: initial.category || 'devotional',
+          isPublished: initial.isPublished || false,
+          isFeatured: initial.isFeatured || false,
+        }
+      : {
+          title: '',
+          titleTa: '',
+          excerpt: '',
+          excerptTa: '',
+          content: '',
+          contentTa: '',
+          category: 'devotional',
+          isPublished: false,
+          isFeatured: false,
+        }
   );
   const [file, setFile] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -56,12 +78,20 @@ function ArticleForm({ initial, onSave, onCancel }) {
             <input className="input" value={form.titleTa} onChange={(e) => setForm({ ...form, titleTa: e.target.value })} />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">Excerpt</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">Excerpt (English)</label>
             <textarea className="input resize-none" rows={2} value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} maxLength={500} />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">Content (HTML or Markdown) *</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">Excerpt (Tamil)</label>
+            <textarea className="input resize-none" rows={2} value={form.excerptTa} onChange={(e) => setForm({ ...form, excerptTa: e.target.value })} maxLength={500} />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700 block mb-1">Content (English - HTML or Markdown) *</label>
             <textarea className="input resize-none font-mono text-xs" rows={8} value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} required />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700 block mb-1">Content (Tamil - HTML or Markdown)</label>
+            <textarea className="input resize-none font-mono text-xs" rows={8} value={form.contentTa} onChange={(e) => setForm({ ...form, contentTa: e.target.value })} />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>

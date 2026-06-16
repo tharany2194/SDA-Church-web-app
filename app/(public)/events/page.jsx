@@ -38,12 +38,12 @@ export default function EventsPage() {
     : events.slice(0, 5);
 
   return (
-    <div className="pt-28 pb-12 min-h-screen">
+    <div className="pt-20 pb-12 min-h-screen">
       <div className="container-custom">
-        <h1 className="section-title">
+        <h1 className="page-title">
           {language === 'ta' ? 'நிகழ்வுகள்' : 'Events Calendar'}
         </h1>
-        <p className="section-subtitle">
+        <p className="page-subtitle">
           {language === 'ta' ? 'மாத நிகழ்வுகளை காண்க' : 'Stay up to date with all church activities'}
         </p>
 

@@ -8,6 +8,7 @@ const articleSchema = new mongoose.Schema(
     content: { type: String, required: [true, 'Article content is required'] },
     contentTa: { type: String },
     excerpt: { type: String, maxlength: [500, 'Excerpt cannot exceed 500 characters'] },
+    excerptTa: { type: String, maxlength: [500, 'Excerpt cannot exceed 500 characters'] },
     coverImage: { type: String, default: null },
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     category: { type: String, enum: ['devotional', 'news', 'testimony', 'announcement', 'other'], default: 'other' },

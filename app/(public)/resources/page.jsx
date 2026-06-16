@@ -9,11 +9,11 @@ export default function ResourcesPage() {
   ];
 
   return (
-    <section className="py-16 min-h-screen bg-gray-50">
+    <section className="pt-20 pb-16 min-h-screen bg-gray-50">
       <div className="container-custom">
-        <div className="text-center mb-12">
-          <h1 className="section-title">Resources</h1>
-          <p className="section-subtitle">Helpful materials for your spiritual growth and ministry</p>
+        <div className="text-center mb-8">
+          <h1 className="page-title">Resources</h1>
+          <p className="page-subtitle">Helpful materials for your spiritual growth and ministry</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

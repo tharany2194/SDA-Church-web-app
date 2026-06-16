@@ -88,14 +88,14 @@ export default function Navbar() {
                 <Link
                   href={href}
                   className={clsx(
-                    'px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                    'px-3 py-2 rounded-lg text-sm font-bold transition-colors whitespace-nowrap',
                     transparent
                       ? pathname === href
                         ? 'text-white bg-white/20'
-                        : 'text-white/80 hover:text-white hover:bg-white/10'
+                        : 'text-white hover:text-white hover:bg-white/15'
                       : pathname === href
-                        ? 'text-primary-600 bg-primary-50 font-semibold'
-                        : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+                        ? 'text-primary-700 bg-primary-50'
+                        : 'text-gray-900 hover:text-primary-700 hover:bg-gray-100'
                   )}
                 >
                   {label[language]}
@@ -110,10 +110,10 @@ export default function Navbar() {
             <button
               onClick={() => dispatch(setLanguage(language === 'en' ? 'ta' : 'en'))}
               className={clsx(
-                'flex items-center gap-1 text-xs font-medium px-2 py-1.5 rounded-lg transition-colors',
+                'flex items-center gap-1 text-xs font-bold px-2 py-1.5 rounded-lg transition-colors',
                 transparent
-                  ? 'text-white/80 hover:text-white hover:bg-white/10'
-                  : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50'
+                  ? 'text-white hover:text-white hover:bg-white/15'
+                  : 'text-gray-800 hover:text-primary-700 hover:bg-gray-100'
               )}
               title="Toggle language"
             >
@@ -211,7 +211,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => dispatch(openLoginModal())}
-                className={clsx('hidden sm:flex text-sm py-2 px-3 sm:px-4 rounded-lg font-medium transition-all whitespace-nowrap', transparent ? 'border border-white/40 text-white hover:bg-white/10' : 'btn-primary')}
+                className={clsx('hidden sm:flex text-sm py-2 px-3 sm:px-4 rounded-lg font-bold transition-all whitespace-nowrap', transparent ? 'border border-white/60 text-white hover:bg-white/15' : 'btn-primary')}
               >
                 {language === 'ta' ? 'உள்நுழை' : 'Sign In'}
               </button>
@@ -237,10 +237,10 @@ export default function Navbar() {
                   <Link
                     href={href}
                     className={clsx(
-                      'block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                      'block px-4 py-2.5 rounded-lg text-sm font-bold transition-colors',
                       pathname === href
-                        ? 'text-primary-600 bg-primary-50'
-                        : 'text-gray-700 hover:bg-gray-50'
+                        ? 'text-primary-700 bg-primary-50'
+                        : 'text-gray-800 hover:bg-gray-50'
                     )}
                   >
                     {label[language]}
@@ -255,7 +255,7 @@ export default function Navbar() {
                       dispatch(openLoginModal());
                       dispatch(closeMobileMenu());
                     }}
-                    className="block w-full text-left px-4 py-2.5 rounded-lg text-sm font-bold text-primary-600 bg-primary-50"
+                    className="block w-full text-left px-4 py-2.5 rounded-lg text-sm font-bold text-primary-700 bg-primary-50"
                   >
                     {language === 'ta' ? 'உள்நுழை' : 'Sign In'}
                   </button>

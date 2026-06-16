@@ -2,13 +2,12 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchCurrentUser } from '../../store/slices/authSlice';
-import Cookies from 'js-cookie';
 
 export default function AuthInitializer() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = Cookies.get('accessToken');
+    const token = typeof window !== 'undefined' ? sessionStorage.getItem('accessToken') : null;
     if (token) {
       dispatch(fetchCurrentUser());
     }

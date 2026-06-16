@@ -29,18 +29,18 @@ export default function SermonsPage() {
   const gridMessages = page === 1 && messages.length > 0 ? messages.slice(1) : messages;
 
   return (
-    <div className="pt-20 pb-12 bg-gray-50/50 min-h-screen">
+    <div className="pt-20 pb-6 bg-gray-50/50 min-h-screen">
 
       <div className="container-custom">
-        <h1 className="text-3xl md:text-4xl font-bold text-church-dark text-center mb-1">
+        <h1 className="page-title">
           {language === 'ta' ? 'பிரசங்கங்கள் & செய்திகள்' : 'Sermons & Messages'}
         </h1>
-        <p className="text-church-muted text-center text-lg mb-4 max-w-2xl mx-auto">
+        <p className="page-subtitle">
           {language === 'ta' ? 'ஆவியில் வளருங்கள்' : 'Grow in spirit through powerful messages'}
         </p>
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-2 justify-center mb-6">
+        <div className="flex flex-wrap gap-2 justify-center mb-3">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -72,8 +72,8 @@ export default function SermonsPage() {
           <div key={`${category}-${page}`}>
             {/* Featured Sermon */}
             {featuredMessage && (
-              <div className="mb-12 overflow-hidden bg-white rounded-[2rem] p-4 md:p-6 shadow-sm border border-gray-100">
-                <div className="flex flex-col lg:flex-row gap-6 lg:items-stretch">
+              <div className="mb-4 overflow-hidden bg-white rounded-xl p-2 md:p-3 shadow-sm border border-gray-100/50">
+                <div className="flex flex-col lg:flex-row gap-3 lg:items-stretch">
                   {/* Left Side: Video/Image + Details */}
                   <motion.div
                     initial={{ opacity: 0, x: -60 }}
@@ -91,11 +91,11 @@ export default function SermonsPage() {
                     </Link>
                     
                     <div className="px-2 pb-2">
-                       <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2 tracking-tight">
+                       <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-1 tracking-tight">
                          {language === 'ta' && featuredMessage.titleTa ? featuredMessage.titleTa : featuredMessage.title}
                        </h2>
                        
-                       <div className="text-gray-500 mb-4 flex flex-wrap items-center gap-2 text-sm font-medium">
+                       <div className="text-gray-500 mb-2 flex flex-wrap items-center gap-2 text-xs font-medium">
                          {featuredMessage.series && <span className="text-primary-700">{featuredMessage.series}</span>}
                          {featuredMessage.series && <span className="text-gray-300">•</span>}
                          <span>{new Date(featuredMessage.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
@@ -103,7 +103,7 @@ export default function SermonsPage() {
                          {featuredMessage.speaker && <span>{featuredMessage.speaker}</span>}
                        </div>
                        
-                       <Link href={`/sermons/${featuredMessage._id}`} className="inline-block px-5 py-2.5 bg-primary-600 text-white rounded-xl font-semibold shadow-sm hover:bg-primary-700 hover:-translate-y-0.5 transition-all text-sm">
+                       <Link href={`/sermons/${featuredMessage._id}`} className="inline-block px-4 py-1.5 bg-primary-600 text-white rounded-lg font-semibold shadow-sm hover:bg-primary-700 hover:-translate-y-0.5 transition-all text-xs">
                          Watch details
                        </Link>
                     </div>
@@ -116,7 +116,7 @@ export default function SermonsPage() {
                     transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
                     className="w-full lg:w-[35%] flex flex-col"
                   >
-                    <div className="w-full bg-gray-50 border border-gray-100 rounded-2xl min-h-[400px] flex-1 flex flex-col overflow-hidden">
+                    <div className="w-full bg-gray-50 border border-gray-100/50 rounded-xl min-h-[300px] flex-1 flex flex-col overflow-hidden">
                        <InteractiveSidebar theme="light" id={featuredMessage._id} initialTab="pray" />
                     </div>
                   </motion.div>
@@ -124,12 +124,12 @@ export default function SermonsPage() {
               </div>
             )}
 
-            <div className="mb-6">
-              <h3 className="text-2xl font-bold text-gray-800">Recently Added</h3>
+            <div className="mb-2">
+              <h3 className="text-xl font-bold text-gray-800">Recently Added</h3>
             </div>
 
             {/* Grid for other sermons */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
               {gridMessages.map((message, idx) => {
                 const title = language === 'ta' && message.titleTa ? message.titleTa : message.title;
                 const thumbnail = message.youtubeVideoId

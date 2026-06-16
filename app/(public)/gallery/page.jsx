@@ -47,11 +47,11 @@ export default function GalleryPage() {
 
 
   return (
-    <div className="pt-24 pb-12">
+    <div className="pt-20 pb-12">
 
       <div className="container-custom">
-        <h1 className="section-title">{language === 'ta' ? 'படத்தொகுப்பு' : 'Gallery'}</h1>
-        <p className="section-subtitle">{language === 'ta' ? 'எங்கள் நிகழ்வு நினைவுகள்' : 'Photos and videos from our church community'}</p>
+        <h1 className="page-title">{language === 'ta' ? 'படத்தொகுப்பு' : 'Gallery'}</h1>
+        <p className="page-subtitle">{language === 'ta' ? 'எங்கள் நிகழ்வு நினைவுகள்' : 'Photos and videos from our church community'}</p>
 
         {/* Tabs */}
         <div className="flex flex-wrap justify-center gap-2 mb-10 px-2 sm:px-0">

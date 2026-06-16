@@ -504,8 +504,6 @@ function ProfileTab() {
   const [profile, setProfile] = useState({ name: user?.name || '', phone: user?.phone || '', preferredLanguage: user?.preferredLanguage || 'en' });
   const [avatar, setAvatar] = useState(null);
   const [saving, setSaving] = useState(false);
-  const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
-  const [changingPw, setChangingPw] = useState(false);
 
   const handleProfileSave = async (e) => {
     e.preventDefault();
@@ -525,26 +523,10 @@ function ProfileTab() {
     }
   };
 
-  const handlePasswordChange = async (e) => {
-    e.preventDefault();
-    if (passwords.newPassword !== passwords.confirmPassword) { toast.error('Passwords do not match'); return; }
-    if (passwords.newPassword.length < 8) { toast.error('Password must be at least 8 characters'); return; }
-    setChangingPw(true);
-    try {
-      await api.put('/users/change-password', { currentPassword: passwords.currentPassword, newPassword: passwords.newPassword });
-      toast.success('Password changed');
-      setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to change password');
-    } finally {
-      setChangingPw(false);
-    }
-  };
-
   const avatarUrl = user?.avatar?.startsWith('http') ? user.avatar : null;
 
   return (
-    <div className="space-y-6 max-w-xl">
+    <div className="w-full">
       {/* Avatar + Identity */}
       <div className="card p-6">
         <div className="flex items-center gap-4 mb-6">
@@ -589,10 +571,36 @@ function ProfileTab() {
           <button type="submit" className="btn-primary" disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</button>
         </form>
       </div>
+    </div>
+  );
+}
 
+// ─── Security Tab ─────────────────────────────────────────────────────────────
+function SecurityTab() {
+  const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  const [changingPw, setChangingPw] = useState(false);
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    if (passwords.newPassword !== passwords.confirmPassword) { toast.error('Passwords do not match'); return; }
+    if (passwords.newPassword.length < 8) { toast.error('Password must be at least 8 characters'); return; }
+    setChangingPw(true);
+    try {
+      await api.put('/users/change-password', { currentPassword: passwords.currentPassword, newPassword: passwords.newPassword });
+      toast.success('Password changed');
+      setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to change password');
+    } finally {
+      setChangingPw(false);
+    }
+  };
+
+  return (
+    <div className="w-full">
       {/* Change Password */}
       <div className="card p-6">
-        <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2"><Key size={16} className="text-primary-600" />Change Password</h3>
+        <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2"><Lock size={16} className="text-primary-600" />Change Password</h3>
         <form onSubmit={handlePasswordChange} className="space-y-4">
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">Current Password</label>
@@ -618,7 +626,8 @@ const tabs = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
   { id: 'prayers', label: 'Prayer Requests', icon: Heart },
   { id: 'donations', label: 'Donations', icon: HandHeart },
-  { id: 'profile', label: 'Profile & Security', icon: User },
+  { id: 'profile', label: 'Profile', icon: User },
+  { id: 'security', label: 'Security', icon: Lock },
 ];
 
 function DashboardPage() {
@@ -626,43 +635,60 @@ function DashboardPage() {
   const [activeTab, setActiveTab] = useState('overview');
 
   return (
-    <div className="py-8 bg-gray-50 flex-1">
-      <div className="container-custom max-w-5xl">
-          {/* Page title */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">My Dashboard</h1>
-            <p className="text-gray-500 text-sm mt-0.5">Manage your profile, prayer requests, and giving</p>
+    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row pt-20 w-full">
+      {/* Sidebar */}
+      <aside className="w-full md:w-64 md:fixed md:left-0 md:top-20 md:bottom-0 bg-white border-b md:border-b-0 md:border-r border-gray-100 flex flex-col z-10 shrink-0">
+        {/* User Card - Hidden on Mobile */}
+        <div className="hidden md:flex flex-col items-center p-6 border-b border-gray-50">
+          <div className="w-20 h-20 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 text-2xl font-bold overflow-hidden mb-3">
+            {user?.avatar?.startsWith('http') ? (
+              <img src={user.avatar} alt={user?.name} className="w-full h-full object-cover" />
+            ) : (
+              user?.name?.charAt(0).toUpperCase()
+            )}
           </div>
+          <h2 className="font-bold text-gray-900 text-center truncate w-full">{user?.name}</h2>
+          <p className="text-gray-500 text-xs text-center truncate w-full mt-0.5">{user?.email}</p>
+          <span className="capitalize text-[10px] bg-primary-50 text-primary-700 px-2.5 py-0.5 rounded-full mt-2 font-semibold tracking-wider">
+            {user?.role?.replace('_', ' ')}
+          </span>
+        </div>
 
-          <div className="flex flex-col md:flex-row gap-6">
-            {/* Sidebar */}
-            <aside className="md:w-52 shrink-0">
-              <div className="card p-2 flex md:flex-col gap-1 overflow-x-auto md:overflow-visible">
-                {tabs.map(({ id, label, icon: Icon }) => (
-                  <button
-                    key={id}
-                    onClick={() => setActiveTab(id)}
-                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap w-full text-left ${
-                      activeTab === id
-                        ? 'bg-primary-600 text-white'
-                        : 'text-gray-600 hover:bg-gray-100'
-                    }`}
-                  >
-                    <Icon size={16} />
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </aside>
+        {/* Sidebar Tabs */}
+        <div className="flex-1 p-4 flex md:flex-col gap-1.5 overflow-x-auto md:overflow-y-auto whitespace-nowrap md:whitespace-normal">
+          {tabs.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id)}
+              className={`flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium transition-all w-full text-left ${
+                activeTab === id
+                  ? 'bg-primary-600 text-white shadow-md shadow-primary-600/10'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <Icon size={16} className={activeTab === id ? 'text-white' : 'text-gray-400'} />
+              {label}
+            </button>
+          ))}
+        </div>
+      </aside>
 
-            {/* Content */}
-            <div className="flex-1 min-w-0">
-              {activeTab === 'overview' && <OverviewTab user={user} onNavigate={setActiveTab} />}
-              {activeTab === 'prayers' && <PrayersTab currentUserId={user?._id} />}
-              {activeTab === 'donations' && <DonationsTab />}
-              {activeTab === 'profile' && <ProfileTab />}
-            </div>
-          </div>
+      {/* Content */}
+      <div className="flex-1 md:ml-64 p-6 md:p-10 min-w-0 w-full bg-gray-50">
+        {/* Page title */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">My Dashboard</h1>
+          <p className="text-gray-500 text-sm mt-0.5">Manage your profile, prayer requests, and giving</p>
+        </div>
+
+        {/* Tab Content */}
+        <div className="w-full">
+          {activeTab === 'overview' && <OverviewTab user={user} onNavigate={setActiveTab} />}
+          {activeTab === 'prayers' && <PrayersTab currentUserId={user?._id} />}
+          {activeTab === 'donations' && <DonationsTab />}
+          {activeTab === 'profile' && <ProfileTab />}
+          {activeTab === 'security' && <SecurityTab />}
+        </div>
       </div>
     </div>
   );

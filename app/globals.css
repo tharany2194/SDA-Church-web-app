@@ -36,6 +36,12 @@
   .section-subtitle {
     @apply text-church-muted text-center text-lg mb-12 max-w-2xl mx-auto;
   }
+  .page-title {
+    @apply text-xl md:text-2xl font-bold text-church-dark text-center mb-1;
+  }
+  .page-subtitle {
+    @apply text-church-muted text-center text-sm mb-3 max-w-2xl mx-auto;
+  }
   .container-custom {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }

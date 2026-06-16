@@ -10,11 +10,11 @@ export default function HistoryPage() {
   ];
 
   return (
-    <section className="py-16 min-h-screen">
+    <section className="pt-20 pb-16 min-h-screen">
       <div className="container-custom max-w-4xl">
-        <div className="text-center mb-16">
-          <h1 className="section-title">Our History</h1>
-          <p className="section-subtitle">Nearly four decades of faith, growth, and community service</p>
+        <div className="text-center mb-8">
+          <h1 className="page-title">Our History</h1>
+          <p className="page-subtitle">Nearly four decades of faith, growth, and community service</p>
         </div>
 
         {/* Timeline */}

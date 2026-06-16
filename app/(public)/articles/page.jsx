@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Calendar, User, Tag, ArrowRight, BookOpen } from 'lucide-react';
 import { format } from 'date-fns';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import api from '../../../lib/api';
 
 const fetcher = (url) => api.get(url).then((r) => r.data);
@@ -17,7 +18,33 @@ const categoryColors = {
   other: 'bg-gray-100 text-gray-600',
 };
 
+const t = {
+  en: {
+    title: 'Articles & Devotionals',
+    subtitle: 'Encouraging words, testimonies, and church news',
+    emptyState: 'No articles in this category yet.',
+    all: 'all',
+    devotional: 'devotional',
+    news: 'news',
+    testimony: 'testimony',
+    announcement: 'announcement',
+    other: 'other',
+  },
+  ta: {
+    title: 'கட்டுரைகள் & தியானங்கள்',
+    subtitle: 'ஊக்கமளிக்கும் வார்த்தைகள், சாட்சிகள் மற்றும் சபை செய்திகள்',
+    emptyState: 'இந்த பிரிவில் இன்னும் கட்டுரைகள் இல்லை.',
+    all: 'அனைத்தும்',
+    devotional: 'தியானம்',
+    news: 'செய்திகள்',
+    testimony: 'சாட்சிகள்',
+    announcement: 'அறிவிப்புகள்',
+    other: 'மற்றவை',
+  }
+};
+
 export default function ArticlesPage() {
+  const { language = 'en' } = useSelector((s) => s.ui) || {};
   const [category, setCategory] = useState('all');
   const [page, setPage] = useState(1);
 
@@ -26,11 +53,11 @@ export default function ArticlesPage() {
   const totalPages = data?.totalPages || 1;
 
   return (
-    <section className="pt-28 sm:pt-32 pb-12 min-h-screen bg-gray-50">
+    <section className="pt-20 pb-12 min-h-screen bg-gray-50">
       <div className="container-custom">
         <div className="text-center mb-10">
-          <h1 className="section-title">Articles & Devotionals</h1>
-          <p className="section-subtitle">Encouraging words, testimonies, and church news</p>
+          <h1 className="page-title">{t[language].title}</h1>
+          <p className="page-subtitle">{t[language].subtitle}</p>
         </div>
 
         {/* Category Tabs */}
@@ -40,7 +67,9 @@ export default function ArticlesPage() {
               key={c}
               onClick={() => { setCategory(c); setPage(1); }}
               className={`px-4 py-1.5 rounded-full text-sm font-medium capitalize transition-colors ${category === c ? 'bg-primary-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'}`}
-            >{c}</button>
+            >
+              {t[language][c] || c}
+            </button>
           ))}
         </div>
 
@@ -56,14 +85,18 @@ export default function ArticlesPage() {
               coverUrl = `${baseUrl}/api/v1/media${article.coverImage}`;
             }
 
+            const displayTitle = language === 'ta' ? (article.titleTa || article.title) : article.title;
+            const displayExcerpt = language === 'ta' ? (article.excerptTa || article.excerpt) : article.excerpt;
+            const displayCategory = language === 'ta' ? (t['ta'][article.category] || article.category) : article.category;
+
             return (
               <Link href={`/articles/${article.slug}`} key={article._id} className="card group overflow-hidden hover:shadow-md transition-shadow">
                 {coverUrl ? (
                   <div className="relative h-48 bg-gray-100">
-                    <Image src={coverUrl} alt={article.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <Image src={coverUrl} alt={displayTitle} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
                     <div className="absolute top-3 left-3">
                       <span className={`text-xs px-2.5 py-1 rounded-full font-medium capitalize ${categoryColors[article.category] || categoryColors.other}`}>
-                        {article.category}
+                        {displayCategory}
                       </span>
                     </div>
                   </div>
@@ -73,8 +106,8 @@ export default function ArticlesPage() {
                   </div>
                 )}
                 <div className="p-5">
-                  <h2 className="font-bold text-gray-900 line-clamp-2 group-hover:text-primary-600 transition-colors mb-2">{article.title}</h2>
-                  {article.excerpt && <p className="text-gray-500 text-sm line-clamp-2 mb-3">{article.excerpt}</p>}
+                  <h2 className="font-bold text-gray-900 line-clamp-2 group-hover:text-primary-600 transition-colors mb-2">{displayTitle}</h2>
+                  {displayExcerpt && <p className="text-gray-500 text-sm line-clamp-2 mb-3">{displayExcerpt}</p>}
                   <div className="flex items-center gap-3 text-xs text-gray-400">
                     {article.author?.name && (
                       <span className="flex items-center gap-1"><User size={11} />{article.author.name}</span>
@@ -92,7 +125,7 @@ export default function ArticlesPage() {
         {articles.length === 0 && (
           <div className="text-center py-20 text-gray-400">
             <BookOpen size={48} className="mx-auto mb-3 text-gray-200" />
-            <p>No articles in this category yet.</p>
+            <p>{t[language].emptyState}</p>
           </div>
         )}
 

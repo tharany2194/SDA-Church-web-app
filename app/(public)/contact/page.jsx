@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import toast from 'react-hot-toast';
+import api from '@/lib/api';
 
 const t = {
   en: {
@@ -32,6 +33,8 @@ const t = {
     sending: 'Sending...',
     sendMessageBtn: 'Send Message',
     successMsg: 'Message sent! We will get back to you soon.',
+    validationError: 'All fields are compulsory and must be entered.',
+    emailFormatError: 'Please enter a valid email address (e.g., name@gmail.com).',
   },
   ta: {
     title: 'தொடர்பு கொள்ள',
@@ -60,6 +63,8 @@ const t = {
     sending: 'அனுப்பப்படுகிறது...',
     sendMessageBtn: 'செய்தி அனுப்புக',
     successMsg: 'செய்தி அனுப்பப்பட்டது! நாங்கள் விரைவில் உங்களைத் தொடர்புகொள்வோம்.',
+    validationError: 'அனைத்து புலங்களும் கட்டாயமாகும், அவை பூர்த்தி செய்யப்பட வேண்டும்.',
+    emailFormatError: 'தயவுசெய்து சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும் (எ.கா., name@gmail.com).',
   }
 };
 
@@ -70,12 +75,43 @@ export default function ContactPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const nameVal = form.name.trim();
+    const emailVal = form.email.trim();
+    const subjectVal = form.subject.trim();
+    const messageVal = form.message.trim();
+
+    if (!nameVal || !emailVal || !subjectVal || !messageVal) {
+      toast.error(t[language].validationError);
+      return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(emailVal)) {
+      toast.error(t[language].emailFormatError);
+      return;
+    }
+
     setSubmitting(true);
-    // Simulate form submit (integrate with email service as needed)
-    await new Promise((r) => setTimeout(r, 1000));
-    toast.success(t[language].successMsg);
-    setForm({ name: '', email: '', subject: '', message: '' });
-    setSubmitting(false);
+    try {
+      const response = await api.post('/contact', {
+        name: nameVal,
+        email: emailVal,
+        subject: subjectVal,
+        message: messageVal,
+      });
+
+      if (response.data?.success) {
+        toast.success(t[language].successMsg);
+        setForm({ name: '', email: '', subject: '', message: '' });
+      } else {
+        toast.error(response.data?.message || 'Failed to send message.');
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'An error occurred. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

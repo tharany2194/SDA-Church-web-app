@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Radio, Clock, BookOpen, Heart, Calendar, Edit3 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import InteractiveSidebar from '../bible/InteractiveSidebar';
+import YouTubeEmbed from '../YouTubeEmbed';
 
 const YOUTUBE_LIVE_ID = process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID || 'live';
 
@@ -170,12 +171,11 @@ export default function LiveStreamSection() {
               ) : (liveInfo.isLive || liveInfo.hasScheduled) ? (
                 <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40 backdrop-blur-md"
                   style={{ paddingBottom: '56.25%' }}>
-                  <iframe
-                    src={`https://www.youtube.com/embed/${liveInfo.videoId}?autoplay=1&mute=1`}
+                  <YouTubeEmbed
+                    videoId={liveInfo.videoId}
                     title={liveInfo.title || "Church Live Stream"}
-                    className="absolute inset-0 w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
+                    autoplay={true}
+                    mute={true}
                   />
                 </div>
               ) : (

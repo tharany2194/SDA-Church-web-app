@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Play } from 'lucide-react';
+import YouTubeEmbed from '../YouTubeEmbed';
 
 export default function SermonMedia({ message, title, thumbnail, isFeatured }) {
   const [isActive, setIsActive] = useState(false);
@@ -22,12 +23,10 @@ export default function SermonMedia({ message, title, thumbnail, isFeatured }) {
     if (message.youtubeVideoId) {
       return (
         <div className={`relative w-full h-full aspect-video bg-black ${isFeatured ? 'rounded-3xl overflow-hidden' : ''}`}>
-          <iframe
-            src={`https://www.youtube.com/embed/${message.youtubeVideoId}?autoplay=1&rel=0`}
-            className="w-full h-full absolute inset-0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-            allowFullScreen
+          <YouTubeEmbed
+            videoId={message.youtubeVideoId}
             title={title}
+            autoplay={true}
           />
         </div>
       );
@@ -68,11 +67,14 @@ export default function SermonMedia({ message, title, thumbnail, isFeatured }) {
       {isHovered && hasVideo && !isActive && (
         <div className="absolute inset-0 z-0">
           {message.youtubeVideoId ? (
-            <iframe
-              src={`https://www.youtube.com/embed/${message.youtubeVideoId}?autoplay=1&mute=1&controls=0&modestbranding=1&playsinline=1&loop=1&playlist=${message.youtubeVideoId}`}
-              className="w-full h-full pointer-events-none"
-              allow="autoplay"
+            <YouTubeEmbed
+              videoId={message.youtubeVideoId}
               title={title}
+              autoplay={true}
+              mute={true}
+              controls={false}
+              loop={true}
+              className="pointer-events-none"
             />
           ) : (
             <video

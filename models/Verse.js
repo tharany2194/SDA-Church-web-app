@@ -30,6 +30,18 @@ const verseSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    backgroundUrl: {
+      type: String,
+      default: null,
+    },
+    audioUrl: {
+      type: String,
+      default: null,
+    },
+    scheduledFor: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,

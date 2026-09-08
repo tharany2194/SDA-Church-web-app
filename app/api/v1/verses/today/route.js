@@ -7,6 +7,7 @@ import { handleError, ok } from '@/lib/apiHelpers';
 import Verse from '@/models/Verse';
 
 import VerseBackground from '@/models/VerseBackground';
+import VerseAudio from '@/models/VerseAudio';
 
 /**
  * GET /api/v1/verses/today
@@ -32,14 +33,50 @@ export async function GET() {
         { isActive: false }
       );
 
-      // Select a random verse from history and make it the active verse for 24 hours
-      const randomVerses = await Verse.aggregate([{ $sample: { size: 1 } }]);
-      if (randomVerses.length > 0) {
-        const newExpiry = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours from now
+      const nextMidnight = new Date(now);
+      nextMidnight.setHours(24, 0, 0, 0); // Sets to 12:00:00 AM of the next day
+
+      // Check if an admin manually scheduled a verse for today
+      const scheduledVerse = await Verse.findOne({
+        scheduledFor: { $lte: now },
+        isActive: false,
+      }).sort({ scheduledFor: -1 });
+
+      let targetVerse = scheduledVerse;
+
+      // Automatic Fallback: If not manually scheduled, randomly select a verse from history at 12 AM
+      if (!targetVerse) {
+        const randomVerses = await Verse.aggregate([{ $sample: { size: 1 } }]);
+        if (randomVerses.length > 0) {
+          targetVerse = randomVerses[0];
+        }
+      }
+
+      if (targetVerse) {
+        let bgUrl = targetVerse.backgroundUrl;
+        if (!bgUrl) {
+          const randomBg = await VerseBackground.aggregate([{ $match: { isActive: true } }, { $sample: { size: 1 } }]);
+          if (randomBg && randomBg.length > 0) {
+            bgUrl = randomBg[0].url;
+          }
+        }
+
+        let audioUrl = targetVerse.audioUrl;
+        if (!audioUrl) {
+          const randomAudio = await VerseAudio.aggregate([{ $match: { isActive: true } }, { $sample: { size: 1 } }]);
+          if (randomAudio && randomAudio.length > 0) {
+            audioUrl = randomAudio[0].url;
+          }
+        }
 
         const activatedVerse = await Verse.findByIdAndUpdate(
-          randomVerses[0]._id,
-          { isActive: true, expiresAt: newExpiry },
+          targetVerse._id,
+          {
+            isActive: true,
+            expiresAt: nextMidnight,
+            ...(bgUrl ? { backgroundUrl: bgUrl } : {}),
+            ...(audioUrl ? { audioUrl } : {}),
+          },
           { new: true }
         );
         finalVerse = activatedVerse.toObject();
@@ -49,11 +86,33 @@ export async function GET() {
     }
 
     if (finalVerse) {
-      // Select a random background
-      const randomBg = await VerseBackground.aggregate([{ $match: { isActive: true } }, { $sample: { size: 1 } }]);
-      if (randomBg && randomBg.length > 0) {
-        finalVerse.backgroundUrl = randomBg[0].url;
+      let needsUpdate = false;
+      const updatePayload = {};
+
+      // If active verse doesn't have a background assigned yet, pick one once and persist it
+      if (!finalVerse.backgroundUrl) {
+        const randomBg = await VerseBackground.aggregate([{ $match: { isActive: true } }, { $sample: { size: 1 } }]);
+        if (randomBg && randomBg.length > 0) {
+          finalVerse.backgroundUrl = randomBg[0].url;
+          updatePayload.backgroundUrl = randomBg[0].url;
+          needsUpdate = true;
+        }
       }
+
+      // If active verse doesn't have background audio assigned yet, pick one once and persist it
+      if (!finalVerse.audioUrl) {
+        const randomAudio = await VerseAudio.aggregate([{ $match: { isActive: true } }, { $sample: { size: 1 } }]);
+        if (randomAudio && randomAudio.length > 0) {
+          finalVerse.audioUrl = randomAudio[0].url;
+          updatePayload.audioUrl = randomAudio[0].url;
+          needsUpdate = true;
+        }
+      }
+
+      if (needsUpdate) {
+        await Verse.findByIdAndUpdate(finalVerse._id, updatePayload);
+      }
+
       return NextResponse.json(
         { success: true, data: finalVerse },
         { status: 200, headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' } }

@@ -104,7 +104,7 @@ function ArticleForm({ initial, onSave, onCancel }) {
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">Cover Image</label>
-              <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files[0])} className="text-sm text-gray-600" />
+              <input type="file" accept="image/png, image/jpeg, image/jpg, image/webp" onChange={(e) => setFile(e.target.files[0])} className="text-sm text-gray-600" />
             </div>
           </div>
           <div className="flex gap-4">

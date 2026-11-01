@@ -179,7 +179,7 @@ function VerseBackgroundManager() {
           Verse Backgrounds
         </h3>
         <div>
-          <input type="file" id="bg-upload" className="hidden" accept="image/*" onChange={handleUpload} disabled={uploading} />
+          <input type="file" id="bg-upload" className="hidden" accept="image/png, image/jpeg, image/jpg, image/webp" onChange={handleUpload} disabled={uploading} />
           <label htmlFor="bg-upload" className="btn btn-secondary cursor-pointer text-sm py-1.5 px-3">
             {uploading ? 'Uploading...' : 'Upload Image'}
           </label>

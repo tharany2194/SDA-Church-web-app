@@ -12,6 +12,7 @@ const nextConfig = {
   },
 
   images: {
+    dangerouslyAllowSVG: false,
     remotePatterns: [
       { protocol: 'https', hostname: 'img.youtube.com' },
       { protocol: 'https', hostname: 'i.ytimg.com' },

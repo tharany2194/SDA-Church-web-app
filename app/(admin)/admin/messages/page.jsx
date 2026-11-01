@@ -112,7 +112,7 @@ function MessageForm({ initial, onSave, onCancel }) {
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">Or Upload Thumbnail / Video</label>
-            <input type="file" accept="image/*,video/*" onChange={(e) => setFile(e.target.files[0])} className="text-sm text-gray-600" />
+            <input type="file" accept="image/png, image/jpeg, image/jpg, image/webp, video/*" onChange={(e) => setFile(e.target.files[0])} className="text-sm text-gray-600" />
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">Description / Notes</label>

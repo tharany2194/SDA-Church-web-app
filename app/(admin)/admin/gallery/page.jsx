@@ -105,7 +105,7 @@ function GalleryForm({ initial, onSave, onCancel, forceCarousel }) {
             <label className="text-sm font-medium text-gray-700 block mb-1">Upload {initial ? 'File' : 'File(s)'}</label>
             <input 
               type="file" 
-              accept={form.type === 'image' ? 'image/*' : 'video/*,image/*'} 
+              accept={form.type === 'image' ? 'image/png, image/jpeg, image/jpg, image/webp' : 'video/*,image/png,image/jpeg,image/jpg,image/webp'} 
               multiple={!initial}
               onChange={(e) => setFiles(Array.from(e.target.files))} 
               className="text-sm text-gray-600 cursor-pointer" 

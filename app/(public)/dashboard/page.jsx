@@ -540,7 +540,7 @@ function ProfileTab() {
             </div>
             <label className="absolute -bottom-1 -right-1 w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-primary-700 transition-colors">
               <Upload size={12} className="text-white" />
-              <input type="file" accept="image/*" className="hidden" onChange={(e) => setAvatar(e.target.files[0])} />
+              <input type="file" accept="image/png, image/jpeg, image/jpg, image/webp" className="hidden" onChange={(e) => setAvatar(e.target.files[0])} />
             </label>
           </div>
           <div>

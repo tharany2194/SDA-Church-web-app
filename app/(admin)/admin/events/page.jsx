@@ -98,7 +98,7 @@ function EventForm({ initial, onSave, onCancel }) {
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">Event Image</label>
-            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files[0])} className="text-sm text-gray-600 block w-full border border-gray-200 rounded-lg p-2" />
+            <input type="file" accept="image/png, image/jpeg, image/jpg, image/webp" onChange={(e) => setFile(e.target.files[0])} className="text-sm text-gray-600 block w-full border border-gray-200 rounded-lg p-2" />
           </div>
           <label className="flex items-center gap-2 text-sm cursor-pointer mt-2 font-medium">
             <input type="checkbox" checked={form.isPublished} onChange={(e) => setForm({ ...form, isPublished: e.target.checked })} className="w-4 h-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500" />
